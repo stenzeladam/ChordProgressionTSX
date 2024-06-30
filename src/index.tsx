@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     heading.textContent = 'Select a root note, a mode, and a tuning:';
   }
 });
-
+console.log()
 declare module 'react-dom' {
   export function createRoot(container: Element | DocumentFragment | null): {
     render(element: JSX.Element): void;
