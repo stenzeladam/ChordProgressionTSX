@@ -34,7 +34,7 @@ const standardTunings: { [key: string]: string[] } = {
   "Drop A": ["A", "E", "A", "D", "Gb/F#", "B"],
 };
 
-export default function ComboBox() {
+export default function TuningSelector() {
   // this seems to not be used anywhere, is it needed for later?
   const [selectedTuning, setSelectedTuning] = useState<string | null>(null);
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
