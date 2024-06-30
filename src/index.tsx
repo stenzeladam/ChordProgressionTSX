@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createRoot } from 'react-dom';
 import SelectRootNote from './components/SelectRootNote';
+import SelectMode from './components/SelectMode'
+import SelectTuning from './components/SelectTuning'
+import Box from '@mui/material/Box';
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,6 +24,10 @@ declare module 'react-dom' {
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
-    <SelectRootNote /> {/* Render SelectRootNote component */}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}> {/* gap: 2 adds spacing between items */}
+    <SelectRootNote /> {}
+    <SelectMode /> {}
+    <SelectTuning /> {}
+    </Box>
   </React.StrictMode>
 );
