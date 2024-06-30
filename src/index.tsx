@@ -28,7 +28,6 @@ root.render(
     <SelectRootNote /> {}
     <SelectMode /> {}
     <SelectTuning /> {}
-    <TuningForEachString /> {}
     </Box>
   </React.StrictMode>
 );
