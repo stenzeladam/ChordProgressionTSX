@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createRoot } from 'react-dom';
 import SelectRootNote from './components/SelectRootNote';
 import SelectMode from './components/SelectMode'
 import SelectTuning from './components/SelectTuning'
+import TuningForEachString from './components/TuningForEachString';
 import Box from '@mui/material/Box';
 
 
@@ -28,6 +28,7 @@ root.render(
     <SelectRootNote /> {}
     <SelectMode /> {}
     <SelectTuning /> {}
+    <TuningForEachString /> {}
     </Box>
   </React.StrictMode>
 );
