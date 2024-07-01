@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import SelectRootNote from './components/SelectRootNote';
-import SelectMode from './components/SelectMode'
-import SelectTuning from './components/SelectTuning'
-import TuningForEachString from './components/TuningForEachString';
+import SelectMode from './components/ModeSelector'
+import SelectTuning from './components/TuningSelector'
 import Box from '@mui/material/Box';
 
 
