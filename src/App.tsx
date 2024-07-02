@@ -5,10 +5,21 @@ import ModeSelector from "./components/ModeSelector";
 import KeyAndTuningButton from "./components/KeyAndTuningButton"
 import CompensateForTuningOption from "./components/CompensateForTuningOption"
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+
+interface RootOption {
+  value: string;
+  label: string;
+}
 
 export default function App() {
+  const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
+
+  const handleRootSelect = (root: RootOption | null) => {
+    setSelectedRoot(root);
+  };
   return <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-    <RootNoteSelect />
+    
     <ModeSelector />
     <TuningSelector />
     <Typography variant="body1" sx={{ mt: 2 }}>

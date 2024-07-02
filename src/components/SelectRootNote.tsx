@@ -1,42 +1,68 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useState } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
-export default function RootNoteSelect() {
-  const [rootNote, setAge] = React.useState('');
+interface RootOption {
+  value: string;
+  label: string;
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+interface AutocompleteRootProps {
+  onSelect: (root: RootOption | null) => void;
+}
+
+const rootNotes: RootOption[] = [
+  { value: "C", label: "C"},
+  { value: "C#", label: "Db/C#"},
+  { value: "D", label: "D"},
+  { value: "D#", label: "Eb/D#"},
+  { value: "E", label: "E"},
+  { value: "F", label: "F"},
+  { value: "F#", label: "Gb/F#"},
+  { value: "G", label: "G"},
+  { value: "G#", label: "Ab/G#"},
+  { value: "A", label: "A"},
+  { value: "A#", label: "Bb/A#"},
+  { value: "B", label: "B"},
+]
+
+const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ onSelect }) => {
+  const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
+
+  const handleChange = (_: any, newValue: RootOption | null) => {
+    setSelectedRoot(newValue);
+    onSelect(newValue);
+    console.log("The root is: ", newValue);
   };
 
   return (
-    <Box>
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="select-root-note">Select a root note</InputLabel>
-        <Select
-          labelId="select-root-note"
-          id="demo-simple-select"
-          value={rootNote}
-          label="Select a root note"
-          onChange={handleChange}
-        >
-          <MenuItem value={"C"}>C</MenuItem>
-          <MenuItem value={"C#"}>C#/Db</MenuItem>
-          <MenuItem value={"D"}>D</MenuItem>
-          <MenuItem value={"D#"}>D#/Eb</MenuItem>
-          <MenuItem value={"E"}>E</MenuItem>
-          <MenuItem value={"F"}>F</MenuItem>
-          <MenuItem value={"F#"}>F#/Gb</MenuItem>
-          <MenuItem value={"G"}>G</MenuItem>
-          <MenuItem value={"G#"}>G#/Ab</MenuItem>
-          <MenuItem value={"A"}>A</MenuItem>
-          <MenuItem value={"A#"}>A#/Bb</MenuItem>
-          <MenuItem value={"B"}>B</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
+    <Autocomplete
+      value={selectedRoot}
+      onChange={handleChange}
+      options={rootNotes}
+      getOptionLabel={(option) => option.label}
+      sx={{ width: 200 }}
+      renderInput={(params) => <TextField {...params} label="Select a root note" />}
+    />
   );
-}
+};
+
+export default AutocompleteRoot;
+
+// export default function AutocompleteRoot() {
+//   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
+//   const handleChange = (_: any, newValue: RootOption | null) => {
+//     setSelectedRoot(newValue);
+//   };
+
+//   return (
+//     <Autocomplete
+//       value={selectedRoot}
+//       onChange={handleChange}
+//       options={rootNotes}
+//       getOptionLabel={(option) => option.label}
+//       sx={{ width: 200 }}
+//       renderInput={(params) => <TextField {...params} label="Select a root note" />}
+//     />
+//   );
+// };
