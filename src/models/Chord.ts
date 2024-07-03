@@ -1,4 +1,4 @@
-class Chord {
+export class Chord {
     private readonly _scale: string[];
     private readonly _chromatic: string[];
     private readonly _chordNum: number;
@@ -10,17 +10,18 @@ class Chord {
     private sus4 = false;
     private seventh = false;
 
-    constructor(chordNumber: number, localScale: string[], localChrom: string[], Mods: boolean[]) {
+    //constructor(chordNumber: number, localScale: string[], localChrom: string[], Mods: boolean[]) {
+    constructor(chordNumber: number, localScale: string[], localChrom: string[]) {
         this._scale = localScale;
         this._chromatic =localChrom;
         this._chordNum = chordNumber - 1; //because TypeScript starts indices at 0, but there is no 
                                          //"0" chord in a chord progression using Roman numerals. 
-        this.isFlat = Mods[0];
+        /*this.isFlat = Mods[0];
         this.isSharp = Mods[1];
         this.sus2 = Mods[2];
         this.sus4 = Mods[3];
         this.seventh = Mods[4];
-
+*/
         for (let i = 0; i < 12; i++) {
             if (this._scale[this._chordNum] == this._chromatic[i]) { 
         		this.rootIndex = i;

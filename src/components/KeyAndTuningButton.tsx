@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
+import { Modes } from '../models/Modes';
+import { Chord } from '../models/Chord';
 
 interface RootOption {
   value: string;
@@ -24,9 +26,16 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
 
   const handleClick = () => {
     setClicked(true);
-    console.log("Selected root: ", selectedRoot);
+    console.log("Selected root: ", selectedRoot?.value);
     console.log("Selected mode: ", selectedMode);
     console.log("Selected tuning: ", selectedTuning);
+    if (selectedRoot && selectedMode) {
+      let instance = new Modes(selectedRoot.value);
+      instance.applyMode(selectedMode);
+      let tempChord = new Chord(1, instance.getScale(), instance.getChromatic());
+      tempChord.buildChord();
+      console.log(tempChord.getNotes_String());
+    }
   };
 
   return (

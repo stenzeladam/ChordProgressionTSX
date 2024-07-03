@@ -1,4 +1,4 @@
-class Modes {
+export class Modes {
     private readonly _root: string;
     private readonly _chromatic: string[];
     private scale: string[] = [];
