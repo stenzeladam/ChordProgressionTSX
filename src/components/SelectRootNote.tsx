@@ -48,21 +48,3 @@ const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ onSelect }) => {
 };
 
 export default AutocompleteRoot;
-
-// export default function AutocompleteRoot() {
-//   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
-//   const handleChange = (_: any, newValue: RootOption | null) => {
-//     setSelectedRoot(newValue);
-//   };
-
-//   return (
-//     <Autocomplete
-//       value={selectedRoot}
-//       onChange={handleChange}
-//       options={rootNotes}
-//       getOptionLabel={(option) => option.label}
-//       sx={{ width: 200 }}
-//       renderInput={(params) => <TextField {...params} label="Select a root note" />}
-//     />
-//   );
-// };
