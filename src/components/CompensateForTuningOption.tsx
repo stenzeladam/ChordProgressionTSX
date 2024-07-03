@@ -50,6 +50,7 @@ export default function SwitchLabels() {
       <FormControlLabel
         control={<Switch onChange={handleChange} color="success" />}
         label={labelText}
+        id="compensate_switch"
       />
     </FormGroup>
   );

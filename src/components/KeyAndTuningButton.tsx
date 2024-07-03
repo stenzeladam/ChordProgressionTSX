@@ -32,6 +32,7 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   return (
     <Box sx={{ maxWidth: 450, display: 'flex', justifyContent: 'left' }}>
       <Button 
+        id="submitButton"
         onClick={handleClick}
         sx={ 
           isIncomplete ? {'&:disabled': {color: 'white', bgcolor: 'grey', border: '2pt solid grey'}} : {

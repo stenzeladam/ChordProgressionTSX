@@ -72,7 +72,7 @@ const TuningSelector: React.FC<TuningSelectorProps> = ({ onSelect }) => {
     <div>
       <Autocomplete
         disablePortal
-        id="combo-box-tuning"
+        id="tuningSelector"
         options={tuningOptions}
         sx={{ width: 300, marginBottom: 2 }}
         renderInput={(params) => <TextField {...params} label="Select a tuning" />}

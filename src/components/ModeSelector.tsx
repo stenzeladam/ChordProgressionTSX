@@ -34,7 +34,7 @@ const ModeSelector: React.FC<ModeSelectorProps> = ({ onSelect }) => {
       value={selectedMode}
       onChange={handleChange}
       disablePortal
-      id="combo-box-modes"
+      id="ModeSelector"
       options={Modes}
       getOptionLabel={(option) => option.label}
       sx={{ width: 200 }}

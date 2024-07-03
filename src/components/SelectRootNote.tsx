@@ -37,6 +37,7 @@ const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ onSelect }) => {
 
   return (
     <Autocomplete
+      id='RootSelector'
       value={selectedRoot}
       onChange={handleChange}
       options={rootNotes}
