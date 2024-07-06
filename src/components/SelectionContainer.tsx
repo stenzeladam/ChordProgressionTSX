@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Stack from '@mui/material/Stack';
 import KeyAndTuningButton from './KeyAndTuningButton';
 import AutocompleteRoot from './SelectRootNote';

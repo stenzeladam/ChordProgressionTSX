@@ -41,13 +41,6 @@ const App = () => {
       <RootNoteSelect onSelect={handleRootSelect} />
       <ModeSelector onSelect={handleModeSelect} />
       <TuningSelector onSelect={handleTuningSelect} />
-      <Typography variant="body1" sx={{ mt: 2 }}>
-        <strong>Compensate note positions for different tunings?</strong>{' '}
-        <br />
-        If <strong>"Yes"</strong>: The low C in C Standard will be referred to as strictly C, and C minor will have the same fingering and position as E minor in E Standard tuning.
-        <br />
-        If <strong>"No"</strong>: The low C in C Standard will be referred to as E, and E minor will retain the same fingering and note position as it would in E Standard.
-      </Typography>
       <CompensateForTuningOption />
       <KeyAndTuningButton
         isIncomplete={isIncomplete}
