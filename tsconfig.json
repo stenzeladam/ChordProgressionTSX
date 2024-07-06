@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "ES2015.Promise", "dom"],
     "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
@@ -10,6 +10,6 @@
     "moduleResolution": "node",
     "outDir": "./dist"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/models/main.ts", "src/models/main.js"],
   "exclude": ["node_modules"]
 }

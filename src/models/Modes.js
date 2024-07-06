@@ -75,7 +75,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.ionian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 2) { // whole step
@@ -90,7 +90,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.dorian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 1 && i != 5) { // whole step
@@ -105,7 +105,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.phrygian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 0 && i != 4) { // whole step
@@ -120,7 +120,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.lydian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 3) { // whole step
@@ -135,7 +135,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.mixolydian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 2 && i != 5) { // whole step
@@ -150,7 +150,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.aeolian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 1 && i != 4) { // whole step
@@ -165,7 +165,7 @@ var Modes = /** @class */ (function () {
         }
     };
     Modes.prototype.locrian = function () {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         var j = 0;
         for (var i = 0; i < this.scale.length; i++) {
             if (i != 0 && i != 3) { // whole step

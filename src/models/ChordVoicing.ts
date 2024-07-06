@@ -1,9 +1,27 @@
+interface ChordData {
+    STRINGS: string;
+    FINGERING: string;
+    CHORD_NAME: string;
+    ENHARMONIC_CHORD_NAME: string;
+    VOICING_ID: string;
+    TONES: string;
+}
+
 export class ChordVoicing {
     private notes: string[];
     private readonly _compensateTuning: boolean;
     private tuning: string[] = ["E", "A", "D", "G", "B", "E"] //standard tuning as default. Only change if _compensateTuning is true
                                                               //starts with string6, string5, ... , string1
     private stringNotes: string[][] = [
+        ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"], //string6
+        ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"], //string5
+        ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"], //string4
+        ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"], //string3
+        ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"], //string2
+        ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]  //string1
+    ];
+
+    private readonly STANDARD: string[][] = [                              //Always have standard tuning available to reference
         ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"], //string6
         ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"], //string5
         ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"], //string4
@@ -34,20 +52,20 @@ export class ChordVoicing {
                 displacement = size - displacement;
                 displacement = displacement % size;
 
-                function reverse(start: number, end: number): void {
+                const reverse = (start: number, end: number): void => {
                     while (start < end) {
                         [currentString[start], currentString[end]] = [currentString[end], currentString[start]];
                         start++;
                         end--;
                     }
-                }
+                };
                 reverse(0, size - 1);
                 reverse(0, displacement - 1);
                 reverse(displacement, size - 1);
             //console.log(6 - nthString, "string: ", this.stringNotes[nthString]);
         }
         //console.log(this.convertNotesToVoicing());
-        this.fetchChordsData(this.convertNotesToVoicing())
+        this.fetchChordDataByVoicing(this.convertNotesToVoicing())
     }
 
     public convertNotesToVoicing(): string {
@@ -78,7 +96,7 @@ export class ChordVoicing {
         return voicing;
     }
 
-    public async fetchChordsData(voice_param: string) {
+    public async fetchChordDataByVoicing(voice_param: string): Promise<ChordData[]> {
         const voicing = voice_param;
         const url = `https://api.uberchord.com/v1/chords?voicing=${voicing}`;
     
@@ -88,10 +106,34 @@ export class ChordVoicing {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            console.log(data); // Handle the response data here
+            return data;
         } catch (error) {
             console.error('Error fetching data:', error);
+            return [];
         }
     }
-    
+    public async fetchChordDataByEnharmonicName(name_param: string[]): Promise<ChordData[]> {
+        let chordName;
+
+        try {
+            chordName = name_param[0] + "_" + name_param[1] + name_param[2] + "_" + name_param[3];
+        } catch (error) {
+            console.error('Error with the enharmonic chord name', error);
+            return [];
+        }
+
+        const url = `https://api.uberchord.com/v1/chords/${chordName}`;
+                
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return [];
+        }
+    }
 }

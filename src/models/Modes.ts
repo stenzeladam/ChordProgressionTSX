@@ -77,7 +77,7 @@ export class Modes {
     }
 
     private ionian(): void {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
@@ -94,7 +94,7 @@ export class Modes {
     }
 
     private dorian(): void {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
@@ -111,7 +111,7 @@ export class Modes {
     }
 
     private phrygian(): void {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
@@ -128,7 +128,7 @@ export class Modes {
     }
 
     private lydian(): void {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
@@ -145,7 +145,7 @@ export class Modes {
     }
 
     private mixolydian(): void {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
@@ -162,7 +162,7 @@ export class Modes {
     }
 
     private aeolian(): void {
-        this.scale = Array(7).fill("");        
+        this.scale = ["", "", "", "", "", "", ""];  
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
@@ -179,7 +179,7 @@ export class Modes {
     }
 
     private locrian(): void {
-        this.scale = Array(7).fill("");
+        this.scale = ["", "", "", "", "", "", ""];
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
             
