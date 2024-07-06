@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChordVoicing = void 0;
+var UberChordAPI_data_1 = require("./UberChordAPI_data");
 var ChordVoicing = /** @class */ (function () {
     function ChordVoicing(param_notes, param_compensate, param_tuning) {
         this.tuning = ["E", "A", "D", "G", "B", "E"]; //standard tuning as default. Only change if _compensateTuning is true
@@ -58,7 +59,7 @@ var ChordVoicing = /** @class */ (function () {
             ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"] //string1
         ];
         this.notes = param_notes;
-        this._compensateTuning = param_compensate;
+        this.COMPENSATE_TUNING = param_compensate;
         if (param_compensate && !param_tuning) { //should be an error because the selected tuning needs to be specified to know how to handle compensation
             throw new Error("The selected tuning needs to be specified to handle compensation");
         }
@@ -92,8 +93,6 @@ var ChordVoicing = /** @class */ (function () {
         for (var nthString = 0; nthString < this.tuning.length; nthString++) {
             _loop_1(nthString);
         }
-        //console.log(this.convertNotesToVoicing());
-        this.fetchChordDataByVoicing(this.convertNotesToVoicing());
     };
     ChordVoicing.prototype.convertNotesToVoicing = function () {
         var numOfNotesInChord = this.notes.length;
@@ -118,9 +117,88 @@ var ChordVoicing = /** @class */ (function () {
         }
         return voicing;
     };
+    ChordVoicing.prototype.convertNotesToVoicingStandard = function () {
+        var numOfNotesInChord = this.notes.length;
+        var tabsFrets = ["X", "X", "X", "X", "X", "X"];
+        for (var nthString = 0; nthString < numOfNotesInChord; nthString++) {
+            var currentString = this.STANDARD[nthString];
+            var size = currentString.length;
+            var fret = 0;
+            while (currentString[fret] != this.notes[nthString] && fret < currentString.length) {
+                fret++;
+            }
+            tabsFrets[nthString] = fret.toString();
+        }
+        var voicing = "";
+        for (var i = 0; i < 6; i++) {
+            if (i < 5) {
+                voicing = voicing + tabsFrets[i] + "-";
+            }
+            else {
+                voicing = voicing + tabsFrets[i];
+            }
+        }
+        return voicing;
+    };
+    ChordVoicing.prototype.mergeChordData = function (param1, param2) {
+        // param1 should be the object created with the normal voicing function
+        // param2 should be the object created with the standard tuning voicing function
+        var strings = param1.getDATA()[0].STRINGS;
+        var fingering = param1.getDATA()[0].FINGERING;
+        var chordName = param2.getDATA()[0].CHORD_NAME;
+        var enharmonicChordName = param2.getDATA()[0].ENHARMONIC_CHORD_NAME;
+        var voicing_ID = param1.getDATA()[0].VOICING_ID;
+        var tones = param2.getDATA()[0].TONES;
+        var mergedData = new UberChordAPI_data_1.UberChordAPI_data([{ strings: strings, fingering: fingering, chordName: chordName, enharmonicChordName: enharmonicChordName, voicing_ID: voicing_ID, tones: tones }]);
+        return mergedData;
+    };
     ChordVoicing.prototype.fetchChordDataByVoicing = function (voice_param) {
         return __awaiter(this, void 0, void 0, function () {
-            var voicing, url, response, data, error_1;
+            var voicing, url, response, data, call, chordName, enharmonicData, standardVoicing, data2, call2, mergedData, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        voicing = voice_param;
+                        url = "https://api.uberchord.com/v1/chords?voicing=".concat(voicing);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 7, , 8]);
+                        return [4 /*yield*/, fetch(url)];
+                    case 2:
+                        response = _a.sent();
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return [4 /*yield*/, response.json()];
+                    case 3:
+                        data = _a.sent();
+                        call = new UberChordAPI_data_1.UberChordAPI_data(data);
+                        chordName = call.getEnharmonicNameAsArray();
+                        return [4 /*yield*/, this.fetchChordDataByEnharmonicName(chordName)];
+                    case 4:
+                        enharmonicData = _a.sent();
+                        call = new UberChordAPI_data_1.UberChordAPI_data(enharmonicData); //Normal data
+                        if (!this.COMPENSATE_TUNING) return [3 /*break*/, 6];
+                        standardVoicing = this.convertNotesToVoicingStandard();
+                        return [4 /*yield*/, this.fetchChordDataByStandardVoicing(standardVoicing)];
+                    case 5:
+                        data2 = _a.sent();
+                        call2 = new UberChordAPI_data_1.UberChordAPI_data(data2);
+                        mergedData = this.mergeChordData(call, call2);
+                        return [2 /*return*/, mergedData];
+                    case 6: return [2 /*return*/, call];
+                    case 7:
+                        error_1 = _a.sent();
+                        console.error('Error fetching data:', error_1);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/, null];
+                }
+            });
+        });
+    };
+    ChordVoicing.prototype.fetchChordDataByStandardVoicing = function (voice_param) {
+        return __awaiter(this, void 0, void 0, function () {
+            var voicing, url, response, data, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -140,8 +218,8 @@ var ChordVoicing = /** @class */ (function () {
                         data = _a.sent();
                         return [2 /*return*/, data];
                     case 4:
-                        error_1 = _a.sent();
-                        console.error('Error fetching data:', error_1);
+                        error_2 = _a.sent();
+                        console.error('Error fetching data:', error_2);
                         return [2 /*return*/, []];
                     case 5: return [2 /*return*/];
                 }
@@ -150,7 +228,7 @@ var ChordVoicing = /** @class */ (function () {
     };
     ChordVoicing.prototype.fetchChordDataByEnharmonicName = function (name_param) {
         return __awaiter(this, void 0, void 0, function () {
-            var chordName, url, response, data, error_2;
+            var chordName, url, response, data, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -176,8 +254,8 @@ var ChordVoicing = /** @class */ (function () {
                         data = _a.sent();
                         return [2 /*return*/, data];
                     case 4:
-                        error_2 = _a.sent();
-                        console.error('Error fetching data:', error_2);
+                        error_3 = _a.sent();
+                        console.error('Error fetching data:', error_3);
                         return [2 /*return*/, []];
                     case 5: return [2 /*return*/];
                 }

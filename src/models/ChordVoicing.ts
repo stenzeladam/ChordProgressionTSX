@@ -1,3 +1,5 @@
+import { UberChordAPI_data } from "./UberChordAPI_data";
+
 interface ChordData {
     STRINGS: string;
     FINGERING: string;
@@ -9,7 +11,7 @@ interface ChordData {
 
 export class ChordVoicing {
     private notes: string[];
-    private readonly _compensateTuning: boolean;
+    private readonly COMPENSATE_TUNING: boolean;
     private tuning: string[] = ["E", "A", "D", "G", "B", "E"] //standard tuning as default. Only change if _compensateTuning is true
                                                               //starts with string6, string5, ... , string1
     private stringNotes: string[][] = [
@@ -32,7 +34,7 @@ export class ChordVoicing {
 
     constructor(param_notes: string[], param_compensate: boolean, param_tuning?: string[]) {
         this.notes = param_notes;
-        this._compensateTuning = param_compensate;
+        this.COMPENSATE_TUNING = param_compensate;
         if(param_compensate && !param_tuning) { //should be an error because the selected tuning needs to be specified to know how to handle compensation
             throw new Error("The selected tuning needs to be specified to handle compensation");
         }
@@ -62,10 +64,7 @@ export class ChordVoicing {
                 reverse(0, size - 1);
                 reverse(0, displacement - 1);
                 reverse(displacement, size - 1);
-            //console.log(6 - nthString, "string: ", this.stringNotes[nthString]);
         }
-        //console.log(this.convertNotesToVoicing());
-        this.fetchChordDataByVoicing(this.convertNotesToVoicing())
     }
 
     public convertNotesToVoicing(): string {
@@ -96,7 +95,76 @@ export class ChordVoicing {
         return voicing;
     }
 
-    public async fetchChordDataByVoicing(voice_param: string): Promise<ChordData[]> {
+    public convertNotesToVoicingStandard(): string {
+
+        const numOfNotesInChord = this.notes.length;
+        let tabsFrets: string[] = ["X","X","X","X","X","X"];
+        
+        for (let nthString = 0; nthString < numOfNotesInChord; nthString++) {
+            let currentString = this.STANDARD[nthString];
+            let size = currentString.length;
+            let fret = 0;
+            while (currentString[fret] != this.notes[nthString] && fret < currentString.length) {
+                fret++;
+            }
+            tabsFrets[nthString] = fret.toString();
+        }
+
+        let voicing:string = "";
+        for(let i = 0; i < 6; i++) {
+            if (i < 5) {
+                voicing = voicing + tabsFrets[i] + "-";
+            }
+            else {
+                voicing = voicing + tabsFrets[i];
+            }
+        }
+        return voicing;
+    }
+
+    private mergeChordData(param1: UberChordAPI_data, param2: UberChordAPI_data): UberChordAPI_data {
+        // param1 should be the object created with the normal voicing function
+        // param2 should be the object created with the standard tuning voicing function
+        let strings = param1.getDATA()[0].STRINGS;
+        let fingering = param1.getDATA()[0].FINGERING;
+        let chordName = param2.getDATA()[0].CHORD_NAME;
+        let enharmonicChordName = param2.getDATA()[0].ENHARMONIC_CHORD_NAME;
+        let voicing_ID = param1.getDATA()[0].VOICING_ID;
+        let tones = param2.getDATA()[0].TONES;
+        const mergedData = new UberChordAPI_data([{strings, fingering, chordName, enharmonicChordName, voicing_ID, tones}]);
+        return mergedData;
+    }
+
+    public async fetchChordDataByVoicing(voice_param: string): Promise<UberChordAPI_data | null> {
+        const voicing = voice_param;
+        const url = `https://api.uberchord.com/v1/chords?voicing=${voicing}`;
+    
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            let call = new UberChordAPI_data(data);
+            let chordName = call.getEnharmonicNameAsArray()
+            let enharmonicData = await this.fetchChordDataByEnharmonicName(chordName);
+            call = new UberChordAPI_data(enharmonicData); //Normal data
+
+            if (this.COMPENSATE_TUNING) {
+                const standardVoicing = this.convertNotesToVoicingStandard();
+                const data2 = await this.fetchChordDataByStandardVoicing(standardVoicing);
+                let call2 = new UberChordAPI_data(data2); //Standard tuning data
+                const mergedData = this.mergeChordData(call, call2);
+                return mergedData;
+            }
+            return call;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        return null;
+    }
+
+    public async fetchChordDataByStandardVoicing(voice_param: string): Promise<ChordData[]> {
         const voicing = voice_param;
         const url = `https://api.uberchord.com/v1/chords?voicing=${voicing}`;
     
@@ -112,6 +180,7 @@ export class ChordVoicing {
             return [];
         }
     }
+
     public async fetchChordDataByEnharmonicName(name_param: string[]): Promise<ChordData[]> {
         let chordName;
 

@@ -39,42 +39,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Modes_1 = require("./Modes");
 var Chord_1 = require("./Chord");
 var ChordVoicing_1 = require("./ChordVoicing");
-var UberChordAPI_data_1 = require("./UberChordAPI_data");
 // Main method for console testing
 function main() {
-    var instance = new Modes_1.Modes("C");
+    var instance = new Modes_1.Modes("E");
     instance.applyMode("Aeolian");
     var tempChord = new Chord_1.Chord(1, instance.getScale(), instance.getChromatic());
     tempChord.buildChord();
-    var tempVoicing = new ChordVoicing_1.ChordVoicing(tempChord.getNotes(), true, ["C", "F", "A#", "D#", "G", "C"]);
+    var tempVoicing = new ChordVoicing_1.ChordVoicing(tempChord.getNotes(), false, ["C", "F", "A#", "D#", "G", "C"]);
     tempVoicing.tuneEachString();
     createCallandInterpretData(tempVoicing);
-    //console.log(tempChord.getNotes_String());
 }
 function createCallandInterpretData(param) {
     return __awaiter(this, void 0, void 0, function () {
-        var dat, call, chordName, data, error_1;
+        var calledChordData, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
+                    _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, param.fetchChordDataByVoicing(param.convertNotesToVoicing())];
                 case 1:
-                    dat = _a.sent();
-                    //let dat = await param.fetchChordsData("X-X-X-3-5-3");
-                    console.log("DATA: ", dat);
-                    call = new UberChordAPI_data_1.UberChordAPI_data(dat);
-                    chordName = call.getEnharmonicNameAsArray();
-                    return [4 /*yield*/, param.fetchChordDataByEnharmonicName(chordName)];
+                    calledChordData = _a.sent();
+                    console.log("calledChordData: ", calledChordData);
+                    return [2 /*return*/, calledChordData];
                 case 2:
-                    data = _a.sent();
-                    console.log("DATA 2: ", data);
-                    return [3 /*break*/, 4];
-                case 3:
                     error_1 = _a.sent();
                     console.error('Error fetching or creating instance:', error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
