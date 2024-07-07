@@ -58,9 +58,6 @@ const TuningSelector: React.FC<TuningSelectorProps> = ({ tuningState, stringTuni
 
     console.log("The selected tuning is: ", tuning, "\nvalue?.label is: ", value?.label);
     setDisabledStringFlag(tuning !== "Other");
-
-    setTuning(tuning);
-    setStringTuning(stringTuningState);
   };
 
   const handleSingleStringTuningChange = (value: string | null | undefined, index: number) => {

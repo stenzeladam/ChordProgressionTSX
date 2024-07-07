@@ -7,6 +7,8 @@ import KeyAndTuningButton from './KeyAndTuningButton';
 import CompensateForTuningOption from './CompensateForTuningOption';
 import Reset from './ResetButton'
 import { ModeOption } from './ModeSelector';
+import ChordNumeralButtons from './ChordNumeralButtons';
+import { ChordNumber } from './ChordNumeralButtons';
 
 interface RootOption {
   value: string;
@@ -19,6 +21,8 @@ const SelectionContainer = () => {
   const [selectedTuning, setSelectedTuning] = useState<string | null>(null);
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
   const [compensateOption, setCompensate] = useState<boolean>(false);
+  const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
+  const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
 
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
@@ -29,19 +33,20 @@ const SelectionContainer = () => {
     setSelectedTuning(null);
     setSelectedMode(null);
     setStringTunings(Array(6).fill(""));
+    setSubmitEnabled(false);
   }
 
   const handleModeSelect = (mode: ModeOption | null) => {
     setSelectedMode(mode);
   };
 
-  const handleTuningSelect = (tuning: string | null, stringTunings: string[]) => {
-    setSelectedTuning(tuning);
-    setStringTunings(stringTunings);
-  };
-
   const handleCompensateSelect = (selection: boolean) => {
-    setCompensate(selection)
+    setCompensate(selection);
+  }
+
+  const handleNumeralSelect = (num: ChordNumber) => {
+    setChordNum(num);
+    console.log("The selected numeral is: ", num.value);
   }
 
   const isIncomplete =
@@ -63,8 +68,11 @@ const SelectionContainer = () => {
         stringTuningState={stringTunings}
         setTuning={setSelectedTuning}
         setStringTuning={setStringTunings} />
-      <CompensateForTuningOption onSelect={handleCompensateSelect} />
+      <CompensateForTuningOption 
+        onSelect={handleCompensateSelect} />
       <KeyAndTuningButton
+        submitEnabled={isSubmitEnabled}
+        setEnableSubmit={setSubmitEnabled}
         isIncomplete={isIncomplete}
         selectedRoot={selectedRoot}
         selectedMode={selectedMode}
@@ -74,6 +82,8 @@ const SelectionContainer = () => {
       <Reset
         onClick={resetInputs}
       />
+      <ChordNumeralButtons 
+        onSelect={handleNumeralSelect}/>
     </Box>
   )
 }

@@ -16,6 +16,8 @@ interface KeyAndTuningButtonProps {
   selectedMode: ModeOption | null;
   selectedTuning: string | null;
   tuningCompensation: boolean;
+  submitEnabled: boolean;
+  setEnableSubmit: (submitEnabled :boolean) => void;
 }
 
 const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
@@ -23,12 +25,12 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   selectedRoot,
   selectedMode,
   selectedTuning,
-  tuningCompensation
+  tuningCompensation,
+  submitEnabled,
+  setEnableSubmit
   }) => {
-  const [isClicked, setClicked] = useState(false);
-
   const handleClick = () => {
-    setClicked(true);
+    setEnableSubmit(true);
     console.log("Selected root: ", selectedRoot?.value);
     console.log("Selected mode: ", selectedMode);
     console.log("Selected tuning: ", selectedTuning);
@@ -53,9 +55,9 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
           '&:hover': {bgcolor: 'white', color: 'black', border: '2pt solid black'},
           '&:disabled': {bgcolor: 'green', color: 'white', border: '2pt solid green'}
         }} 
-        disabled={isIncomplete || (isClicked && !isIncomplete)}
+        disabled={isIncomplete || (submitEnabled && !isIncomplete)}
         variant="outlined">
-          {isIncomplete ? 'Select a root, mode, and tuning' : (isClicked ? 'Root, mode, and tuning confirmed' : 'Confirm root, mode, and tuning selection')}
+          {isIncomplete ? 'Select a root, mode, and tuning' : (submitEnabled ? 'Root, mode, and tuning confirmed' : 'Confirm root, mode, and tuning selection')}
       </Button>
     </Box>
   );
