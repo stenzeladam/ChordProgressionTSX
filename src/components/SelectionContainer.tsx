@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { useState } from 'react';
-import RootNoteSelect from './SelectRootNote';
-import TuningSelector from './TuningSelector';
+import RootNoteSelect, { RootOption } from './SelectRootNote';
+import TuningSelector, { TuningOption } from './TuningSelector';
 import ModeSelector from './ModeSelector';
 import KeyAndTuningButton from './KeyAndTuningButton';
 import CompensateForTuningOption from './CompensateForTuningOption';
@@ -10,15 +10,10 @@ import { ModeOption } from './ModeSelector';
 import ChordNumeralButtons from './ChordNumeralButtons';
 import { ChordNumber } from './ChordNumeralButtons';
 
-interface RootOption {
-  value: string;
-  label: string;
-}
-
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
   const [selectedMode, setSelectedMode] = useState<ModeOption | null>(null);
-  const [selectedTuning, setSelectedTuning] = useState<string | null>(null);
+  const [selectedTuning, setSelectedTuning] = useState<TuningOption | null>(null);
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
   const [compensateOption, setCompensate] = useState<boolean>(false);
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
@@ -51,7 +46,7 @@ const SelectionContainer = () => {
     !selectedRoot ||
     !selectedMode ||
     !selectedTuning ||
-    (selectedTuning === 'Other' && stringTunings.some((tuning) => !tuning));
+    (selectedTuning.tuning === 'Other' && stringTunings.some((tuning) => !tuning));
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -74,7 +69,7 @@ const SelectionContainer = () => {
         isIncomplete={isIncomplete}
         selectedRoot={selectedRoot}
         selectedMode={selectedMode}
-        selectedTuning={selectedTuning}
+        selectedTuning={selectedTuning?.tuning ?? null}
         tuningCompensation={compensateOption}
       />
       <Reset

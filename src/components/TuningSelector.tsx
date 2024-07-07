@@ -3,6 +3,11 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 
+export interface TuningOption {
+  label: string;
+  tuning: string;
+}
+
 const tuningOptions = [
   { label: 'E Standard', tuning: "E Standard" },
   { label: 'Eb/D# Standard', tuning: "D# Standard" },
@@ -35,9 +40,9 @@ const definedTunings: { [key: string]: string[] } = {
 };
 
 interface TuningSelectorProps {
-  tuningState: string | null;
+  tuningState: TuningOption | null;
   stringTuningState: string[];
-  setTuning: (tuning: string | null) => void;
+  setTuning: (tuning: TuningOption | null) => void;
   setStringTuning: (stringTunings: string[]) => void;
 }
 
@@ -46,13 +51,13 @@ const TuningSelector: React.FC<TuningSelectorProps> = ({ tuningState, stringTuni
 
   const handleTuningChange = (_: any, value: { label: string; tuning: string } | null) => {
     const tuning = value?.tuning || ""; // Ensure tuning is always a string
-    setTuning(tuning);
+    setTuning(value);
 
     if (tuning && definedTunings[tuning]) {
-      setTuning(tuning);
+      setTuning(value);
       setStringTuning(definedTunings[tuning]);
     } else {
-      setTuning(tuning);
+      setTuning(value);
       setStringTuning(Array(6).fill(""));
     }
 
@@ -62,7 +67,7 @@ const TuningSelector: React.FC<TuningSelectorProps> = ({ tuningState, stringTuni
 
   const handleSingleStringTuningChange = (value: string | null | undefined, index: number) => {
     const updatedStringTunings = [...stringTuningState.slice(0, index), value ?? "", ...stringTuningState.slice(index + 1)];
-    setTuning(tuningState);
+
     setStringTuning(updatedStringTunings);
   };
 
@@ -70,6 +75,7 @@ const TuningSelector: React.FC<TuningSelectorProps> = ({ tuningState, stringTuni
     <div>
       <Autocomplete
         disablePortal
+        value={tuningState}
         id="tuningSelector"
         options={tuningOptions}
         sx={{ width: 300, marginBottom: 2 }}
