@@ -41,4 +41,4 @@ const ChordNumeralButtons: React.FC<ChordNumeralButtonsProps> = ({onSelect}) => 
   );
 }
 
-export default ChordNumeralButtons;
+export default ChordNumeralButtons; 

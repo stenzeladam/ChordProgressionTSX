@@ -9,6 +9,7 @@ import Reset from './ResetButton'
 import { ModeOption } from './ModeSelector';
 import ChordNumeralButtons from './ChordNumeralButtons';
 import { ChordNumber } from './ChordNumeralButtons';
+import AddChordButtton from './AddChordButton'
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
@@ -16,7 +17,10 @@ const SelectionContainer = () => {
   const [selectedTuning, setSelectedTuning] = useState<TuningOption | null>(null);
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
   const [compensateOption, setCompensate] = useState<boolean>(false);
+  const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
+  const [hasChordNum, setHasChordNum] = useState<boolean>(false);
+  const [chordProgNums, setChordProgNums] = useState<number[]>([]);
  
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
@@ -28,6 +32,9 @@ const SelectionContainer = () => {
     setSelectedMode(null);
     setStringTunings(Array(6).fill(""));
     setSubmitEnabled(false);
+    setChordProgNums([]);
+    setHasChordNum(false);
+    setChordNum(null);
   }
 
   const handleModeSelect = (mode: ModeOption | null) => {
@@ -39,9 +46,19 @@ const SelectionContainer = () => {
   }
 
   const handleNumeralSelect = (num: ChordNumber) => {
-    console.log("The selected numeral is: ", num.value);
+    setHasChordNum(true);
+    setChordNum(num);
   }
 
+  const addChord = (num:ChordNumber | null) => {
+    if (num) {
+      setChordProgNums((prev: number[]) => {
+        return [...prev, num.value];
+      });
+    }
+  }
+
+  console.log("The progression: ", chordProgNums);
   const isIncomplete =
     !selectedRoot ||
     !selectedMode ||
@@ -77,6 +94,10 @@ const SelectionContainer = () => {
       />
       <ChordNumeralButtons 
         onSelect={handleNumeralSelect}/>
+      <AddChordButtton 
+        hasChordNum={hasChordNum}
+        chordNum={chordNum}
+        onSubmit={addChord}/>
     </Box>
   )
 }
