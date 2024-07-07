@@ -117,12 +117,23 @@ var ChordVoicing = /** @class */ (function () {
         }
         return voicing;
     };
+    ChordVoicing.prototype.convertNotesToVoicingArray = function (param) {
+        var tabsFrets = ["X", "X", "X", "X", "X", "X"];
+        for (var nthString = 0; nthString < tabsFrets.length; nthString++) {
+            var currentString = this.stringNotes[nthString];
+            var fret = 0;
+            while (param[nthString] != currentString[fret] && fret < currentString.length) {
+                fret++;
+            }
+            tabsFrets[nthString] = fret.toString();
+        }
+        return tabsFrets;
+    };
     ChordVoicing.prototype.convertNotesToVoicingStandard = function () {
         var numOfNotesInChord = this.notes.length;
         var tabsFrets = ["X", "X", "X", "X", "X", "X"];
         for (var nthString = 0; nthString < numOfNotesInChord; nthString++) {
             var currentString = this.STANDARD[nthString];
-            var size = currentString.length;
             var fret = 0;
             while (currentString[fret] != this.notes[nthString] && fret < currentString.length) {
                 fret++;
@@ -140,6 +151,128 @@ var ChordVoicing = /** @class */ (function () {
         }
         return voicing;
     };
+    ChordVoicing.prototype.convertVoicingToNotesArray = function (param) {
+        var fretTabsStr = param.split(" ");
+        var notesArr = [];
+        var fretNumber = 0;
+        for (var i = 0; i < fretTabsStr.length; i++) {
+            var tunedStringNotes = this.stringNotes[i]; //Check each string, from lowest to highest, for the notes at each fret number in fretTabsStr
+            if (fretTabsStr[i] != "X") {
+                fretNumber = parseInt(fretTabsStr[i]);
+                notesArr.push(tunedStringNotes[fretNumber]);
+            }
+            else {
+                notesArr.push("X");
+            }
+        }
+        return notesArr;
+    };
+    ChordVoicing.prototype.checkForNotesToRemove = function (param1, tonesParam) {
+        var correctTones = tonesParam.split(","); //these are the tones to keep, all other tones should be removed from param1
+        var tonesToCheck = param1;
+        for (var i = 0; i < correctTones.length; i++) { //for consistency in how notes are written, convert all flats to their sharp equivalent. Ex: Eb -> D#
+            switch (correctTones[i]) {
+                case "Db":
+                    correctTones[i] = "C#";
+                    break;
+                case "Eb":
+                    correctTones[i] = "D#";
+                    break;
+                case "Gb":
+                    correctTones[i] = "F#";
+                    break;
+                case "Ab":
+                    correctTones[i] = "G#";
+                    break;
+                case "Bb":
+                    correctTones[i] = "A#";
+                    break;
+                default:
+                    break;
+            }
+        }
+        var indicesNeedReplacing = Array(tonesToCheck.length).fill(false);
+        for (var i = 0; i < tonesToCheck.length; i++) {
+            if (tonesToCheck[i] == "X") { //Nothing to replace
+                //continue;
+            }
+            else {
+                var replaceFlag = true;
+                for (var j = 0; j < correctTones.length; j++) { //check the entire correctNotes array to see if tonesToCheck[i] belongs
+                    if (tonesToCheck[i] === correctTones[j]) {
+                        replaceFlag = false;
+                    }
+                }
+                if (replaceFlag) { //Need to replace these notes either with the nearest available note, within 2 frets below or 3 frets above, or an "X" if no such note is available.
+                    indicesNeedReplacing[i] = true; //Mark index for needing replacement
+                }
+            }
+        }
+        var voice = this.convertNotesToVoicingArray(tonesToCheck);
+        return this.replaceNotes(tonesToCheck, correctTones, indicesNeedReplacing, voice);
+    };
+    ChordVoicing.prototype.replaceNotes = function (param, correctNotesParam, indices, voice_arr) {
+        var notes = param;
+        var voicingArray = voice_arr;
+        var correctNotes = correctNotesParam;
+        for (var i = 0; i < indices.length; i++) {
+            var currentNote = notes[i];
+            var currentFret = void 0;
+            var noteFixed = false;
+            if (indices[i]) { //if the index is marked true for replacement, then notes[i] needs to be replaced. i is also the nthString to check (Ex: if i = 0, check the lowest string/6th string)
+                for (var j = 0; (j < this.stringNotes[i].length) && !noteFixed; j++) { //first check the string to find any of the notes in correctNotesParam. 
+                    if (currentNote == this.stringNotes[i][j]) {
+                        currentFret = j; //marking the fret number of the incorrect note, so the distance to the nearest correct note can be calculated;
+                        var offsets = [1, -1, 2, -2, 3]; // the order of frets to check, ie 1 fret above, then 1 below, then 2 above...etc
+                        for (var _i = 0, offsets_1 = offsets; _i < offsets_1.length; _i++) {
+                            var offset = offsets_1[_i];
+                            var above12thFret = false;
+                            var k = (j + offset) % this.stringNotes[i].length; //check one fret above. The % this.stringNotes[i].length is in case j is at the 11th fret, it will check the 12th fret and above, as the 12th fret note will be the same as the 0 index note.
+                            if (k >= 0) { //Cannot have a negative fret
+                                if (j + offset >= this.stringNotes[i].length) {
+                                    above12thFret = true;
+                                }
+                                for (var element = 0; element < correctNotes.length; element++) { //check each element in correctNotes to see if this.stringNotes[i][k] is a correct note
+                                    if (this.stringNotes[i][k] === correctNotes[element]) {
+                                        notes[i] = "(" + correctNotes[element] + ")";
+                                        if (above12thFret) {
+                                            currentFret = 12 + k;
+                                            voicingArray[i] = "(" + currentFret.toString() + ")";
+                                            noteFixed = true;
+                                            break;
+                                        }
+                                        else {
+                                            currentFret = k;
+                                            voicingArray[i] = "(" + currentFret.toString() + ")";
+                                            noteFixed = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (noteFixed) {
+                                break;
+                            }
+                        }
+                        if (!noteFixed) {
+                            notes[i] = "(X)";
+                            voicingArray[i] = "(X)";
+                            noteFixed = true;
+                        }
+                    }
+                }
+            }
+        }
+        for (var i = 0; i < notes.length; i++) {
+            if (notes[i] === "X") {
+                voicingArray[i] = "X";
+            }
+            else if (notes[i] === "(X)") {
+                voicingArray[i] = "(X)";
+            }
+        }
+        return [notes, voicingArray];
+    };
     ChordVoicing.prototype.mergeChordData = function (param1, param2) {
         // param1 should be the object created with the normal voicing function
         // param2 should be the object created with the standard tuning voicing function
@@ -149,6 +282,18 @@ var ChordVoicing = /** @class */ (function () {
         var enharmonicChordName = param2.getDATA()[0].ENHARMONIC_CHORD_NAME;
         var voicing_ID = param1.getDATA()[0].VOICING_ID;
         var tones = param2.getDATA()[0].TONES;
+        // convert stings to an array of notes based upon the selected-tuning array (not the constant standard tuning array), and then check to see if any of these notes are not present in tones.
+        var strArr = this.convertVoicingToNotesArray(strings);
+        var correctedVoicingTab = this.checkForNotesToRemove(strArr, tones)[1];
+        strings = "";
+        for (var i = 0; i < correctedVoicingTab.length; i++) {
+            if (i < correctedVoicingTab.length - 1) {
+                strings = strings + correctedVoicingTab[i] + " ";
+            }
+            else {
+                strings = strings + correctedVoicingTab[i];
+            }
+        }
         var mergedData = new UberChordAPI_data_1.UberChordAPI_data([{ strings: strings, fingering: fingering, chordName: chordName, enharmonicChordName: enharmonicChordName, voicing_ID: voicing_ID, tones: tones }]);
         return mergedData;
     };

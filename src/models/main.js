@@ -41,11 +41,11 @@ var Chord_1 = require("./Chord");
 var ChordVoicing_1 = require("./ChordVoicing");
 // Main method for console testing
 function main() {
-    var instance = new Modes_1.Modes("E");
+    var instance = new Modes_1.Modes("C");
     instance.applyMode("Aeolian");
-    var tempChord = new Chord_1.Chord(1, instance.getScale(), instance.getChromatic());
+    var tempChord = new Chord_1.Chord(2, instance.getScale(), instance.getChromatic());
     tempChord.buildChord();
-    var tempVoicing = new ChordVoicing_1.ChordVoicing(tempChord.getNotes(), false, ["C", "F", "A#", "D#", "G", "C"]);
+    var tempVoicing = new ChordVoicing_1.ChordVoicing(tempChord.getNotes(), true, ["C", "F", "A#", "D#", "G", "C"]);
     tempVoicing.tuneEachString();
     createCallandInterpretData(tempVoicing);
 }
