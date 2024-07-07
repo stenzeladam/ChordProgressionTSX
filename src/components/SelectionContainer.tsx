@@ -22,8 +22,7 @@ const SelectionContainer = () => {
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
   const [compensateOption, setCompensate] = useState<boolean>(false);
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
-  const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
-
+ 
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
   };
@@ -45,7 +44,6 @@ const SelectionContainer = () => {
   }
 
   const handleNumeralSelect = (num: ChordNumber) => {
-    setChordNum(num);
     console.log("The selected numeral is: ", num.value);
   }
 
