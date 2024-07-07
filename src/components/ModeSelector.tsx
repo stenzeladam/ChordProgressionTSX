@@ -1,15 +1,14 @@
-import { useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-interface ModeOption {
+export interface ModeOption {
   label: string;
   mode: string;
 }
 
 interface ModeSelectorProps {
-  onSelect: (mode: string | null) => void;
-  modeState: string | null;
+  onSelect: (mode: ModeOption | null) => void;
+  modeState: ModeOption | null;
 }
 
 const Modes: ModeOption[] = [
@@ -23,18 +22,13 @@ const Modes: ModeOption[] = [
 ];
 
 const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect }) => {
-  const option = useMemo(() => Modes.find(element => {
-      return element.mode === modeState;
-    })
-  , [modeState]);
-
   const handleChange = (_: any, newValue: ModeOption | null) => {
-    onSelect(newValue ? newValue.mode : null);
+    onSelect(newValue);
   };
 
   return (
     <Autocomplete
-      value={option}
+      value={modeState}
       onChange={handleChange}
       disablePortal
       id="ModeSelector"

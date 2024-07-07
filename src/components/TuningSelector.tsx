@@ -37,32 +37,36 @@ const definedTunings: { [key: string]: string[] } = {
 interface TuningSelectorProps {
   tuningState: string | null;
   stringTuningState: string[];
-  onSelect: (tuning: string | null, stringTunings: string[]) => void;
+  setTuning: (tuning: string | null) => void;
+  setStringTuning: (stringTunings: string[]) => void;
 }
 
-const TuningSelector: React.FC<TuningSelectorProps> = ({ tuningState, stringTuningState, onSelect }) => {
+const TuningSelector: React.FC<TuningSelectorProps> = ({ tuningState, stringTuningState, setTuning, setStringTuning }) => {
   const [disableStringTuningFlag, setDisabledStringFlag] = useState(true);
 
   const handleTuningChange = (_: any, value: { label: string; tuning: string } | null) => {
     const tuning = value?.tuning || ""; // Ensure tuning is always a string
-    onSelect(tuning, []);
+    setTuning(tuning);
 
     if (tuning && definedTunings[tuning]) {
-      onSelect(tuning, definedTunings[tuning]);
+      setTuning(tuning);
+      setStringTuning(definedTunings[tuning]);
     } else {
-      onSelect(tuning, Array(6).fill(""));
+      setTuning(tuning);
+      setStringTuning(Array(6).fill(""));
     }
 
     console.log("The selected tuning is: ", tuning, "\nvalue?.label is: ", value?.label);
     setDisabledStringFlag(tuning !== "Other");
 
-    // Call onSelect with selectedTuning and current stringTunings
-    onSelect(tuning, stringTuningState);
+    setTuning(tuning);
+    setStringTuning(stringTuningState);
   };
 
   const handleSingleStringTuningChange = (value: string | null | undefined, index: number) => {
     const updatedStringTunings = [...stringTuningState.slice(0, index), value ?? "", ...stringTuningState.slice(index + 1)];
-    onSelect(tuningState, updatedStringTunings);
+    setTuning(tuningState);
+    setStringTuning(updatedStringTunings);
   };
 
   return (

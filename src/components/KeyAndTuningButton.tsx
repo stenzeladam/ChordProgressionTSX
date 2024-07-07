@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 import { Modes } from '../models/Modes';
 import { Chord } from '../models/Chord';
+import { ModeOption } from './ModeSelector';
 
 interface RootOption {
   value: string;
@@ -12,7 +13,7 @@ interface RootOption {
 interface KeyAndTuningButtonProps {
   isIncomplete: boolean;
   selectedRoot: RootOption | null;
-  selectedMode: string | null;
+  selectedMode: ModeOption | null;
   selectedTuning: string | null;
   tuningCompensation: boolean;
 }
@@ -34,7 +35,7 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
     console.log("Compensate: ", tuningCompensation)
     if (selectedRoot && selectedMode) {
       let instance = new Modes(selectedRoot.value);
-      instance.applyMode(selectedMode);
+      instance.applyMode(selectedMode.mode);
       let tempChord = new Chord(1, instance.getScale(), instance.getChromatic());
       tempChord.buildChord();
       console.log(tempChord.getNotes_String());

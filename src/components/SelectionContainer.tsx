@@ -6,6 +6,7 @@ import ModeSelector from './ModeSelector';
 import KeyAndTuningButton from './KeyAndTuningButton';
 import CompensateForTuningOption from './CompensateForTuningOption';
 import Reset from './ResetButton'
+import { ModeOption } from './ModeSelector';
 
 interface RootOption {
   value: string;
@@ -14,7 +15,7 @@ interface RootOption {
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
-  const [selectedMode, setSelectedMode] = useState<string | null>(null);
+  const [selectedMode, setSelectedMode] = useState<ModeOption | null>(null);
   const [selectedTuning, setSelectedTuning] = useState<string | null>(null);
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
   const [compensateOption, setCompensate] = useState<boolean>(false);
@@ -30,7 +31,7 @@ const SelectionContainer = () => {
     setStringTunings(Array(6).fill(""));
   }
 
-  const handleModeSelect = (mode: string | null) => {
+  const handleModeSelect = (mode: ModeOption | null) => {
     setSelectedMode(mode);
   };
 
@@ -60,7 +61,8 @@ const SelectionContainer = () => {
       <TuningSelector 
         tuningState={selectedTuning}
         stringTuningState={stringTunings}
-        onSelect={handleTuningSelect} />
+        setTuning={setSelectedTuning}
+        setStringTuning={setStringTunings} />
       <CompensateForTuningOption onSelect={handleCompensateSelect} />
       <KeyAndTuningButton
         isIncomplete={isIncomplete}
