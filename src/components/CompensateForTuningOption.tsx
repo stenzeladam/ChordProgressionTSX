@@ -1,18 +1,27 @@
 import * as React from 'react';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { Typography } from '@mui/material';
+import { Switch, FormControlLabel, FormGroup, Typography } from '@mui/material';
 
-export default function SwitchLabels() {
+// interface CompensateOption {
+//   selected: boolean;
+// }
+
+interface CompensateForTuningOptionProps {
+  onSelect: (selection: boolean) => void;
+}
+
+const CompensateSwitch: React.FC<CompensateForTuningOptionProps> = ({ onSelect }) => {
   const [labelText, setLabelText] = React.useState("No, don't compensate for the tuning");
+  const [compensationSelection, setCompensationSelection] = React.useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
+    const isSelected = event.target.checked;
+    if (isSelected) {
       setLabelText("Yes, compensate for the tuning");
     } else {
       setLabelText("No, don't compensate for the tuning");
     }
+    setCompensationSelection(isSelected);
+    onSelect(isSelected);
   };
 
   return (
@@ -26,12 +35,15 @@ export default function SwitchLabels() {
       </Typography>
       <FormGroup>
         <FormControlLabel
-          control={<Switch onChange={handleChange} color="success" />}
+          control={<Switch checked={compensationSelection}
+            onChange={handleChange} 
+            color="success" />}
           label={labelText}
           id="compensate_switch"
         />
       </FormGroup>
     </div>
   );
-}
+};
+export default CompensateSwitch;
 

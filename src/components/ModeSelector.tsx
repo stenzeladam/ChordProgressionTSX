@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
@@ -9,6 +9,7 @@ interface ModeOption {
 
 interface ModeSelectorProps {
   onSelect: (mode: string | null) => void;
+  modeState: string | null;
 }
 
 const Modes: ModeOption[] = [
@@ -21,17 +22,19 @@ const Modes: ModeOption[] = [
   { label: 'Locrian', mode: "Locrian" }
 ];
 
-const ModeSelector: React.FC<ModeSelectorProps> = ({ onSelect }) => {
-  const [selectedMode, setSelectedMode] = React.useState<ModeOption | null>(null);
+const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect }) => {
+  const option = useMemo(() => Modes.find(element => {
+      return element.mode === modeState;
+    })
+  , [modeState]);
 
   const handleChange = (_: any, newValue: ModeOption | null) => {
-    setSelectedMode(newValue);
     onSelect(newValue ? newValue.mode : null);
   };
 
   return (
     <Autocomplete
-      value={selectedMode}
+      value={option}
       onChange={handleChange}
       disablePortal
       id="ModeSelector"

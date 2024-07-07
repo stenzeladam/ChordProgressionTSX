@@ -9,6 +9,7 @@ interface RootOption {
 
 interface AutocompleteRootProps {
   onSelect: (root: RootOption | null) => void;
+  rootState: RootOption | null
 }
 
 const rootNotes: RootOption[] = [
@@ -26,11 +27,8 @@ const rootNotes: RootOption[] = [
   { value: "B", label: "B"},
 ]
 
-const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ onSelect }) => {
-  const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
-
+const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState ,onSelect }) => {
   const handleChange = (_: any, newValue: RootOption | null) => {
-    setSelectedRoot(newValue);
     onSelect(newValue);
     console.log("The root is: ", newValue);
   };
@@ -38,7 +36,7 @@ const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ onSelect }) => {
   return (
     <Autocomplete
       id='RootSelector'
-      value={selectedRoot}
+      value={rootState}
       onChange={handleChange}
       options={rootNotes}
       getOptionLabel={(option) => option.label}

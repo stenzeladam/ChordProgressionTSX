@@ -14,14 +14,16 @@ interface KeyAndTuningButtonProps {
   selectedRoot: RootOption | null;
   selectedMode: string | null;
   selectedTuning: string | null;
+  tuningCompensation: boolean;
 }
 
 const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   isIncomplete,
   selectedRoot,
   selectedMode,
-  selectedTuning
-}) => {
+  selectedTuning,
+  tuningCompensation
+  }) => {
   const [isClicked, setClicked] = useState(false);
 
   const handleClick = () => {
@@ -29,6 +31,7 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
     console.log("Selected root: ", selectedRoot?.value);
     console.log("Selected mode: ", selectedMode);
     console.log("Selected tuning: ", selectedTuning);
+    console.log("Compensate: ", tuningCompensation)
     if (selectedRoot && selectedMode) {
       let instance = new Modes(selectedRoot.value);
       instance.applyMode(selectedMode);
