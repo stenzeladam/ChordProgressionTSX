@@ -10,17 +10,19 @@ import { ModeOption } from './ModeSelector';
 import ChordNumeralButtons from './ChordNumeralButtons';
 import { ChordNumber } from './ChordNumeralButtons';
 import AddChordButtton from './AddChordButton'
+import { Modes } from '../models/Modes';
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
   const [selectedMode, setSelectedMode] = useState<ModeOption | null>(null);
   const [selectedTuning, setSelectedTuning] = useState<TuningOption | null>(null);
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
-  const [compensateOption, setCompensate] = useState<boolean>(false);
+  const [compensateOption, setCompensate] = useState<boolean>(false); //intentionally won't be reset by "Reset" component
   const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
   const [chordProgNums, setChordProgNums] = useState<number[]>([]);
+  const [modeInstanceState, setModeInstanceState] = useState<Modes | null>(null);
  
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
@@ -35,6 +37,7 @@ const SelectionContainer = () => {
     setChordProgNums([]);
     setHasChordNum(false);
     setChordNum(null);
+    setModeInstanceState(null);
   }
 
   const handleModeSelect = (mode: ModeOption | null) => {
@@ -43,6 +46,10 @@ const SelectionContainer = () => {
 
   const handleCompensateSelect = (selection: boolean) => {
     setCompensate(selection);
+  }
+
+  const handleKeyTuningSubmit = (modeInstance: Modes) => {
+    setModeInstanceState(modeInstance);
   }
 
   const handleNumeralSelect = (num: ChordNumber) => {
@@ -58,6 +65,7 @@ const SelectionContainer = () => {
     }
   }
 
+  console.log("The mode instance: ", modeInstanceState);
   //console.log("The progression: ", chordProgNums);
   const isIncomplete =
     !selectedRoot ||
@@ -88,6 +96,7 @@ const SelectionContainer = () => {
         selectedMode={selectedMode}
         selectedTuning={selectedTuning?.tuning ?? null}
         tuningCompensation={compensateOption}
+        onSubmit={handleKeyTuningSubmit}
       />
       <Reset
         onClick={resetInputs}

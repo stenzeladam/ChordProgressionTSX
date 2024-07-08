@@ -18,6 +18,7 @@ interface KeyAndTuningButtonProps {
   tuningCompensation: boolean;
   submitEnabled: boolean;
   setEnableSubmit: (submitEnabled :boolean) => void;
+  onSubmit: (modeInstance: Modes) => void;
 }
 
 const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
@@ -27,15 +28,17 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   selectedTuning,
   tuningCompensation,
   submitEnabled,
-  setEnableSubmit
+  setEnableSubmit,
+  onSubmit
   }) => {
   const handleClick = () => {
     setEnableSubmit(true);
     if (selectedRoot && selectedMode) {
       let instance = new Modes(selectedRoot.value);
       instance.applyMode(selectedMode.mode);
-      let tempChord = new Chord(1, instance.getScale(), instance.getChromatic());
-      tempChord.buildChord();
+      onSubmit(instance);
+      //let tempChord = new Chord(1, instance.getScale(), instance.getChromatic());
+      //tempChord.buildChord();
       //console.log(tempChord.getNotes_String());
     }
   };
