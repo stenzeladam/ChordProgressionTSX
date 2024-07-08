@@ -37,9 +37,6 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
       let instance = new Modes(selectedRoot.value);
       instance.applyMode(selectedMode.mode);
       onSubmit(instance);
-      //let tempChord = new Chord(1, instance.getScale(), instance.getChromatic());
-      //tempChord.buildChord();
-      //console.log(tempChord.getNotes_String());
     }
   };
 

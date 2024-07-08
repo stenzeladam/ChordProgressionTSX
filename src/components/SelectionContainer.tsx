@@ -6,11 +6,15 @@ import ModeSelector from './ModeSelector';
 import KeyAndTuningButton from './KeyAndTuningButton';
 import CompensateForTuningOption from './CompensateForTuningOption';
 import Reset from './ResetButton'
-import { ModeOption } from './ModeSelector';
 import ChordNumeralButtons from './ChordNumeralButtons';
-import { ChordNumber } from './ChordNumeralButtons';
 import AddChordButtton from './AddChordButton'
+import SubmitChordProgessionButton from './SubmitChordProgressionButton';
+import { ModeOption } from './ModeSelector';
+import { ChordNumber } from './ChordNumeralButtons';
 import { Modes } from '../models/Modes';
+import { Chord } from '../models/Chord';
+import { ChordVoicing } from '../models/ChordVoicing';
+import { UberChordAPI_data } from '../models/UberChordAPI_data';
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
@@ -23,7 +27,10 @@ const SelectionContainer = () => {
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
   const [chordProgNums, setChordProgNums] = useState<number[]>([]);
   const [modeInstanceState, setModeInstanceState] = useState<Modes | null>(null);
- 
+  const [isChordProgArrEmpty, setChordProgArrEmpty] = useState<boolean>(true);
+  const [chordsArray, setChordsArray] = useState<Chord[]>([]);
+  const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
+  
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
   };
@@ -38,6 +45,9 @@ const SelectionContainer = () => {
     setHasChordNum(false);
     setChordNum(null);
     setModeInstanceState(null);
+    setChordProgArrEmpty(true);
+    setChordsArray([]);
+    setAddChordDisabled(true);
   }
 
   const handleModeSelect = (mode: ModeOption | null) => {
@@ -49,6 +59,7 @@ const SelectionContainer = () => {
   }
 
   const handleKeyTuningSubmit = (modeInstance: Modes) => {
+    setAddChordDisabled(false);
     setModeInstanceState(modeInstance);
   }
 
@@ -62,10 +73,50 @@ const SelectionContainer = () => {
       setChordProgNums((prev: number[]) => {
         return [...prev, num.value];
       });
+      setChordProgArrEmpty(false);
     }
   }
 
-  console.log("The mode instance: ", modeInstanceState);
+  const submitChordProgression = () => {
+    const key = modeInstanceState;
+    if (key) {
+      for (let i = 0; i < chordProgNums.length; i++) {
+        let tempChord = new Chord(chordProgNums[i], key.getScale(), key.getChromatic());
+        tempChord.buildChord();
+        setChordsArray((prev: Chord[]) => {
+          return [...prev, tempChord];
+        });
+      }
+      for (let i = 0; i < chordsArray.length; i++) {
+        let tempVoicing = new ChordVoicing(chordsArray[i].getNotes(), compensateOption, stringTunings);
+        tempVoicing.tuneEachString();
+        let x = createCallandInterpretData(tempVoicing);
+        console.log(x);
+      }
+    }
+  }
+
+    // let instance = new Modes("C");
+    // instance.applyMode("Aeolian");
+    // let tempChord = new Chord(2, instance.getScale(), instance.getChromatic());
+    // tempChord.buildChord();
+    // let tempVoicing = new ChordVoicing(tempChord.getNotes(), true, ["C", "F", "A#", "D#", "G", "C"]);
+    // tempVoicing.tuneEachString();
+    // createCallandInterpretData(tempVoicing);
+
+  async function createCallandInterpretData(param: ChordVoicing) {
+    try {
+        const calledChordData = await param.fetchChordDataByVoicing(param.convertNotesToVoicing());
+        console.log("calledChordData: ", calledChordData);
+        return calledChordData;
+
+    } catch (error) {
+        console.error('Error fetching or creating instance:', error);
+    }
+
+}
+  //console.log("CHORD ARRAY", chordsArray);
+  //console.log("The mode instance: ", modeInstanceState);
   //console.log("The progression: ", chordProgNums);
   const isIncomplete =
     !selectedRoot ||
@@ -104,9 +155,13 @@ const SelectionContainer = () => {
       <ChordNumeralButtons 
         onSelect={handleNumeralSelect}/>
       <AddChordButtton 
+        isDisabled={isAddChordDisabled}
         hasChordNum={hasChordNum}
         chordNum={chordNum}
         onSubmit={addChord}/>
+      <SubmitChordProgessionButton
+        hasNoChords={isChordProgArrEmpty}
+        onSubmit={submitChordProgression}/>
     </Box>
   )
 }

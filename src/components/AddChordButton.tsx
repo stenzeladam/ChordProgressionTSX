@@ -4,12 +4,13 @@ import Button from '@mui/material/Button';
 import { ChordNumber } from './ChordNumeralButtons';
 
 interface AddChordButtonProps {
+  isDisabled: boolean;
   hasChordNum: boolean;
   chordNum: ChordNumber | null;
   onSubmit: (chord :ChordNumber | null) => void;
 }
 
-const AddChordButton: React.FC<AddChordButtonProps> = ({hasChordNum, chordNum, onSubmit}) => {
+const AddChordButton: React.FC<AddChordButtonProps> = ({hasChordNum, chordNum, onSubmit, isDisabled}) => {
   const handleClick = () => {
       onSubmit(chordNum);
       //console.log("selected chord: ", chordNum?.value);
@@ -20,7 +21,7 @@ const AddChordButton: React.FC<AddChordButtonProps> = ({hasChordNum, chordNum, o
       <Button variant="contained"
         id="add_chord_button"
         onClick={handleClick}
-        disabled={!hasChordNum} 
+        disabled={!hasChordNum || isDisabled} 
         color="success">
         Add Chord
       </Button>

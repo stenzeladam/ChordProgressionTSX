@@ -19,7 +19,7 @@ const ChordNumeralButtons: React.FC<ChordNumeralButtonsProps> = ({onSelect}) => 
   return (
     <FormControl>
       <FormLabel 
-        color='error'
+        sx={{ color: 'black' }}
         id="chordRomanNumerals">        
         Chord Numerals
       </FormLabel>
