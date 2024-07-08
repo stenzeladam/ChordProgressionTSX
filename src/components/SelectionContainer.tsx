@@ -79,30 +79,24 @@ const SelectionContainer = () => {
 
   const submitChordProgression = () => {
     const key = modeInstanceState;
-    if (key) {
+    if (key && selectedTuning != null) {
       for (let i = 0; i < chordProgNums.length; i++) {
         let tempChord = new Chord(chordProgNums[i], key.getScale(), key.getChromatic());
         tempChord.buildChord();
         setChordsArray((prev: Chord[]) => {
           return [...prev, tempChord];
         });
-      }
       for (let i = 0; i < chordsArray.length; i++) {
         let tempVoicing = new ChordVoicing(chordsArray[i].getNotes(), compensateOption, stringTunings);
-        tempVoicing.tuneEachString();
+        console.log("chordsArray[i].getNotes(): ", chordsArray[i].getNotes());
+        let s = tempVoicing.tuneEachString();
+        console.log("tempVoicing.tuneEachString(); ", s);
         let x = createCallandInterpretData(tempVoicing);
         console.log(x);
       }
     }
+    }
   }
-
-    // let instance = new Modes("C");
-    // instance.applyMode("Aeolian");
-    // let tempChord = new Chord(2, instance.getScale(), instance.getChromatic());
-    // tempChord.buildChord();
-    // let tempVoicing = new ChordVoicing(tempChord.getNotes(), true, ["C", "F", "A#", "D#", "G", "C"]);
-    // tempVoicing.tuneEachString();
-    // createCallandInterpretData(tempVoicing);
 
   async function createCallandInterpretData(param: ChordVoicing) {
     try {
