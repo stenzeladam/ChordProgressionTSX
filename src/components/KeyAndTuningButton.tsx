@@ -31,16 +31,12 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   }) => {
   const handleClick = () => {
     setEnableSubmit(true);
-    console.log("Selected root: ", selectedRoot?.value);
-    console.log("Selected mode: ", selectedMode);
-    console.log("Selected tuning: ", selectedTuning);
-    console.log("Compensate: ", tuningCompensation)
     if (selectedRoot && selectedMode) {
       let instance = new Modes(selectedRoot.value);
       instance.applyMode(selectedMode.mode);
       let tempChord = new Chord(1, instance.getScale(), instance.getChromatic());
       tempChord.buildChord();
-      console.log(tempChord.getNotes_String());
+      //console.log(tempChord.getNotes_String());
     }
   };
 

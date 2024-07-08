@@ -12,7 +12,7 @@ interface AddChordButtonProps {
 const AddChordButton: React.FC<AddChordButtonProps> = ({hasChordNum, chordNum, onSubmit}) => {
   const handleClick = () => {
       onSubmit(chordNum);
-      console.log("selected chord: ", chordNum?.value);
+      //console.log("selected chord: ", chordNum?.value);
   }
 
   return (

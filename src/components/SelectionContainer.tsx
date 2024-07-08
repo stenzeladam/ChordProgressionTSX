@@ -58,7 +58,7 @@ const SelectionContainer = () => {
     }
   }
 
-  console.log("The progression: ", chordProgNums);
+  //console.log("The progression: ", chordProgNums);
   const isIncomplete =
     !selectedRoot ||
     !selectedMode ||

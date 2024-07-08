@@ -30,7 +30,6 @@ const rootNotes: RootOption[] = [
 const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState ,onSelect }) => {
   const handleChange = (_: any, newValue: RootOption | null) => {
     onSelect(newValue);
-    console.log("The root is: ", newValue);
   };
 
   return (
