@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RootNoteSelect, { RootOption } from './SelectRootNote';
 import TuningSelector, { TuningOption } from './TuningSelector';
 import ModeSelector from './ModeSelector';
@@ -77,26 +77,30 @@ const SelectionContainer = () => {
     }
   }
 
-  const submitChordProgression = () => {
-    const key = modeInstanceState;
-    if (key && selectedTuning != null) {
-      for (let i = 0; i < chordProgNums.length; i++) {
-        let tempChord = new Chord(chordProgNums[i], key.getScale(), key.getChromatic());
-        tempChord.buildChord();
-        setChordsArray((prev: Chord[]) => {
-          return [...prev, tempChord];
-        });
-      for (let i = 0; i < chordsArray.length; i++) {
-        let tempVoicing = new ChordVoicing(chordsArray[i].getNotes(), compensateOption, stringTunings);
-        console.log("chordsArray[i].getNotes(): ", chordsArray[i].getNotes());
-        let s = tempVoicing.tuneEachString();
-        console.log("tempVoicing.tuneEachString(); ", s);
-        let x = createCallandInterpretData(tempVoicing);
-        console.log(x);
-      }
+const submitChordProgression = () => {
+  const key = modeInstanceState;
+  if (key && selectedTuning != null) {
+    const newChordsArray = [];
+    for (let i = 0; i < chordProgNums.length; i++) {
+      let tempChord = new Chord(chordProgNums[i], key.getScale(), key.getChromatic());
+      tempChord.buildChord();
+      newChordsArray.push(tempChord);
     }
+    setChordsArray(newChordsArray);
+  }
+};
+
+useEffect(() => {
+  if (chordsArray.length > 0) {
+    for (let i = 0; i < chordsArray.length; i++) {
+      let tempVoicing = new ChordVoicing(chordsArray[i].getNotes(), compensateOption, stringTunings);
+      let s = tempVoicing.tuneEachString();
+      let x = createCallandInterpretData(tempVoicing);
+      console.log(x);
     }
   }
+}, [chordsArray]);
+
 
   async function createCallandInterpretData(param: ChordVoicing) {
     try {
@@ -109,9 +113,6 @@ const SelectionContainer = () => {
     }
 
 }
-  //console.log("CHORD ARRAY", chordsArray);
-  //console.log("The mode instance: ", modeInstanceState);
-  //console.log("The progression: ", chordProgNums);
   const isIncomplete =
     !selectedRoot ||
     !selectedMode ||
