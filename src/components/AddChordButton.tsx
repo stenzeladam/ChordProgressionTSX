@@ -13,7 +13,6 @@ interface AddChordButtonProps {
 const AddChordButton: React.FC<AddChordButtonProps> = ({hasChordNum, chordNum, onSubmit, isDisabled}) => {
   const handleClick = () => {
       onSubmit(chordNum);
-      //console.log("selected chord: ", chordNum?.value);
   }
 
   return (

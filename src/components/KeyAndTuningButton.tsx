@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 import { Modes } from '../models/Modes';
-import { Chord } from '../models/Chord';
 import { ModeOption } from './ModeSelector';
 
 interface RootOption {
@@ -25,8 +24,6 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   isIncomplete,
   selectedRoot,
   selectedMode,
-  selectedTuning,
-  tuningCompensation,
   submitEnabled,
   setEnableSubmit,
   onSubmit

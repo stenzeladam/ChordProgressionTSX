@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import RootNoteSelect, { RootOption } from './SelectRootNote';
 import TuningSelector, { TuningOption } from './TuningSelector';
 import ModeSelector from './ModeSelector';
@@ -8,13 +8,12 @@ import CompensateForTuningOption from './CompensateForTuningOption';
 import Reset from './ResetButton'
 import ChordNumeralButtons from './ChordNumeralButtons';
 import AddChordButtton from './AddChordButton'
-import SubmitChordProgessionButton from './SubmitChordProgressionButton';
 import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
 import { Modes } from '../models/Modes';
 import { Chord } from '../models/Chord';
 import { ChordVoicing } from '../models/ChordVoicing';
-import { UberChordAPI_data } from '../models/UberChordAPI_data';
+import ChordProgressionTable from './ChordProgressionTable';
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
@@ -28,7 +27,7 @@ const SelectionContainer = () => {
   const [chordProgNums, setChordProgNums] = useState<number[]>([]);
   const [modeInstanceState, setModeInstanceState] = useState<Modes | null>(null);
   const [isChordProgArrEmpty, setChordProgArrEmpty] = useState<boolean>(true);
-  const [chordsArray, setChordsArray] = useState<Chord[]>([]);
+  const [chordsArray, setChordsArray] = useState<any>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
   
   const handleRootSelect = (root: RootOption | null) => {
@@ -48,7 +47,7 @@ const SelectionContainer = () => {
     setChordProgArrEmpty(true);
     setChordsArray([]);
     setAddChordDisabled(true);
-  }
+  };
 
   const handleModeSelect = (mode: ModeOption | null) => {
     setSelectedMode(mode);
@@ -56,63 +55,50 @@ const SelectionContainer = () => {
 
   const handleCompensateSelect = (selection: boolean) => {
     setCompensate(selection);
-  }
+  };
 
   const handleKeyTuningSubmit = (modeInstance: Modes) => {
     setAddChordDisabled(false);
     setModeInstanceState(modeInstance);
-  }
+  };
 
   const handleNumeralSelect = (num: ChordNumber) => {
     setHasChordNum(true);
     setChordNum(num);
-  }
+  };
 
-  const addChord = (num:ChordNumber | null) => {
-    if (num) {
-      setChordProgNums((prev: number[]) => {
-        return [...prev, num.value];
-      });
-      setChordProgArrEmpty(false);
-    }
-  }
-
-const submitChordProgression = () => {
-  const key = modeInstanceState;
-  if (key && selectedTuning != null) {
-    const newChordsArray = [];
-    for (let i = 0; i < chordProgNums.length; i++) {
-      let tempChord = new Chord(chordProgNums[i], key.getScale(), key.getChromatic());
+  const addChord = async (num:ChordNumber | null) => {
+    const key = modeInstanceState;
+    if (num && key && selectedTuning != null) {
+      let tempChord = new Chord(num.value, key.getScale(), key.getChromatic());
       tempChord.buildChord();
-      newChordsArray.push(tempChord);
-    }
-    setChordsArray(newChordsArray);
-  }
-};
+      let tempVoicing = new ChordVoicing(tempChord.getNotes(), compensateOption, stringTunings);
+      tempVoicing.tuneEachString();
+      let chordData = await createCallandInterpretData(tempVoicing);
+      let chordDataInterfaceArr = chordData?.getDATA();
 
-useEffect(() => {
-  if (chordsArray.length > 0) {
-    for (let i = 0; i < chordsArray.length; i++) {
-      let tempVoicing = new ChordVoicing(chordsArray[i].getNotes(), compensateOption, stringTunings);
-      let s = tempVoicing.tuneEachString();
-      let x = createCallandInterpretData(tempVoicing);
-      console.log(x);
+      if (chordDataInterfaceArr && chordDataInterfaceArr.length > 0) {
+        setChordsArray((prev: any) => {
+          return [...prev, {numeral: num.value, 
+            chord_name: chordDataInterfaceArr[0].CHORD_NAME,
+            chord_tabs: chordDataInterfaceArr[0].STRINGS,
+            chord_notes: chordDataInterfaceArr[0].TONES
+           }];
+        })
+      }    
     }
-  }
-}, [chordsArray]);
-
+  };
 
   async function createCallandInterpretData(param: ChordVoicing) {
     try {
         const calledChordData = await param.fetchChordDataByVoicing(param.convertNotesToVoicing());
-        console.log("calledChordData: ", calledChordData);
         return calledChordData;
 
     } catch (error) {
         console.error('Error fetching or creating instance:', error);
     }
 
-}
+  }
   const isIncomplete =
     !selectedRoot ||
     !selectedMode ||
@@ -144,9 +130,6 @@ useEffect(() => {
         tuningCompensation={compensateOption}
         onSubmit={handleKeyTuningSubmit}
       />
-      <Reset
-        onClick={resetInputs}
-      />
       <ChordNumeralButtons 
         onSelect={handleNumeralSelect}/>
       <AddChordButtton 
@@ -154,9 +137,12 @@ useEffect(() => {
         hasChordNum={hasChordNum}
         chordNum={chordNum}
         onSubmit={addChord}/>
-      <SubmitChordProgessionButton
-        hasNoChords={isChordProgArrEmpty}
-        onSubmit={submitChordProgression}/>
+      <ChordProgressionTable
+        ChordsArr={chordsArray}
+        />
+      <Reset
+        onClick={resetInputs}
+      />
     </Box>
   )
 }

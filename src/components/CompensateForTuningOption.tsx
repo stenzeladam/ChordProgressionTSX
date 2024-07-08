@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { Switch, FormControlLabel, FormGroup, Typography } from '@mui/material';
 
-// interface CompensateOption {
-//   selected: boolean;
-// }
-
 interface CompensateForTuningOptionProps {
   onSelect: (selection: boolean) => void;
 }

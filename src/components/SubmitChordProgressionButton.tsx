@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { Box } from '@mui/material';
-import { Modes } from '../models/Modes';
-import { Chord } from '../models/Chord';
-import { ModeOption } from './ModeSelector';
 
 interface SubmitChordProgressionProps {
   hasNoChords: boolean

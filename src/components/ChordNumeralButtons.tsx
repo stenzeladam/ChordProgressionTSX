@@ -18,26 +18,29 @@ const ChordNumeralButtons: React.FC<ChordNumeralButtonsProps> = ({onSelect}) => 
     }
   return (
     <FormControl>
-      <FormLabel 
-        sx={{ color: 'black' }}
-        id="chordRomanNumerals">        
-        Chord Numerals
-      </FormLabel>
-      <RadioGroup
-        aria-labelledby="chordRomanNumerals"
-        defaultValue={null}
-        onChange={handleChange}
-        name="chord-numeral-buttons-group"
-      >
-        <FormControlLabel value="1" control={<Radio color="error" />} label="I" />
-        <FormControlLabel value="2" control={<Radio color="error" />} label="II" />
-        <FormControlLabel value="3" control={<Radio color="error" />} label="III" />
-        <FormControlLabel value="4" control={<Radio color="error" />} label="IV" />
-        <FormControlLabel value="5" control={<Radio color="error" />} label="V" />
-        <FormControlLabel value="6" control={<Radio color="error" />} label="VI" />
-        <FormControlLabel value="7" control={<Radio color="error" />} label="VII" />
-      </RadioGroup>
-    </FormControl>
+  <FormLabel
+    sx={{ color: 'black' }}
+    id="chordRomanNumerals"
+  >
+    Chord Numerals
+  </FormLabel>
+    <RadioGroup
+      aria-labelledby="chordRomanNumerals"
+      defaultValue={null}
+      onChange={handleChange}
+      name="chord-numeral-buttons-group"
+      sx={{ flexDirection: 'row' }}
+    >
+      <FormControlLabel value="1" control={<Radio />} label="I" />
+      <FormControlLabel value="2" control={<Radio />} label="II" />
+      <FormControlLabel value="3" control={<Radio />} label="III" />
+      <FormControlLabel value="4" control={<Radio />} label="IV" />
+      <FormControlLabel value="5" control={<Radio />} label="V" />
+      <FormControlLabel value="6" control={<Radio />} label="VI" />
+      <FormControlLabel value="7" control={<Radio />} label="VII" />
+    </RadioGroup>
+  </FormControl>
+
   );
 }
 

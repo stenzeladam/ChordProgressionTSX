@@ -48,7 +48,7 @@ const definedTunings: { [key: string]: string[] } = {
   "Drop C": ["C", "G", "C", "F", "A", "D"],
   "Drop B": ["B", "F#", "B", "E", "G#", "C#"],
   "Drop A#": ["A#", "F", "A#", "D#", "G", "C"],
-  "Drop A": ["A", "E", "A", "D", "Gb/F#", "B"],
+  "Drop A": ["A", "E", "A", "D", "F#", "B"],
 };
 
 interface TuningSelectorProps {
