@@ -71,8 +71,60 @@ export class Modes {
             case "Locrian":
                 this.locrian();
                 break;
+            case "Harmonic Minor":
+                this.harmonicMinor();
+                break;
+            case "Double Harmonic Major":
+                this.doubleHarmonicMajor();
+                break;
             default:
                 break;
+        }
+    }
+
+    private harmonicMinor(): void {
+        this.scale = ["", "", "", "", "", "", ""];  
+        let j = 0;
+        for (let i = 0; i < this.scale.length; i++) {
+            
+            if (i != 1 && i != 4 && i != 5) {  // whole step
+                this.scale[i] = this._chromatic[j];
+                j++;
+                j++;
+            }
+            else if (i == 5) {                  // 1.5 step
+                this.scale[i] = this._chromatic[j];
+                j++;
+                j++;
+                j++;
+            }
+            else {                              // half step
+                this.scale[i] = this._chromatic[j];
+                j++;
+            }
+        }
+    }
+
+    private doubleHarmonicMajor(): void {
+        this.scale = ["", "", "", "", "", "", ""];  
+        let j = 0;
+        for (let i = 0; i < this.scale.length; i++) {
+            
+            if (i != 0 && i != 2 && i != 4) {               // whole step
+                this.scale[i] = this._chromatic[j];
+                j++;
+                j++;
+            }
+            if ((i == 1) || (i == 5)) {
+                this.scale[i] = this._chromatic[j];
+                j++;
+                j++;
+                j++;
+            }
+            else {                      // half step
+                this.scale[i] = this._chromatic[j];
+                j++;
+            }
         }
     }
 
