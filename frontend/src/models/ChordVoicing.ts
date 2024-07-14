@@ -91,6 +91,7 @@ export class ChordVoicing {
                 voicing = voicing + tabsFrets[i];
             }
         }
+        console.log(voicing);
         return voicing;
     }
 
@@ -132,6 +133,7 @@ export class ChordVoicing {
                 voicing = voicing + tabsFrets[i];
             }
         }
+        console.log("STANDARD: ", voicing);
         return voicing;
     }
 

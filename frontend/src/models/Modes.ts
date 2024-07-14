@@ -109,23 +109,23 @@ export class Modes {
         this.scale = ["", "", "", "", "", "", ""];  
         let j = 0;
         for (let i = 0; i < this.scale.length; i++) {
-            
-            if (i != 0 && i != 2 && i != 4) {               // whole step
+            if (i === 0 || i === 2 || i === 4) {
                 this.scale[i] = this._chromatic[j];
                 j++;
-                j++;
             }
-            if ((i == 1) || (i == 5)) {
+            else if (i === 1 || i === 5) {
                 this.scale[i] = this._chromatic[j];
                 j++;
                 j++;
                 j++;
             }
-            else {                      // half step
+            else {
                 this.scale[i] = this._chromatic[j];
+                j++;
                 j++;
             }
         }
+        console.log("SCALE: ", this.scale);
     }
 
     private ionian(): void {

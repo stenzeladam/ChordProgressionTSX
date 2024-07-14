@@ -20,7 +20,7 @@ const Modes: ModeOption[] = [
   { label: 'Aeolian', mode: "Aeolian" },
   { label: 'Locrian', mode: "Locrian" },
   { label: 'Harmonic Minor', mode: "Harmonic Minor" },
-  //{ label: 'Double Harmonic Major', mode: "Double Harmonic Major" }
+  { label: 'Double Harmonic Major', mode: "Double Harmonic Major" }
 ];
 
 const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect }) => {
