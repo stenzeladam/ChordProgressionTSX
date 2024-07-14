@@ -1,41 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
-import { Modes } from '../models/Modes';
-import { ModeOption } from './ModeSelector';
-
-interface RootOption {
-  value: string;
-  label: string;
-}
 
 interface KeyAndTuningButtonProps {
   isIncomplete: boolean;
-  selectedRoot: RootOption | null;
-  selectedMode: ModeOption | null;
-  selectedTuning: string | null;
-  tuningCompensation: boolean;
-  submitEnabled: boolean;
-  setEnableSubmit: (submitEnabled :boolean) => void;
-  onSubmit: (modeInstance: Modes) => void;
+  onClick: () => void
 }
 
-const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
-  isIncomplete,
-  selectedRoot,
-  selectedMode,
-  submitEnabled,
-  setEnableSubmit,
-  onSubmit
-  }) => {
+const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({ isIncomplete, onClick }) => {
+  const [isSelectionConfirmed, setIsSelectionConfirmed] = useState<boolean>(false);
+
   const handleClick = () => {
-    setEnableSubmit(true);
-    if (selectedRoot && selectedMode) {
-      let instance = new Modes(selectedRoot.value);
-      instance.applyMode(selectedMode.mode);
-      onSubmit(instance);
-    }
-  };
+    setIsSelectionConfirmed(true)
+    onClick()
+  }
 
   return (
     <Box sx={{ maxWidth: 450, display: 'flex', justifyContent: 'left' }}>
@@ -48,9 +26,9 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
           '&:hover': {bgcolor: 'white', color: 'black', border: '2pt solid black'},
           '&:disabled': {bgcolor: 'green', color: 'white', border: '2pt solid green'}
         }} 
-        disabled={isIncomplete || (submitEnabled && !isIncomplete)}
+        disabled={isIncomplete || (isSelectionConfirmed && !isIncomplete)}
         variant="outlined">
-          {isIncomplete ? 'Select a root, mode, and tuning' : (submitEnabled ? 'Root, mode, and tuning confirmed' : 'Confirm root, mode, and tuning selection')}
+          {isIncomplete ? 'Select a root, mode, and tuning' : (isSelectionConfirmed ? 'Root, mode, and tuning confirmed' : 'Confirm root, mode, and tuning selection')}
       </Button>
     </Box>
   );

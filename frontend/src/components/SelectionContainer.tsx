@@ -7,7 +7,7 @@ import KeyAndTuningButton from './KeyAndTuningButton';
 import CompensateForTuningOption from './CompensateForTuningOption';
 import Reset from './ResetButton'
 import ChordNumeralButtons from './ChordNumeralButtons';
-import AddChordButtton from './AddChordButton'
+import AddChordButton from './AddChordButton'
 import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
 import { Modes } from '../models/Modes';
@@ -22,7 +22,6 @@ const SelectionContainer = () => {
   const [stringTunings, setStringTunings] = useState<string[]>(Array(6).fill(""));
   const [compensateOption, setCompensate] = useState<boolean>(false); //intentionally won't be reset by "Reset" component
   const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
-  const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
   const [chordProgNums, setChordProgNums] = useState<number[]>([]);
   const [modeInstanceState, setModeInstanceState] = useState<Modes | null>(null);
@@ -39,7 +38,6 @@ const SelectionContainer = () => {
     setSelectedTuning(null);
     setSelectedMode(null);
     setStringTunings(Array(6).fill(""));
-    setSubmitEnabled(false);
     setChordProgNums([]);
     setHasChordNum(false);
     setChordNum(null);
@@ -57,9 +55,8 @@ const SelectionContainer = () => {
     setCompensate(selection);
   };
 
-  const handleKeyTuningSubmit = (modeInstance: Modes) => {
+  const handleKeyTuningSubmit = () => {
     setAddChordDisabled(false);
-    setModeInstanceState(modeInstance);
   };
 
   const handleNumeralSelect = (num: ChordNumber) => {
@@ -67,8 +64,21 @@ const SelectionContainer = () => {
     setChordNum(num);
   };
 
+  const generateMode = () => {
+    let instance = null;
+
+    if(selectedRoot && selectedMode) {
+      instance = new Modes(selectedRoot.value);
+      instance.applyMode(selectedMode.mode);
+      setModeInstanceState(instance);
+    }
+
+    return instance
+  }
+
   const addChord = async (num:ChordNumber | null) => {
-    const key = modeInstanceState;
+    const key = generateMode();
+
     if (num && key && selectedTuning != null) {
       let tempChord = new Chord(num.value, key.getScale(), key.getChromatic());
       tempChord.buildChord();
@@ -121,25 +131,19 @@ const SelectionContainer = () => {
       <CompensateForTuningOption 
         onSelect={handleCompensateSelect} />
       <KeyAndTuningButton
-        submitEnabled={isSubmitEnabled}
-        setEnableSubmit={setSubmitEnabled}
         isIncomplete={isIncomplete}
-        selectedRoot={selectedRoot}
-        selectedMode={selectedMode}
-        selectedTuning={selectedTuning?.tuning ?? null}
-        tuningCompensation={compensateOption}
-        onSubmit={handleKeyTuningSubmit}
+        onClick={handleKeyTuningSubmit}
       />
       <ChordNumeralButtons 
         onSelect={handleNumeralSelect}/>
-      <AddChordButtton 
+      <AddChordButton 
         isDisabled={isAddChordDisabled}
         hasChordNum={hasChordNum}
         chordNum={chordNum}
         onSubmit={addChord}/>
       <ChordProgressionTable
         ChordsArr={chordsArray}
-        />
+      />
       <Reset
         onClick={resetInputs}
       />
