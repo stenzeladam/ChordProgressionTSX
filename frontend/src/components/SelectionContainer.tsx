@@ -10,7 +10,6 @@ import ChordNumeralButtons from './ChordNumeralButtons';
 import AddChordButtton from './AddChordButton'
 import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
-import { Modes } from '../models/Modes';
 import { Chord } from '../models/Chord';
 import { ChordVoicing } from '../models/ChordVoicing';
 import ChordProgressionTable from './ChordProgressionTable';
@@ -25,7 +24,7 @@ const SelectionContainer = () => {
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
   const [chordProgNums, setChordProgNums] = useState<number[]>([]);
-  const [modeInstanceState, setModeInstanceState] = useState<Modes | null>(null);
+  const [modeInstanceState, setModeInstanceState] = useState<{ root: string; chromatic: string[]; scale: string[]; } | null>(null);
   const [isChordProgArrEmpty, setChordProgArrEmpty] = useState<boolean>(true);
   const [chordsArray, setChordsArray] = useState<any>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
@@ -57,8 +56,9 @@ const SelectionContainer = () => {
     setCompensate(selection);
   };
 
-  const handleKeyTuningSubmit = (modeInstance: Modes) => {
+  const handleKeyTuningSubmit = (modeInstance: { root: string; chromatic: string[]; scale: string[]; }) => {
     setAddChordDisabled(false);
+    console.log("SELECTION CONTAINER: ", modeInstance);
     setModeInstanceState(modeInstance);
   };
 
@@ -69,8 +69,9 @@ const SelectionContainer = () => {
 
   const addChord = async (num:ChordNumber | null) => {
     const key = modeInstanceState;
+    if (key) console.log("TEST key.scale: ", key.scale);
     if (num && key && selectedTuning != null) {
-      let tempChord = new Chord(num.value, key.getScale(), key.getChromatic());
+      let tempChord = new Chord(num.value, key.scale, key.chromatic);
       tempChord.buildChord();
       let tempVoicing = new ChordVoicing(tempChord.getNotes(), compensateOption, stringTunings);
       tempVoicing.tuneEachString();
