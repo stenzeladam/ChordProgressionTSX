@@ -10,9 +10,8 @@ import ChordNumeralButtons from './ChordNumeralButtons';
 import AddChordButtton from './AddChordButton'
 import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
-import { Chord } from '../models/Chord';
-import { ChordVoicing } from '../models/ChordVoicing';
 import ChordProgressionTable from './ChordProgressionTable';
+import axios from 'axios';
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
@@ -23,9 +22,8 @@ const SelectionContainer = () => {
   const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
-  const [chordProgNums, setChordProgNums] = useState<number[]>([]);
+  //const [chordProgNums, setChordProgNums] = useState<number[]>([]);
   const [modeInstanceState, setModeInstanceState] = useState<{ root: string; chromatic: string[]; scale: string[]; } | null>(null);
-  const [isChordProgArrEmpty, setChordProgArrEmpty] = useState<boolean>(true);
   const [chordsArray, setChordsArray] = useState<any>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
   
@@ -39,11 +37,10 @@ const SelectionContainer = () => {
     setSelectedMode(null);
     setStringTunings(Array(6).fill(""));
     setSubmitEnabled(false);
-    setChordProgNums([]);
+    //setChordProgNums([]);
     setHasChordNum(false);
     setChordNum(null);
     setModeInstanceState(null);
-    setChordProgArrEmpty(true);
     setChordsArray([]);
     setAddChordDisabled(true);
   };
@@ -58,7 +55,6 @@ const SelectionContainer = () => {
 
   const handleKeyTuningSubmit = (modeInstance: { root: string; chromatic: string[]; scale: string[]; }) => {
     setAddChordDisabled(false);
-    console.log("SELECTION CONTAINER: ", modeInstance);
     setModeInstanceState(modeInstance);
   };
 
@@ -68,38 +64,21 @@ const SelectionContainer = () => {
   };
 
   const addChord = async (num:ChordNumber | null) => {
-    const key = modeInstanceState;
-    if (key) console.log("TEST key.scale: ", key.scale);
-    if (num && key && selectedTuning != null) {
-      let tempChord = new Chord(num.value, key.scale, key.chromatic);
-      tempChord.buildChord();
-      let tempVoicing = new ChordVoicing(tempChord.getNotes(), compensateOption, stringTunings);
-      tempVoicing.tuneEachString();
-      let chordData = await createCallandInterpretData(tempVoicing);
-      let chordDataInterfaceArr = chordData?.getDATA();
-
-      if (chordDataInterfaceArr && chordDataInterfaceArr.length > 0) {
-        setChordsArray((prev: any) => {
-          return [...prev, {numeral: num.value, 
-            chord_name: chordDataInterfaceArr[0].CHORD_NAME,
-            chord_tabs: chordDataInterfaceArr[0].STRINGS,
-            chord_notes: chordDataInterfaceArr[0].TONES
-           }];
-        })
-      }    
+    try {
+      if (modeInstanceState && num && selectedTuning != null) {
+        const responseChord = await axios.post('http://localhost:3000/api/add/chord', {
+          numeral: num.value,
+          mode: modeInstanceState,
+          compensate: compensateOption,
+          tuning: stringTunings
+        });
+        setChordsArray(responseChord.data);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
     }
   };
 
-  async function createCallandInterpretData(param: ChordVoicing) {
-    try {
-        const calledChordData = await param.fetchChordDataByVoicing(param.convertNotesToVoicing());
-        return calledChordData;
-
-    } catch (error) {
-        console.error('Error fetching or creating instance:', error);
-    }
-
-  }
   const isIncomplete =
     !selectedRoot ||
     !selectedMode ||

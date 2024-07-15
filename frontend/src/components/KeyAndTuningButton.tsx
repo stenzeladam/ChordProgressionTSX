@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
-//import { Modes } from '../models/Modes';
 import { ModeOption } from './ModeSelector';
 import axios from 'axios';
 
@@ -37,15 +36,13 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   const handleClick = async () => {
     setEnableSubmit(true);
     if (selectedRoot && selectedMode) {
-      const keyDataInstance: KeyData = {
-        root: selectedRoot.value,
-        mode: selectedMode.mode
-      }
-
+      // const keyDataInstance: KeyData = {
+      //   root: selectedRoot.value,
+      //   mode: selectedMode.mode
+      // }
       try {
-        const response = await axios.post('http://localhost:3000/api/mode', keyDataInstance);
+        const response = await axios.post('http://localhost:3000/api/mode', { root: selectedRoot.value, mode: selectedMode.mode });
         const KEY: { root: string; chromatic: string[]; scale: string[]; } = response.data;
-        console.log("KEY: ", KEY);
         onSubmit(KEY);
       } catch (error) {
         console.error("Error: ", error);

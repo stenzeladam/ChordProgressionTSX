@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { Modes } from './Modes';
+import { Chord } from './Chord';
+import { ChordVoicing } from './ChordVoicing';
 
 const app = express();
 app.use(express.json());
@@ -32,19 +34,69 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Chord Progression Tool');
 });
 
-//Route to submit a root/mode/tuning selection 
-//The ... is just a placeholder for now
-app.get('/api/mode', (req: Request, res: Response) => {
-    res.send(); //Send the key and tuning as an object?
-});
-
 app.post('/api/mode', (req: Request, res: Response) => {
     let mode = new Modes(req.body.root, req.body.mode);
     const instance = mode.getModeMembers();
-    //console.log("FROM BACKEND: ", instance);
     res.send(instance);
 });
 
+app.post('/api/add/chord', async (req: Request, res: Response) => {
+    const data = req.body;
+    let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic);
+    tempChord.buildChord();
+    let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
+    tempVoicing.tuneEachString();
+    let chordData = await createCallandInterpretData(tempVoicing);
+    let chordDataInterfaceArr = chordData?.getDATA();
+    let chordsArr: any = [];
+    let chordNumeral: string = convertToRoman(data.numeral); 
+    if (chordDataInterfaceArr && chordDataInterfaceArr.length > 0) {
+        chordsArr = [
+            ...chordsArr,
+            {
+                numeral: chordNumeral,
+                chord_name: chordDataInterfaceArr[0].CHORD_NAME,
+                chord_tabs: chordDataInterfaceArr[0].STRINGS,
+                chord_notes: chordDataInterfaceArr[0].TONES
+            }
+        ];
+    }
+    res.send(chordsArr);
+});
+
+async function createCallandInterpretData(param: ChordVoicing) {
+      try {
+          const calledChordData = await param.fetchChordDataByVoicing(param.convertNotesToVoicing());
+          return calledChordData;
+  
+      } catch (error) {
+          console.error('Error fetching or creating instance:', error);
+      }
+  
+}
+
+function convertToRoman(num: number): string {
+    const romanNumeralMap: { value: number; numeral: string }[] = [
+        { value: 40, numeral: 'XL' },
+        { value: 10, numeral: 'X' },
+        { value: 9, numeral: 'IX' },
+        { value: 5, numeral: 'V' },
+        { value: 4, numeral: 'IV' },
+        { value: 1, numeral: 'I' }
+    ];
+
+    let result = '';
+
+    for (const { value, numeral } of romanNumeralMap) {
+        while (num >= value) {
+            result += numeral;
+            num -= value;
+        }
+    }
+
+    return result;
+}
+
 app.use((req: Request, res: Response) => {
     res.status(404).send('404 Error: Page Not Found');
-})
+});
