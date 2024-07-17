@@ -3,6 +3,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import './ChordNumeralButtons.css'
 
 export interface ChordNumber {
     value: number;
@@ -22,7 +23,7 @@ const ChordNumeralButtons: React.FC<ChordNumeralButtonsProps> = ({onSelect}) => 
     sx={{ color: 'black' }}
     id="chordRomanNumerals"
   >
-    Chord Numerals
+    Chord Numerals: 
   </FormLabel>
     <RadioGroup
       aria-labelledby="chordRomanNumerals"
@@ -31,13 +32,41 @@ const ChordNumeralButtons: React.FC<ChordNumeralButtonsProps> = ({onSelect}) => 
       name="chord-numeral-buttons-group"
       sx={{ flexDirection: 'row' }}
     >
-      <FormControlLabel value="1" control={<Radio id="chord1" />} label="I" />
-      <FormControlLabel value="2" control={<Radio id="chord2"/>} label="II" />
-      <FormControlLabel value="3" control={<Radio id="chord3"/>} label="III" />
-      <FormControlLabel value="4" control={<Radio id="chord4"/>} label="IV" />
-      <FormControlLabel value="5" control={<Radio id="chord5"/>} label="V" />
-      <FormControlLabel value="6" control={<Radio id="chord6"/>} label="VI" />
-      <FormControlLabel value="7" control={<Radio id="chord7"/>} label="VII" />
+      <FormControlLabel 
+        value="1" 
+        control={<Radio id="chord1" />} 
+        label={<span className="CourierRadio">I</span>} 
+      />
+      <FormControlLabel 
+        value="2" 
+        control={<Radio id="chord2"/>} 
+        label={<span className="CourierRadio">II</span>} 
+      />
+      <FormControlLabel 
+        value="3" 
+        control={<Radio id="chord3"/>} 
+        label={<span className="CourierRadio">III</span>} 
+      />
+      <FormControlLabel 
+        value="4" 
+        control={<Radio id="chord4"/>} 
+        label={<span className="CourierRadio">IV</span>} 
+      />
+      <FormControlLabel 
+        value="5" 
+        control={<Radio id="chord5"/>} 
+        label={<span className="CourierRadio">V</span>}  
+      />
+      <FormControlLabel 
+        value="6" 
+        control={<Radio id="chord6"/>} 
+        label={<span className="CourierRadio">VI</span>} 
+      />
+      <FormControlLabel 
+        value="7" 
+        control={<Radio id="chord7"/>} 
+        label={<span className="CourierRadio">VII</span>} 
+      />
     </RadioGroup>
   </FormControl>
 

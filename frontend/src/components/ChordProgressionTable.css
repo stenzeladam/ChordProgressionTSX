@@ -1,0 +1,11 @@
+.MerriweatherTable {
+    font-family: 'Merriweather', serif, monospace;
+    font-size: medium;
+  }
+  
+.CourierTable {
+    font-family: 'Courier New', serif, monospace;
+    /* font-weight: bold; */
+    font-weight: 600;
+    font-size: large;
+}

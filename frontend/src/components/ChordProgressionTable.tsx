@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import './ChordProgressionTable.css'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,7 +30,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 interface ChordInterface {
-  numeral: number,
+  numeral: string,
   chord_name: string,
   chord_tabs: string,
   chord_notes: string,
@@ -54,12 +55,23 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}
         <TableBody>
           {ChordsArr.map((row, index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell component="th" scope="row">
-                {row.numeral}
+              <StyledTableCell 
+                component="th" 
+                scope="row">
+                <span className="CourierTable">{row.numeral}</span>
               </StyledTableCell>
-              <StyledTableCell align="right">{row.chord_name}</StyledTableCell>
-              <StyledTableCell align="right">{row.chord_tabs}</StyledTableCell>
-              <StyledTableCell align="right">{row.chord_notes}</StyledTableCell>
+              <StyledTableCell 
+                align="right">
+                <span className="CourierTable">{row.chord_name}</span>
+              </StyledTableCell>
+              <StyledTableCell 
+                align="right">
+                <span className="CourierTable">{row.chord_tabs}</span>
+              </StyledTableCell>
+              <StyledTableCell 
+                align="right">
+                <span className="CourierTable">{row.chord_notes}</span>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

@@ -40,7 +40,7 @@ app.post('/api/mode', (req: Request, res: Response) => {
     res.send(instance);
 });
 
-app.post('/api/add/chord', async (req: Request, res: Response) => {
+app.post('/api/add/chord', async (req: Request, res: Response) => { //Expected to be called line 69 in SelectionContainer.tsx
     const data = req.body;
     let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic);
     tempChord.buildChord();
@@ -48,15 +48,21 @@ app.post('/api/add/chord', async (req: Request, res: Response) => {
     tempVoicing.tuneEachString();
     let chordData = await createCallandInterpretData(tempVoicing);
     let chordDataInterfaceArr = chordData?.getDATA();
-    let chordsArr: any = [];
-    let chordNumeral: string = convertToRoman(data.numeral); 
+    let chordsArr = data.chordsArray;
+    let chordNumeral: string = convertToRoman(data.numeral);
     if (chordDataInterfaceArr && chordDataInterfaceArr.length > 0) {
+        const nameArr: string[] = chordDataInterfaceArr[0].CHORD_NAME.split(',');
+        let tempName: string = ""
+        for (let i = 0; i < nameArr.length; i++) {
+            tempName = tempName + nameArr[i];
+        }
+        chordDataInterfaceArr[0].CHORD_NAME = tempName;
         chordsArr = [
             ...chordsArr,
             {
                 numeral: chordNumeral,
                 chord_name: chordDataInterfaceArr[0].CHORD_NAME,
-                chord_tabs: chordDataInterfaceArr[0].STRINGS,
+                chord_tabs: chordDataInterfaceArr[0].STRINGS.replace(/ /g, '-'),
                 chord_notes: chordDataInterfaceArr[0].TONES
             }
         ];

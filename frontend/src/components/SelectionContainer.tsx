@@ -22,9 +22,8 @@ const SelectionContainer = () => {
   const [chordNum, setChordNum] = useState<ChordNumber | null>(null);
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
-  //const [chordProgNums, setChordProgNums] = useState<number[]>([]);
   const [modeInstanceState, setModeInstanceState] = useState<{ root: string; chromatic: string[]; scale: string[]; } | null>(null);
-  const [chordsArray, setChordsArray] = useState<any>([]);
+  const [chordsArray, setChordsArray] = useState<{numeral: string, chord_name: string, chord_tabs: string, chord_notes: string}[]>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
   
   const handleRootSelect = (root: RootOption | null) => {
@@ -37,7 +36,6 @@ const SelectionContainer = () => {
     setSelectedMode(null);
     setStringTunings(Array(6).fill(""));
     setSubmitEnabled(false);
-    //setChordProgNums([]);
     setHasChordNum(false);
     setChordNum(null);
     setModeInstanceState(null);
@@ -70,7 +68,8 @@ const SelectionContainer = () => {
           numeral: num.value,
           mode: modeInstanceState,
           compensate: compensateOption,
-          tuning: stringTunings
+          tuning: stringTunings,
+          chordsArray: chordsArray
         });
         setChordsArray(responseChord.data);
       }
@@ -119,7 +118,7 @@ const SelectionContainer = () => {
         onSubmit={addChord}/>
       <ChordProgressionTable
         ChordsArr={chordsArray}
-        />
+      />
       <Reset
         onClick={resetInputs}
       />

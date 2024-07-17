@@ -1,0 +1,11 @@
+.MerriweatherRadio {
+    font-family: 'Merriweather', serif, monospace;
+    font-size: large;
+    font-weight: bold;
+  }
+  
+.CourierRadio {
+    font-family: 'Courier New', serif, monospace;
+    font-weight: 700;
+    font-size: large;
+}
