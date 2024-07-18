@@ -15,12 +15,12 @@ export class ChordVoicing {
     private tuning: string[] = ["E", "A", "D", "G", "B", "E"] //standard tuning as default. Only change if _compensateTuning is true
                                                               //starts with string6, string5, ... , string1
     private stringNotes: string[][] = [
-        ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"], //string6
-        ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"], //string5
-        ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"], //string4
-        ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"], //string3
-        ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"], //string2
-        ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]  //string1
+        ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"], //string6 is stringNotes[0]
+        ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"], //string5 is stringNotes[1]
+        ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"], //string4 is stringNotes[2]
+        ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"], //string3 is stringNotes[3]
+        ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"], //string2 is stringNotes[4]
+        ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"]  //string1 is stringNotes[5]
     ];
 
     private readonly STANDARD: string[][] = [                              //Always have standard tuning available to reference
@@ -154,31 +154,35 @@ export class ChordVoicing {
         return notesArr;
     }
 
-    private checkForNotesToRemove(param1: string[], tonesParam: string): [string[], string[]] { //first element in return is the note names, second element is the note/string tabs, both as arrays
-        const correctTones: string[] = tonesParam.split(",") //these are the tones to keep, all other tones should be removed from param1
-        let tonesToCheck: string[] = param1;
-
-        for (let i = 0; i < correctTones.length; i++) { //for consistency in how notes are written, convert all flats to their sharp equivalent. Ex: Eb -> D#
-            switch(correctTones[i]) {
+    private convertFlatsToSharps(param: string[]): string[] {
+        let chordNotes = param;
+        for (let i = 0; i < chordNotes.length; i++) { //for consistency in how notes are written, convert all flats to their sharp equivalent. Ex: Eb -> D#
+            switch(chordNotes[i]) {
                 case "Db":
-                    correctTones[i] = "C#";
+                    chordNotes[i] = "C#";
                     break;
                 case "Eb":
-                    correctTones[i] = "D#";
+                    chordNotes[i] = "D#";
                     break;
                 case "Gb":
-                    correctTones[i] = "F#";
+                    chordNotes[i] = "F#";
                     break;
                 case "Ab":
-                    correctTones[i] = "G#";
+                    chordNotes[i] = "G#";
                     break;
                 case "Bb":
-                    correctTones[i] = "A#";
+                    chordNotes[i] = "A#";
                     break;
                 default:
                     break;
             }
         }
+        return chordNotes;
+    }
+
+    private checkForNotesToRemove(param1: string[], tonesParam: string): [string[], string[]] { //first element in return is the note names, second element is the note/string tabs, both as arrays
+        const correctTones = this.convertFlatsToSharps(tonesParam.split(",")); //these are the tones to keep, all other tones should be removed from param1
+        let tonesToCheck: string[] = param1;
         
         let indicesNeedReplacing: boolean[] = Array(tonesToCheck.length).fill(false);
 
@@ -266,6 +270,256 @@ export class ChordVoicing {
         return [notes, voicingArray];
     }
 
+    private voicing(param: string[]): string[]  {
+        // Create up to three voicings given the notes. 
+        let voicing: string[] = ["X", "X", "X", "X", "X", "X"];
+
+        //TODO: instead of having the method create three seperate voicings, have it create a single voicing where the root string is specified in a function parameter
+        //      the idea is that the method will be called three times with different root strings to get 3 different voicings
+        //      this will make the method significantly easier to understand and way less jumbled. Temporarily commented out sections relating to other voicings
+
+        //let voicingTwo: string[] = ["X", "X", "X", "X", "X", "X"];
+        //let voicingThree: string[] = ["X", "X", "X", "X", "X", "X"];
+        //const chordNotes: string[] = this.convertFlatsToSharps(param); ***CORRECT ONE TO USE FOR CODE***
+
+        const chordNotes: string[] = ["F", "A", "C"] // ***TESTING PURPOSES ONLY***
+
+        console.log("Chord Notes: ", chordNotes);
+
+        if (param.length < 3) {
+            return ["ERROR", "ERROR", "ERROR"];
+        }
+
+        let voicingNoteAdded: Map<string, boolean> = new Map(); //hashmap to check if note has been added to voicing, so notes not added yet can be prioritized
+        //let voicingTwoNoteAdded: Map<string, boolean> = new Map();
+        //let voicingThreeNoteAdded: Map<string, boolean> = new Map();
+        
+        for (let i = 0; i < chordNotes.length; i++) {
+            voicingNoteAdded.set(chordNotes[i], false);
+           // voicingTwoNoteAdded.set(chordNotes[i], false);
+           // voicingTwoNoteAdded.set(chordNotes[i], false);
+        }
+        //console.log(voicingOneNoteAdded);
+
+        //find the root note on the 6th string
+        for (let fret = 0; fret < 12; fret++) {
+            if (this.stringNotes[0][fret] === chordNotes[0]) {
+                voicing[0] = fret.toString();
+                voicingNoteAdded.set(chordNotes[0], true);
+            }
+            // if (this.stringNotes[1][fret] === chordNotes[0]) {
+            //     voicingTwo[1] = fret.toString();
+            //     voicingTwoNoteAdded.set(chordNotes[0], true);
+            // }
+            // if (this.stringNotes[2][fret] === chordNotes[0]) {
+            //     voicingThree[2] = fret.toString();
+            //     voicingThreeNoteAdded.set(chordNotes[0], true);
+            // }
+        }
+
+        // try to find the next best note on the next string for each voicing
+        // Give priority to finding the 5th (in most cases, chordNotes[2]) on the next string for each voicing. 
+        // Check up to four frets above, or two frets below.
+        const voicingRootFret: number = parseInt(voicing[0], 10); //to ensure the integer is of base 10
+        //const voicingTwoRootFret: number = parseInt(voicingTwo[1], 10);
+        //const voicingThreeRootFret: number = parseInt(voicingThree[2], 10);
+        
+        //for voicingOne, check stringNotes[1][voicingOneRootFret] for the 5th
+        const fretOffsets = [0, 2, 1, -1, -2, 3, 4]; // the order of frets to check, ie 0, then 2 frets above, then 1 above, then 1 below...etc
+        let voicing_MoreThanTwoAbove: boolean = false; //if the offset is more than 2 frets above, do not check below the root fret, as the fingering would be too difficult to play
+        //let voicingTwo_MoreThanTwoAbove: boolean = false;
+        //let voicingThree_MoreThanTwoAbove: boolean = false;
+        let voicingString5: boolean = false;
+        for (let i of fretOffsets) {
+            let tempFret = voicingRootFret + i;
+            if (tempFret >= 0) {
+                let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+                if (this.stringNotes[1][x] === chordNotes[2]) {
+                    voicing[1] = tempFret.toString();
+                    voicingNoteAdded.set(chordNotes[2], true);
+                    voicingString5 = true;
+                    if (i > 2) {
+                        voicing_MoreThanTwoAbove = true;
+                    }
+                }
+            }
+            // tempFret  = voicingTwoRootFret + i;
+            // if (tempFret >= 0) {
+            //     let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+            //     if (this.stringNotes[2][x] === chordNotes[2]) {
+            //         voicingTwo[2] = tempFret.toString();
+            //         voicingTwoNoteAdded.set(chordNotes[2], true);
+            //         if (i > 2) {
+            //             voicingTwo_MoreThanTwoAbove = true;
+            //         }
+            //     }
+            // }
+            // tempFret  = voicingThreeRootFret + i;
+            // if (tempFret >= 0) {
+            //     let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+            //     if (this.stringNotes[3][x] === chordNotes[2]) {
+            //         voicingThree[3] = tempFret.toString();
+            //         voicingThreeNoteAdded.set(chordNotes[2], true);
+            //         if (i > 2) {
+            //             voicingThree_MoreThanTwoAbove = true;
+            //         }
+            //     }
+            // }
+        }
+
+        // if chordNotes[2] was not found on the next string for any of these voicings, search for any notes within range
+        // first prioritize searching for any notes that haven't been added yet
+    
+        for (let note of voicingNoteAdded.keys()) {
+            if (voicingString5) { //once a suitable note on the string has been found
+                break;
+            }
+            if (voicingNoteAdded.get(note) === false) { // if true, then the key/note has not been added and should be searched for on this string
+                for (let i of fretOffsets) {
+                    if (!voicing_MoreThanTwoAbove || (voicing_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+                        let tempFret = voicingRootFret + i;
+                        if (tempFret >= 0) {
+                            let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+                            if (this.stringNotes[1][x] === note) {
+                                voicing[1] = tempFret.toString();
+                                voicingNoteAdded.set(note, true);
+                                voicingString5 = true;
+                                if (i > 2) {
+                                    voicing_MoreThanTwoAbove = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // voicingOne, String5 will remain an "X" if no suitable note can be found. 
+
+        // for voicingOne, now check string4 for any suitable note, prioritizing notes not yet found.
+        let voicingOneString4: boolean = false;
+        for (let note of voicingNoteAdded.keys()) {
+            if (voicingOneString4) { //once a suitable note on the string has been found
+                break;
+            }
+            if (voicingNoteAdded.get(note) === false) { // if true, then the key/note has not been added and should be searched for on this string
+                for (let i of fretOffsets) {
+                    if (!voicing_MoreThanTwoAbove || (voicing_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+                        let tempFret = voicingRootFret + i;
+                        if (tempFret >= 0) {
+                            let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+                            if (this.stringNotes[2][x] === note) {
+                                voicing[2] = tempFret.toString();
+                                voicingNoteAdded.set(note, true);
+                                voicingOneString4 = true;
+                                if (i > 2) {
+                                    voicing_MoreThanTwoAbove = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!voicingOneString4) { //If none of the unassigned notes are suitable for this string, check the notes that have been assigned
+            for (let note of voicingNoteAdded.keys()) {
+                if (voicingOneString4) { //once a suitable note on the string has been found
+                    break;
+                }
+                if (voicingNoteAdded.get(note) === true) { // if true, then the key/note has already been added and should be searched for on this string
+                    for (let i of fretOffsets) {
+                        if (!voicing_MoreThanTwoAbove || (voicing_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+                            let tempFret = voicingRootFret + i;
+                            if (tempFret >= 0) {
+                                let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+                                if (this.stringNotes[2][x] === note) {
+                                    voicing[2] = tempFret.toString();
+                                    voicingNoteAdded.set(note, true);
+                                    voicingOneString4 = true;
+                                    if (i > 2) {
+                                        voicing_MoreThanTwoAbove = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        console.log("voicing: ", voicing)
+        //console.log("voicingTwo: ", voicingTwo)
+        //console.log("voicingThree: ", voicingThree)
+        console.log(voicingNoteAdded);
+
+        // If there are 5 notes or more, only two voicings are needed.
+        // If there are 6 notes, only one voicing is needed.
+        // Create an optimal voicing that starts on the 6th string, then an optimal voicing that starts on the 5th string, 
+        // and an optimal vocing that starts on the 4th string.
+
+        // Check for first note in notes array, then prioritize finding the notes mostly sequentially
+        // prioritize finding the fifth, flat 5th, then the fourth, then the third if possible. Also prioritize any notes that 
+        // have not been assigned yet. Example: A_add9 should return 5-7-9-6-5-5
+        // Find A on the 6th string. 5th fret
+        // then check the 5th string for the 5th, which is E. The fret needs to be within 4 frets above or 2 frets below, alternating checks
+        // if the note is more than 2 frets above, then can't check any notes below root fret
+        // if the 5th is not there,
+
+        return param;
+    }
+
+    private checkStringForNotes() {
+        // for voicingOne, now check string4 for any suitable note, prioritizing notes not yet found.
+        // let voicingOneString4: boolean = false;
+        // for (let note of voicingOneNoteAdded.keys()) {
+        //     if (voicingOneString4) { //once a suitable note on the string has been found
+        //         break;
+        //     }
+        //     if (voicingOneNoteAdded.get(note) === false) { // if true, then the key/note has not been added and should be searched for on this string
+        //         for (let i of fretOffsets) {
+        //             if (!voicingOne_MoreThanTwoAbove || (voicingOne_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+        //                 let tempFret = voicingOneRootFret + i;
+        //                 if (tempFret >= 0) {
+        //                     let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+        //                     if (this.stringNotes[2][x] === note) {
+        //                         voicingOne[2] = tempFret.toString();
+        //                         voicingOneNoteAdded.set(note, true);
+        //                         voicingOneString4 = true;
+        //                         if (i > 2) {
+        //                             voicingOne_MoreThanTwoAbove = true;
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // if (!voicingOneString4) { //If none of the unassigned notes are suitable for this string, check the notes that have been assigned
+        //     for (let note of voicingOneNoteAdded.keys()) {
+        //         if (voicingOneString4) { //once a suitable note on the string has been found
+        //             break;
+        //         }
+        //         if (voicingOneNoteAdded.get(note) === true) { // if true, then the key/note has already been added and should be searched for on this string
+        //             for (let i of fretOffsets) {
+        //                 if (!voicingOne_MoreThanTwoAbove || (voicingOne_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+        //                     let tempFret = voicingOneRootFret + i;
+        //                     if (tempFret >= 0) {
+        //                         let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+        //                         if (this.stringNotes[2][x] === note) {
+        //                             voicingOne[2] = tempFret.toString();
+        //                             voicingOneNoteAdded.set(note, true);
+        //                             voicingOneString4 = true;
+        //                             if (i > 2) {
+        //                                 voicingOne_MoreThanTwoAbove = true;
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
     private mergeChordData(param1: UberChordAPI_data, param2: UberChordAPI_data): UberChordAPI_data {
         // param1 should be the object created with the normal voicing function
         // param2 should be the object created with the standard tuning voicing function
@@ -279,6 +533,8 @@ export class ChordVoicing {
 
         // convert stings to an array of notes based upon the selected-tuning array (not the constant standard tuning array), and then check to see if any of these notes are not present in tones.
         let strArr: string[] = this.convertVoicingToNotesArray(strings);
+        let x = this.voicing(this.getTonesAsArray(tones));
+        //console.log(strArr);
         let correctedVoicingTab: string[] = this.checkForNotesToRemove(strArr, tones)[1];
         strings = ""
         for (let i = 0; i < correctedVoicingTab.length; i++) {
@@ -292,6 +548,10 @@ export class ChordVoicing {
         }
         const mergedData = new UberChordAPI_data([{strings, fingering, chordName, enharmonicChordName, voicing_ID, tones}]);
         return mergedData;
+    }
+
+    private getTonesAsArray(tones: string): string[] {
+        return tones.split(',');
     }
 
     public async fetchChordDataByVoicing(voice_param: string): Promise<UberChordAPI_data | null> {
@@ -313,6 +573,8 @@ export class ChordVoicing {
                 const standardVoicing = this.convertNotesToVoicingStandard();
                 const data2 = await this.fetchChordDataByStandardVoicing(standardVoicing);
                 let call2 = new UberChordAPI_data(data2); //Standard tuning data
+                // console.log("call: ", call);
+                // console.log("call2: ", call2);
                 const mergedData = this.mergeChordData(call, call2);
                 return mergedData;
             }
