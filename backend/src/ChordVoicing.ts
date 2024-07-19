@@ -271,55 +271,49 @@ export class ChordVoicing {
     }
 
     private voicing(param: string[], n: number): string[]  {
-
-        // TODO: make it so that if the same fret is used on more than two strings, don't check below the root fret, as this is too difficult to play
-        // TODO: if the second string after the root string goes below the root fret, only check one note above the root fret, and two below the root fret
-              // if the string above the root string in this case is an X, you can also go back and check two frets below the root fret for any notes that haven't been assigned yet
-        // TODO: If the fifth is on an open string that is one or two strings below, make the voicing check all notes below the root fret (but only if the root fret is > 2), and none above
-
-        // Create up to three voicings given the notes. 
         let voicing: string[] = ["X", "X", "X", "X", "X", "X"];
-
-        //const chordNotes: string[] = this.convertFlatsToSharps(param); ***CORRECT ONE TO USE FOR CODE***
-
-        const chordNotes: string[] = ["F", "G#", "B", "D#"] // ***TESTING PURPOSES ONLY***
-
-        console.log("Chord Notes: ", chordNotes);
-
+        const chordNotes: string[] = this.convertFlatsToSharps(param); //***CORRECT ONE TO USE FOR CODE***
+        //const chordNotes: string[] = ["F", "G#", "B", "D#"] // ***TESTING PURPOSES ONLY***
+        //const chordNotes: string[] = ["D#", "G", "A#"] // ***TESTING PURPOSES ONLY***
+        console.log(`\nChord Notes: ${chordNotes} \n`);
         if (param.length < 2) {
             return ["ERROR", "ERROR", "ERROR"];
         }
 
         let voicingNoteAdded: Map<string, boolean> = new Map(); //hashmap to check if note has been added to voicing, so notes not added yet can be prioritized
+        let dontGoBelowRootFret: {value: boolean} = {value: false}; // wrapped as an object so that the the boolean is passed by reference, not by value
+        let dontGoAboveRootFret: {value: boolean} = {value: false}; // if true, only check below root fret by 4 notes. Only set to true if the root fret is > 2. 
+        let fretTimesUsed: Map<number, number> = new Map(); // keep count of the times each fret is used. If any fret is ever used more than twice, don't go below root fret
+
         for (let i = 0; i < chordNotes.length; i++) {
             voicingNoteAdded.set(chordNotes[i], false);
         }
-
         //find the root note on string(6 - n) --- if n === 0, this is string6 aka the lowest string 
         for (let fret = 0; fret < 12; fret++) {
             if (this.stringNotes[n][fret] === chordNotes[0]) {
+                fretTimesUsed.set(fret, 1);
                 voicing[n] = fret.toString();
                 voicingNoteAdded.set(chordNotes[0], true);
             }
         }
-        
+        const voicingRootFret: number = parseInt(voicing[n], 10); //to ensure the integer is of base 10
+
+        dontGoAboveRootFret.value = this.isFifthOnOpenString(n, voicingRootFret, voicingNoteAdded); //checks if the fifth is on an open string for the next two strings
         // try to find the next best note on the next string for each voicing
         // Give priority to finding the 5th (in most cases, chordNotes[2]) on the next string for each voicing. 
         // Check up to four frets above, or two frets below.
-        const voicingRootFret: number = parseInt(voicing[n], 10); //to ensure the integer is of base 10
-        let voicing_MoreThanTwoAbove: boolean = false; //if the offset is more than 2 frets above, do not check below the root fret, as the fingering would be too difficult to play
 
         //for voicing, check stringNotes[n + 1][voicingOneRootFret] for the 5th (interval)
         let lookFor5th: boolean = true;
-        this.checkStringForNotes((n+1), voicingRootFret, voicingNoteAdded, voicing_MoreThanTwoAbove, voicing, lookFor5th);
+        this.checkStringForNotes((n+1), voicingRootFret, voicingNoteAdded, 
+            voicing, lookFor5th, dontGoAboveRootFret, dontGoBelowRootFret, fretTimesUsed);
 
         //check the rest of the strings
         for (let i = (n + 2); i < 6; i++) {
-            this.checkStringForNotes(i, voicingRootFret, voicingNoteAdded, voicing_MoreThanTwoAbove, voicing, false); //last parameter is false because no longer looking for the fifth 
+            this.checkStringForNotes(i, voicingRootFret, voicingNoteAdded, 
+                voicing, false, dontGoAboveRootFret, dontGoBelowRootFret, fretTimesUsed); //last parameter is false because no longer looking for the fifth 
         }
-
         console.log("voicing: ", voicing)
-
         // Check for first note in notes array, then prioritize finding the notes mostly sequentially
         // prioritize finding the fifth, flat 5th, then the fourth, then the third if possible. Also prioritize any notes that 
         // have not been assigned yet. Example: A_add9 should return something close to 5-7-9-6-5-5
@@ -327,13 +321,19 @@ export class ChordVoicing {
         // then check the 5th string for the 5th, which is E. The fret needs to be within 4 frets above or 2 frets below, alternating checks
         // if the note is more than 2 frets above, then can't check any notes below root fret
         // if the 5th is not there,
-
         return param;
     }
 
-    private checkStringForNotes(stringN: number, voicingRootFret: number, voicingNoteAdded: Map<string, boolean>, voicing_MoreThanTwoAbove: boolean, voicing: string[], lookFor5th: boolean): void {
+    private checkStringForNotes(stringN: number, voicingRootFret: number, voicingNoteAdded: Map<string, boolean>, 
+        voicing: string[], lookFor5th: boolean, dontGoAboveRootFret: {value: boolean}, dontGoBelowRootFret: {value: boolean}, fretTimesUsed: Map<number, number>): void {
         // for voicing, check stringN for any suitable note, prioritizing notes not yet found.
-        const fretOffsets = [0, 2, 1, -1, -2, 3, 4]; // the order of frets to check, ie 0, then 2 frets above, then 1 above, then 1 below...etc
+        let fretOffsets = [0, 2, 1, -1, -2, 3, 4]; // the order of frets to check, ie 0, then 2 frets above, then 1 above, then 1 below...etc
+        if (dontGoAboveRootFret.value) {
+            fretOffsets = [0, -1, -2, -3, -4, -5];
+        }
+        if (dontGoBelowRootFret.value) {
+            fretOffsets = [0, 1, 2, 3, 4];
+        }
         let voicingStringN: boolean = false; //if a suitable note for the voicing has been assigned on the current Nth string, set to true
         for (let note of voicingNoteAdded.keys()) {
             if (voicingStringN) { //once a suitable note on the string has been found
@@ -345,16 +345,24 @@ export class ChordVoicing {
                 if (fifth !== "None") { //searchForFifthOfRoot was able to find a fifth as a key in voicingNoteAdded
                     for (let i of fretOffsets) {
                         tempFret = voicingRootFret + i;
-                        //let tempFret = voicingRootFret + i;
                         if (tempFret >= 0) {
                             let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
                             if (this.stringNotes[stringN][x] === fifth) {
                                 voicing[stringN] = tempFret.toString();
+                                if (!fretTimesUsed.has(tempFret)) { //if the fret has not been used before, add start keeping track of the times it has been used
+                                    fretTimesUsed.set(tempFret, 1); //used once
+                                }
+                                else {
+                                    let count = fretTimesUsed.get(tempFret);
+                                    if (count != undefined) {
+                                        count++;
+                                        fretTimesUsed.set(tempFret, count); //increment the count for the fret
+                                    }
+                                }
                                 voicingNoteAdded.set(fifth, true);
                                 voicingStringN = true; //interval 5th has been found and has been assigned for the current string
-                                //console.log("note: ", fifth, " at fret: ", tempFret, " on string: ", stringN);
-                                if (i > 2) {
-                                    voicing_MoreThanTwoAbove = true;
+                                if (i >= 2 || this.fretUsedMoreThanTwice(fretTimesUsed)) { // Cases where it would be too difficult to play the voicing if there are any more notes at a fret below the root fret
+                                    dontGoBelowRootFret.value = true; 
                                 }
                             }
                         }
@@ -362,18 +370,27 @@ export class ChordVoicing {
                 }
             }
             if (voicingNoteAdded.get(note) === false && !voicingStringN) { // if true, then the key/note has not been added and should be searched for on this string
-                //console.log("note that has not been added: ", note);
                 for (let i of fretOffsets) {
-                    if (!voicing_MoreThanTwoAbove || (voicing_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+                    if (!dontGoBelowRootFret.value || (dontGoBelowRootFret.value && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
                         let tempFret = voicingRootFret + i;
                         if (tempFret >= 0) {
                             let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
                             if (this.stringNotes[stringN][x] === note) {
                                 voicing[stringN] = tempFret.toString();
+                                if (!fretTimesUsed.has(tempFret)) { //if the fret has not been used before, add start keeping track of the times it has been used
+                                    fretTimesUsed.set(tempFret, 1); //used once
+                                }
+                                else {
+                                    let count = fretTimesUsed.get(tempFret);
+                                    if (count != undefined) {
+                                        count++;
+                                        fretTimesUsed.set(tempFret, count); //increment the count for the fret
+                                    }
+                                }
                                 voicingNoteAdded.set(note, true);
                                 voicingStringN = true;
-                                if (i > 2) {
-                                    voicing_MoreThanTwoAbove = true;
+                                if (i >= 2 || this.fretUsedMoreThanTwice(fretTimesUsed)) { // Cases where it would be too difficult to play the voicing if there are any more notes at a fret below the root fret
+                                    dontGoBelowRootFret.value = true;
                                 }
                             }
                         }
@@ -381,24 +398,31 @@ export class ChordVoicing {
                 }
             }
         }
-        if (!voicingStringN) { //If none of the unassigned notes are suitable for this string, check the notes that have been assigned
-            for (let note of voicingNoteAdded.keys()) {
+        if (!voicingStringN) { //If none of the unassigned notes are suitable for this string, check for any notes
+            for (let i of fretOffsets) {
                 if (voicingStringN) { //once a suitable note on the string has been found
                     break;
                 }
-                if (voicingNoteAdded.get(note) === true) { // if true, then the key/note has already been added and should be searched for on this string
-                    for (let i of fretOffsets) {
-                        if (!voicing_MoreThanTwoAbove || (voicing_MoreThanTwoAbove && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
-                            let tempFret = voicingRootFret + i;
-                            if (tempFret >= 0) {
-                                let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
-                                if (this.stringNotes[stringN][x] === note) {
-                                    voicing[stringN] = tempFret.toString();
-                                    voicingStringN = true;
-                                    if (i > 2) {
-                                        voicing_MoreThanTwoAbove = true;
-                                    }
+                if (!dontGoBelowRootFret.value || (dontGoBelowRootFret.value && i >= 0)) { //don't check frets below the root fret if there is one note in the voicing that is at least two frets above the root fret
+                    let tempFret = voicingRootFret + i;
+                    if (tempFret >= 0) {
+                        let x = tempFret % 12; //use (fret % 12) to find notes above the 12th fret
+                        let tempNote = this.stringNotes[stringN][x];
+                        if (voicingNoteAdded.has(tempNote)) {
+                            voicing[stringN] = tempFret.toString();
+                            if (!fretTimesUsed.has(tempFret)) { //if the fret has not been used before, add start keeping track of the times it has been used
+                                fretTimesUsed.set(tempFret, 1); //used once
+                            }
+                            else {
+                                let count = fretTimesUsed.get(tempFret);
+                                if (count != undefined) {
+                                    count++;
+                                    fretTimesUsed.set(tempFret, count); //increment the count for the fret
                                 }
+                            }
+                            voicingStringN = true;
+                            if (i >= 2 || this.fretUsedMoreThanTwice(fretTimesUsed)) { // Cases where it would be too difficult to play the voicing if there are any more notes at a fret below the root fret
+                                dontGoBelowRootFret.value = true;
                             }
                         }
                     }
@@ -442,6 +466,34 @@ export class ChordVoicing {
         }
         // return "None" if no fifth could be found
         return "None";
+    }
+
+    private isFifthOnOpenString(nthString: number, rootFret: number, voicingNoteAdded: Map<string, boolean>): boolean { // checks the next two strings if the fifth (interval) is an open string (fret === 0)
+        // the value passed to nthString should be the string that the root is on
+        // the value passed to rootFret should be the fret number that the root is on, on the nthString
+        // voicingNoteAdded should have one "true" value, the value for the key that represents the root note. Use this to find the correct fifth (interval)
+        if (rootFret === 5 || rootFret === 10 || nthString > 1) { // to prevent this from returning true in the cases of Drop D tunings, and the fifth being on the 12th fret (an octave above open)
+            return false
+        }
+        const fifth = this.searchForFifthOfRoot(voicingNoteAdded);
+        if (this.stringNotes[nthString + 1][0] === fifth) {
+            return true;
+        }
+        else if (this.stringNotes[nthString + 2][0] === fifth) {
+            return true;
+        }
+        return false;
+    }
+
+    private fretUsedMoreThanTwice(fretTimesUsed: Map<number, number>): boolean { // return true is a fret is used more than twice. Otherwise return false
+        // parameter is a map keeping count of times each fret has been used. First number is the fret, the second number is the count.
+        for (let fret of fretTimesUsed.keys()) {
+            let count = fretTimesUsed.get(fret);
+            if (count != undefined && count > 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private mergeChordData(param1: UberChordAPI_data, param2: UberChordAPI_data): UberChordAPI_data {
