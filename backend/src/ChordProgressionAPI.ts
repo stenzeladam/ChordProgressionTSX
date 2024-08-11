@@ -3,6 +3,13 @@ import { Modes } from './Modes';
 import { Chord } from './Chord';
 import { ChordVoicing } from './ChordVoicing';
 
+interface ChordInterface {
+    numeral: string,
+    chord_name: string,
+    chord_tabs: string[],
+    chord_notes: string,
+  }
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -62,6 +69,29 @@ app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected 
         ]
     }
     res.send(chordsArr);
+});
+
+app.delete('/api/delete/chord', (req: Request, res: Response) => {
+    const { chordsArray: serializedChordsArray, index } = req.query;
+  
+    if (!serializedChordsArray || typeof index !== 'string') {
+      return res.status(400).json({ error: 'Invalid request parameters' });
+    }
+  
+    try {
+      const parsedChordsArray = JSON.parse(serializedChordsArray as string) as ChordInterface[];
+      const indexToDelete = parseInt(index, 10);
+  
+      if (isNaN(indexToDelete) || indexToDelete < 0 || indexToDelete >= parsedChordsArray.length) {
+        return res.status(400).json({ error: 'Invalid index' });
+      }
+  
+      const newChordsArray = parsedChordsArray.filter((_, i) => i !== indexToDelete);
+      res.status(200).json(newChordsArray);
+    } catch (error) {
+      console.error('Error parsing chords array:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 async function createCallandInterpretData(param: ChordVoicing) {

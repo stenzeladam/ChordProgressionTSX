@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,16 +8,18 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import './VoicingDropdown.css';
 
 interface VoicingDropdownProps {
-  handleChange: (event: SelectChangeEvent<string>) => void;
   chord_tabs: string[];
 }
 
-const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ handleChange, chord_tabs }) => {
-  const [voicing, setVoicing] = useState(chord_tabs[0]);
+const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ chord_tabs }) => {
+  const [voicing, setVoicing] = useState(chord_tabs[0] || '');
+
+  useEffect(() => {
+    setVoicing(chord_tabs[0] || '');
+  }, [chord_tabs]);
 
   const handleVoicingChange = (event: SelectChangeEvent<string>) => {
     setVoicing(event.target.value);
-    handleChange(event);
   };
 
   const menuProps = {
@@ -50,6 +52,9 @@ const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ handleChange, chord_t
               {tab}
             </MenuItem>
           ))}
+          <MenuItem value="">
+            None
+          </MenuItem>
         </Select>
       </FormControl>
     </Box>

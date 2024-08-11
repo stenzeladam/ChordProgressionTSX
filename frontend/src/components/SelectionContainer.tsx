@@ -12,7 +12,13 @@ import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
 import ChordProgressionTable from './ChordProgressionTable';
 import axios from 'axios';
-import { BlobOptions } from 'buffer';
+
+interface ChordInterface {
+  numeral: string,
+  chord_name: string,
+  chord_tabs: string[],
+  chord_notes: string,
+}
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
@@ -24,7 +30,7 @@ const SelectionContainer = () => {
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
   const [modeInstanceState, setModeInstanceState] = useState<{ root: string; chromatic: string[]; scale: string[]; } | null>(null);
-  const [chordsArray, setChordsArray] = useState<{numeral: string, chord_name: string, chord_tabs: string[], chord_notes: string}[]>([]);
+  const [chordsArray, setChordsArray] = useState<ChordInterface[]>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
   const [selectRootDisabled, setSelectedRootDisabled] = useState<boolean>(false);
   const [selectModeDisabled, setSelectModeDisabled] = useState<boolean>(false);
@@ -74,7 +80,7 @@ const SelectionContainer = () => {
     setChordNum(num);
   };
 
-  const addChord = async (num:ChordNumber | null) => {
+  const addChord = async (num: ChordNumber | null) => {
     try {
       if (modeInstanceState && num && selectedTuning != null) {
         const responseChord = await axios.post('http://localhost:3000/api/add/chord', {
@@ -88,6 +94,24 @@ const SelectionContainer = () => {
       }
     } catch (error) {
       console.error("Error: ", error);
+    }
+  };
+
+  const removeFromChordsArray = async (index: number, chordsArray: ChordInterface[]) => {
+    try {
+      const response = await axios.delete('http://localhost:3000/api/delete/chord', {
+        params: {
+          chordsArray: JSON.stringify(chordsArray),
+          index: index.toString(),
+        },
+      });
+      if (response.status === 200) {
+        setChordsArray(response.data);
+      } else {
+        console.error('Failed to delete the chord', response.data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -137,7 +161,8 @@ const SelectionContainer = () => {
         onClick={resetInputs}
       />
       <ChordProgressionTable
-        ChordsArr={chordsArray}
+        chordsArray={chordsArray}
+        removeFromChordsArray={removeFromChordsArray}
       />
     </Box>
   )

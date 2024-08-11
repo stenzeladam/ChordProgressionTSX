@@ -9,9 +9,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import './ChordProgressionTable.css'
 import './VoicingDropdown'
-import { SelectChangeEvent } from '@mui/material/Select';
 import VoicingDropdown from './VoicingDropdown';
 import Box from '@mui/material/Box';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,15 +41,14 @@ interface ChordInterface {
 }
 
 interface ChordProgressionTableProps {
-  ChordsArr : ChordInterface[]
+  chordsArray: ChordInterface[]
+  removeFromChordsArray: (index: number, chordsArray: ChordInterface[]) => void;
 }
 
-const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}) => {
+const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArray, removeFromChordsArray}) => {
 
-  const [voicing, setVoicing] = useState({});
-
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setVoicing(event.target.value);
+  const handleDeleteRow = (index: number) => {
+    removeFromChordsArray(index, chordsArray);
   };
 
   return (
@@ -57,6 +56,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
+            <StyledTableCell>Delete Row</StyledTableCell>
             <StyledTableCell>Chord Numeral</StyledTableCell>
             <StyledTableCell align="right">Chord Name</StyledTableCell>
             <StyledTableCell align="right">Chord Voicing&nbsp;(Suggested)</StyledTableCell>
@@ -64,8 +64,14 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}
           </TableRow>
         </TableHead>
         <TableBody>
-          {ChordsArr.map((row, index) => (
+          {chordsArray.map((row, index) => (
             <StyledTableRow key={index}>
+              <StyledTableCell>
+                <DeleteIcon 
+                  onClick={() => handleDeleteRow(index)} 
+                  style={{ cursor: 'pointer' }} 
+                />
+              </StyledTableCell>
               <StyledTableCell 
                 component="th" 
                 scope="row">
@@ -79,7 +85,6 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                   <VoicingDropdown
                     chord_tabs={row.chord_tabs}
-                    handleChange={handleSelectChange}
                   />
                 </Box>
               </StyledTableCell>
