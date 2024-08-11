@@ -65,7 +65,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
         </TableHead>
         <TableBody>
           {chordsArray.map((row, index) => (
-            <StyledTableRow key={index}>
+            <StyledTableRow key={`${row.numeral}-${index}`}>
               <StyledTableCell>
                 <DeleteIcon 
                   onClick={() => handleDeleteRow(index)} 
