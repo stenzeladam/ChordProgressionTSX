@@ -34,6 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 interface ChordInterface {
+  rowID: number,
   numeral: string,
   chord_name: string,
   chord_tabs: string[],
@@ -65,7 +66,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
         </TableHead>
         <TableBody>
           {chordsArray.map((row, index) => (
-            <StyledTableRow key={`${row.numeral}-${index}`}>
+            <StyledTableRow key={row.rowID}>
               <StyledTableCell width={1}>
                 <DeleteIcon 
                   onClick={() => handleDeleteRow(index)} 

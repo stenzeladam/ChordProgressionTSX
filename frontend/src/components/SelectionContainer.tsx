@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import RootNoteSelect, { RootOption } from './SelectRootNote';
 import TuningSelector, { TuningOption } from './TuningSelector';
 import ModeSelector from './ModeSelector';
@@ -14,6 +14,7 @@ import ChordProgressionTable from './ChordProgressionTable';
 import axios from 'axios';
 
 interface ChordInterface {
+  rowID: number,
   numeral: string,
   chord_name: string,
   chord_tabs: string[],
@@ -114,6 +115,10 @@ const SelectionContainer = () => {
       console.error('Error:', error);
     }
   };
+
+  React.useEffect(()=>{
+    console.log(chordsArray)
+  }, [chordsArray])
 
   const isIncomplete =
     !selectedRoot ||

@@ -4,6 +4,7 @@ import { Chord } from './Chord';
 import { ChordVoicing } from './ChordVoicing';
 
 interface ChordInterface {
+    rowID: number,
     numeral: string,
     chord_name: string,
     chord_tabs: string[],
@@ -47,7 +48,10 @@ app.post('/api/mode', (req: Request, res: Response) => {
     res.send(instance);
 });
 
+
+
 app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected to be called line 67 in SelectionContainer.tsx
+    
     const data = req.body;
     let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic);
     tempChord.buildChord();
@@ -56,11 +60,20 @@ app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected 
     let chordData = await createCallandInterpretData(tempVoicing);
     let newChordDataInterface = chordData?.getData();
     let chordsArr = data.chordsArray;
+    let uniqueID;
+    if (chordsArr.length === 0) {
+        uniqueID = 0;
+    }
+    else {
+        let last = chordsArr.length-1;
+        uniqueID = chordsArr[last].rowID + 1;
+    }
     let chordNumeral: string = convertToRoman(data.numeral);
     if (newChordDataInterface) {
         chordsArr = [
             ...chordsArr,
             {
+                rowID: uniqueID,
                 numeral: chordNumeral,
                 chord_name: newChordDataInterface.NAME,
                 chord_tabs: newChordDataInterface.TABS,
@@ -68,6 +81,7 @@ app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected 
             }
         ]
     }
+    uniqueID++;
     res.send(chordsArr);
 });
 
