@@ -98,12 +98,12 @@ const SelectionContainer = () => {
     }
   };
 
-  const removeFromChordsArray = async (index: number, chordsArray: ChordInterface[]) => {
+  const removeFromChordsArray = async (rowID: number) => {
     try {
       const response = await axios.delete('http://localhost:3000/api/delete/chord', {
         params: {
           chordsArray: JSON.stringify(chordsArray),
-          index: index.toString(),
+          rowID: rowID.toString(),
         },
       });
       if (response.status === 200) {
@@ -114,11 +114,7 @@ const SelectionContainer = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
-
-  React.useEffect(()=>{
-    console.log(chordsArray)
-  }, [chordsArray])
+  };  
 
   const isIncomplete =
     !selectedRoot ||

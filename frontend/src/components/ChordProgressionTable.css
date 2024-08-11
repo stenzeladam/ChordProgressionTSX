@@ -10,3 +10,11 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.delete-icon {
+  cursor: pointer;
+}
+
+.delete-icon:hover {
+  color: rgb(220, 0, 0); /* Change this to your desired hover color */
+}

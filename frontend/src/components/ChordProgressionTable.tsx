@@ -48,8 +48,8 @@ interface ChordProgressionTableProps {
 
 const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArray, removeFromChordsArray}) => {
 
-  const handleDeleteRow = (index: number) => {
-    removeFromChordsArray(index, chordsArray);
+  const handleDeleteRow = (rowID: number) => {
+    removeFromChordsArray(rowID, chordsArray);
   };
 
   return (
@@ -65,12 +65,12 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
           </TableRow>
         </TableHead>
         <TableBody>
-          {chordsArray.map((row, index) => (
+          {chordsArray.map((row) => (
             <StyledTableRow key={row.rowID}>
               <StyledTableCell width={1}>
-                <DeleteIcon 
-                  onClick={() => handleDeleteRow(index)} 
-                  style={{ cursor: 'pointer' }} 
+              <DeleteIcon 
+                  onClick={() => handleDeleteRow(row.rowID)} 
+                  className="delete-icon"
                 />
               </StyledTableCell>
               <StyledTableCell 
