@@ -127,7 +127,6 @@ export class Modes {
                 j++;
             }
         }
-        console.log("SCALE: ", this.scale);
     }
 
     private ionian(): void {

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
@@ -9,7 +8,8 @@ export interface RootOption {
 
 interface AutocompleteRootProps {
   onSelect: (root: RootOption | null) => void;
-  rootState: RootOption | null
+  rootState: RootOption | null;
+  isDisabled: boolean;
 }
 
 const rootNotes: RootOption[] = [
@@ -27,7 +27,7 @@ const rootNotes: RootOption[] = [
   { value: "B", label: "B"},
 ]
 
-const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState ,onSelect }) => {
+const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState, onSelect, isDisabled }) => {
   const handleChange = (_: any, newValue: RootOption | null) => {
     onSelect(newValue);
   };
@@ -35,6 +35,7 @@ const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState ,onSelect
   return (
     <Autocomplete
       id='RootSelector'
+      disabled={isDisabled}
       value={rootState}
       onChange={handleChange}
       options={rootNotes}

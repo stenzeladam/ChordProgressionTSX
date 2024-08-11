@@ -9,6 +9,7 @@ export interface ModeOption {
 interface ModeSelectorProps {
   onSelect: (mode: ModeOption | null) => void;
   modeState: ModeOption | null;
+  isDisabled: boolean;
 }
 
 const Modes: ModeOption[] = [
@@ -23,7 +24,7 @@ const Modes: ModeOption[] = [
   { label: 'Double Harmonic Major', mode: "Double Harmonic Major" }
 ];
 
-const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect }) => {
+const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect, isDisabled }) => {
   const handleChange = (_: any, newValue: ModeOption | null) => {
     onSelect(newValue);
   };
@@ -32,6 +33,7 @@ const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect }) => {
     <Autocomplete
       value={modeState}
       onChange={handleChange}
+      disabled={isDisabled}
       disablePortal
       id="ModeSelector"
       options={Modes}

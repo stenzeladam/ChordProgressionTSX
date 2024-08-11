@@ -30,12 +30,17 @@ export class CustomChordData {
         const nameArr: string[] = this.NAME.split(',');
         let tempName: string = ""
         for (let i = 0; i < nameArr.length; i++) {
-            tempName = tempName + nameArr[i];
+            if (i === nameArr.length - 1 && nameArr[i] !== "") {
+                tempName = tempName + "/" + nameArr[i];
+            }
+            else {
+                tempName = tempName + nameArr[i];
+            }
         }
 
         let enharmName = this.getFormattedEnharmonicName();
         if (enharmName !== tempName) {
-            tempName = `${tempName} (also known as ${enharmName})`;
+            tempName = `${tempName} (also ${enharmName})`;
         }
         return tempName;
     }
@@ -44,7 +49,12 @@ export class CustomChordData {
         const nameArr: string[] = this.ENHARMONIC_NAME.split(',');
         let tempName: string = ""
         for (let i = 0; i < nameArr.length; i++) {
-            tempName = tempName + nameArr[i];
+            if (i === nameArr.length - 1 && nameArr[i] !== "") {
+                tempName = tempName + "/" + nameArr[i];
+            }
+            else {
+                tempName = tempName + nameArr[i];
+            }
         }
         return tempName;
     }
@@ -74,18 +84,19 @@ export class CustomChordData {
     }
 
     private formatTONES(): string {
-        const EXPANSIONS: { [key: string]: string } = {
-            "A#": "A#/Bb",
-            "C#": "C#/Db",
-            "D#": "D#/Eb",
-            "F#": "F#/Gb",
-            "G#": "G#/Ab"
-        };
+        // const EXPANSIONS: { [key: string]: string } = {
+        //     "A#": "A#(Bb)",
+        //     "C#": "C#(Db)",
+        //     "D#": "D#(Eb)",
+        //     "F#": "F#(Gb)",
+        //     "G#": "G#(Ab)"
+        // };
 
         let result = "";
 
         for (let i = 0; i < this.TONES.length; i++) {
-            const tone = EXPANSIONS[this.TONES[i]] || this.TONES[i];
+            //const tone = EXPANSIONS[this.TONES[i]] || this.TONES[i];
+            const tone = this.TONES[i];
             result += tone;
             if (i < this.TONES.length - 1) {
                 result += ", ";

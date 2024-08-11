@@ -56,13 +56,15 @@ interface TuningSelectorProps {
   stringTuningState: string[];
   setTuning: (tuning: TuningOption | null) => void;
   setStringTuning: (stringTunings: string[]) => void;
+  isDisabled: boolean;
 }
 
 const TuningSelector: React.FC<TuningSelectorProps> = ({ 
   tuningState, 
   stringTuningState,
   setTuning, 
-  setStringTuning, 
+  setStringTuning,
+  isDisabled 
   }) => {
     const [disableStringTuningFlag, setDisabledStringFlag] = useState(true);
 
@@ -91,6 +93,7 @@ const TuningSelector: React.FC<TuningSelectorProps> = ({
           disablePortal
           value={tuningState}
           id="tuningSelector"
+          disabled={isDisabled}
           options={tuningOptions}
           sx={{ width: 300, marginBottom: 2 }}
           renderInput={(params) => <TextField {...params} label="Select a tuning" />}

@@ -12,6 +12,7 @@ import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
 import ChordProgressionTable from './ChordProgressionTable';
 import axios from 'axios';
+import { BlobOptions } from 'buffer';
 
 const SelectionContainer = () => {
   const [selectedRoot, setSelectedRoot] = useState<RootOption | null>(null);
@@ -25,6 +26,10 @@ const SelectionContainer = () => {
   const [modeInstanceState, setModeInstanceState] = useState<{ root: string; chromatic: string[]; scale: string[]; } | null>(null);
   const [chordsArray, setChordsArray] = useState<{numeral: string, chord_name: string, chord_tabs: string[], chord_notes: string}[]>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
+  const [selectRootDisabled, setSelectedRootDisabled] = useState<boolean>(false);
+  const [selectModeDisabled, setSelectModeDisabled] = useState<boolean>(false);
+  const [selectTuningDisabled, setSelectedTuningDisabled] = useState<boolean>(false);
+  const [compensateOptionDisabled, setCompensateOptionDisabled] = useState<boolean>(false);
   
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
@@ -41,6 +46,10 @@ const SelectionContainer = () => {
     setModeInstanceState(null);
     setChordsArray([]);
     setAddChordDisabled(true);
+    setSelectedRootDisabled(false);
+    setSelectModeDisabled(false);
+    setSelectedTuningDisabled(false);
+    setCompensateOptionDisabled(false);
   };
 
   const handleModeSelect = (mode: ModeOption | null) => {
@@ -54,6 +63,10 @@ const SelectionContainer = () => {
   const handleKeyTuningSubmit = (modeInstance: { root: string; chromatic: string[]; scale: string[]; }) => {
     setAddChordDisabled(false);
     setModeInstanceState(modeInstance);
+    setSelectedRootDisabled(true);
+    setSelectModeDisabled(true);
+    setSelectedTuningDisabled(true);
+    setCompensateOptionDisabled(true);
   };
 
   const handleNumeralSelect = (num: ChordNumber) => {
@@ -88,17 +101,21 @@ const SelectionContainer = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <RootNoteSelect 
         rootState={selectedRoot}
-        onSelect={handleRootSelect} />
+        onSelect={handleRootSelect}
+        isDisabled={selectRootDisabled} />
       <ModeSelector 
         modeState={selectedMode}
-        onSelect={handleModeSelect} />
+        onSelect={handleModeSelect}
+        isDisabled={selectModeDisabled} />
       <TuningSelector 
         tuningState={selectedTuning}
         stringTuningState={stringTunings}
         setTuning={setSelectedTuning}
-        setStringTuning={setStringTunings} />
+        setStringTuning={setStringTunings}
+        isDisabled={selectTuningDisabled} />
       <CompensateForTuningOption 
-        onSelect={handleCompensateSelect} />
+        onSelect={handleCompensateSelect}
+        isDisabled={compensateOptionDisabled} />
       <KeyAndTuningButton
         submitEnabled={isSubmitEnabled}
         setEnableSubmit={setSubmitEnabled}
@@ -116,11 +133,11 @@ const SelectionContainer = () => {
         hasChordNum={hasChordNum}
         chordNum={chordNum}
         onSubmit={addChord}/>
-      <ChordProgressionTable
-        ChordsArr={chordsArray}
-      />
       <Reset
         onClick={resetInputs}
+      />
+      <ChordProgressionTable
+        ChordsArr={chordsArray}
       />
     </Box>
   )

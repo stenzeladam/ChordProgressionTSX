@@ -20,11 +20,6 @@ interface KeyAndTuningButtonProps {
   onSubmit: (modeInstance: { root: string; chromatic: string[]; scale: string[]; }) => void;
 }
 
-interface KeyData {
-  root: string,
-  mode: string
-}
-
 const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   isIncomplete,
   selectedRoot,
@@ -36,10 +31,6 @@ const KeyAndTuningButton: React.FC<KeyAndTuningButtonProps> = ({
   const handleClick = async () => {
     setEnableSubmit(true);
     if (selectedRoot && selectedMode) {
-      // const keyDataInstance: KeyData = {
-      //   root: selectedRoot.value,
-      //   mode: selectedMode.mode
-      // }
       try {
         const response = await axios.post('http://localhost:3000/api/mode', { root: selectedRoot.value, mode: selectedMode.mode });
         const KEY: { root: string; chromatic: string[]; scale: string[]; } = response.data;

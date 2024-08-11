@@ -3,9 +3,10 @@ import { Switch, FormControlLabel, FormGroup, Typography } from '@mui/material';
 
 interface CompensateForTuningOptionProps {
   onSelect: (selection: boolean) => void;
+  isDisabled: boolean;
 }
 
-const CompensateSwitch: React.FC<CompensateForTuningOptionProps> = ({ onSelect }) => {
+const CompensateSwitch: React.FC<CompensateForTuningOptionProps> = ({ onSelect, isDisabled }) => {
   const [labelText, setLabelText] = React.useState("No, don't compensate for the tuning");
   const [compensationSelection, setCompensationSelection] = React.useState<boolean>(false);
 
@@ -36,6 +37,7 @@ const CompensateSwitch: React.FC<CompensateForTuningOptionProps> = ({ onSelect }
             color="success" />}
           label={labelText}
           id="compensate_switch"
+          disabled={isDisabled}
         />
       </FormGroup>
     </div>
