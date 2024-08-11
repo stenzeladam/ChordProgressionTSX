@@ -56,7 +56,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Delete Row</StyledTableCell>
+            <StyledTableCell></StyledTableCell>
             <StyledTableCell>Chord Numeral</StyledTableCell>
             <StyledTableCell align="right">Chord Name</StyledTableCell>
             <StyledTableCell align="right">Chord Voicing&nbsp;(Suggested)</StyledTableCell>
@@ -66,7 +66,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
         <TableBody>
           {chordsArray.map((row, index) => (
             <StyledTableRow key={`${row.numeral}-${index}`}>
-              <StyledTableCell>
+              <StyledTableCell width={1}>
                 <DeleteIcon 
                   onClick={() => handleDeleteRow(index)} 
                   style={{ cursor: 'pointer' }} 
