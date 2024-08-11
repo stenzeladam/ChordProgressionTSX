@@ -21,12 +21,14 @@ export class UberChordAPI_data {
         }));
     }
 
-    public getStringsAsArray(): string[] {
+    public getStringsAsArray(): string {
         if (this.CHORD_DATA.length > 0) { //Ensure CHORD_DATA is not empty in case there is an issue with the API call
             let str = this.CHORD_DATA[0].STRINGS;
-            return str.split(" ");
+            str.split(" ");
+            
+            return str;
         }
-        return [""];
+        return "";
     }
 
     public getStringsAsString(): string {

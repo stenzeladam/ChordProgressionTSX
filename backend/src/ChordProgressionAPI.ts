@@ -40,39 +40,33 @@ app.post('/api/mode', (req: Request, res: Response) => {
     res.send(instance);
 });
 
-app.post('/api/add/chord', async (req: Request, res: Response) => { //Expected to be called line 69 in SelectionContainer.tsx
+app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected to be called line 67 in SelectionContainer.tsx
     const data = req.body;
     let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic);
     tempChord.buildChord();
     let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
     tempVoicing.tuneEachString();
     let chordData = await createCallandInterpretData(tempVoicing);
-    let chordDataInterfaceArr = chordData?.getDATA();
+    let newChordDataInterface = chordData?.getData();
     let chordsArr = data.chordsArray;
     let chordNumeral: string = convertToRoman(data.numeral);
-    if (chordDataInterfaceArr && chordDataInterfaceArr.length > 0) {
-        const nameArr: string[] = chordDataInterfaceArr[0].CHORD_NAME.split(',');
-        let tempName: string = ""
-        for (let i = 0; i < nameArr.length; i++) {
-            tempName = tempName + nameArr[i];
-        }
-        chordDataInterfaceArr[0].CHORD_NAME = tempName;
+    if (newChordDataInterface) {
         chordsArr = [
             ...chordsArr,
             {
                 numeral: chordNumeral,
-                chord_name: chordDataInterfaceArr[0].CHORD_NAME,
-                chord_tabs: chordDataInterfaceArr[0].STRINGS.replace(/ /g, '-'),
-                chord_notes: chordDataInterfaceArr[0].TONES
+                chord_name: newChordDataInterface.NAME,
+                chord_tabs: newChordDataInterface.TABS,
+                chord_notes: newChordDataInterface.TONES
             }
-        ];
+        ]
     }
     res.send(chordsArr);
 });
 
 async function createCallandInterpretData(param: ChordVoicing) {
       try {
-          const calledChordData = await param.fetchChordDataByVoicing(param.convertNotesToVoicing());
+          const calledChordData = await param.fetchUberChordDataByVoicing(param.convertNotesToBasicVoicing());
           return calledChordData;
   
       } catch (error) {

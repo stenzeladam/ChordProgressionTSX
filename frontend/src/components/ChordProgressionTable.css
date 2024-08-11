@@ -1,11 +1,12 @@
-.MerriweatherTable {
-    font-family: 'Merriweather', serif, monospace;
-    font-size: medium;
-  }
-  
+/* ChordProgressionTable.css */
 .CourierTable {
-    font-family: 'Courier New', serif, monospace;
-    /* font-weight: bold; */
-    font-weight: 600;
-    font-size: large;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+  font-size: large;
+}
+
+.voicing-dropdown-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }

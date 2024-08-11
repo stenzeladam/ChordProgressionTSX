@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,6 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import './ChordProgressionTable.css'
+import './VoicingDropdown'
+import { SelectChangeEvent } from '@mui/material/Select';
+import VoicingDropdown from './VoicingDropdown';
+import Box from '@mui/material/Box';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -32,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface ChordInterface {
   numeral: string,
   chord_name: string,
-  chord_tabs: string,
+  chord_tabs: string[],
   chord_notes: string,
 }
 
@@ -41,6 +45,13 @@ interface ChordProgressionTableProps {
 }
 
 const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}) => {
+
+  const [voicing, setVoicing] = useState({});
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    setVoicing(event.target.value);
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -64,9 +75,13 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}
                 align="right">
                 <span className="CourierTable">{row.chord_name}</span>
               </StyledTableCell>
-              <StyledTableCell 
-                align="right">
-                <span className="CourierTable">{row.chord_tabs}</span>
+              <StyledTableCell align="right">
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                  <VoicingDropdown
+                    chord_tabs={row.chord_tabs}
+                    handleChange={handleSelectChange}
+                  />
+                </Box>
               </StyledTableCell>
               <StyledTableCell 
                 align="right">
@@ -78,6 +93,6 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({ChordsArr}
       </Table>
     </TableContainer>
   );
-}
+};
 
 export default ChordProgressionTable;

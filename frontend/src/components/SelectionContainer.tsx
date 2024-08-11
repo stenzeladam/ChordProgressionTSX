@@ -23,7 +23,7 @@ const SelectionContainer = () => {
   const [isSubmitEnabled, setSubmitEnabled] = useState<boolean>(false);
   const [hasChordNum, setHasChordNum] = useState<boolean>(false);
   const [modeInstanceState, setModeInstanceState] = useState<{ root: string; chromatic: string[]; scale: string[]; } | null>(null);
-  const [chordsArray, setChordsArray] = useState<{numeral: string, chord_name: string, chord_tabs: string, chord_notes: string}[]>([]);
+  const [chordsArray, setChordsArray] = useState<{numeral: string, chord_name: string, chord_tabs: string[], chord_notes: string}[]>([]);
   const [isAddChordDisabled, setAddChordDisabled] = useState<boolean>(true);
   
   const handleRootSelect = (root: RootOption | null) => {
