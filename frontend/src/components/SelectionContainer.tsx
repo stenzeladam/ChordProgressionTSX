@@ -25,11 +25,17 @@ interface ChordInterface {
 interface ChordModifications {
   sus2: boolean;
   sus4: boolean;
+  major: boolean;
+  minor: boolean;
+  FifthChord: boolean;
 }
 
 const ChordModsInitialState: ChordModifications = {
   sus2: false,
-  sus4: false
+  sus4: false,
+  major: false,
+  minor: false,
+  FifthChord: false
 }
 
 const SelectionContainer = () => {
@@ -95,23 +101,73 @@ const SelectionContainer = () => {
   };
 
   // *** A bunch of handlers to keep track of chord modifications. 
+  let conditionOne: boolean = ChordMods.sus2 || ChordMods.sus4 || ChordMods.major || ChordMods.minor || ChordMods.FifthChord;
+  React.useEffect (() => {
+    conditionOne = ChordMods.sus2 || ChordMods.sus4 || ChordMods.major || ChordMods.minor || ChordMods.FifthChord;
+    console.log(ChordMods)
+  }, [ChordMods])
+
+  const handleFifthChord = () => {
+    setChordMods(() => {
+      const fifth = !(conditionOne);
+      return {
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: false,
+        FifthChord: fifth
+      };
+    });
+  }
 
   const handleSus2 = () => {
-    setChordMods((prevMods) => {
-      const newSus2 = !prevMods.sus2;
+    setChordMods(() => {
+      const newSus2 = !(conditionOne);
       return {
         sus2: newSus2,
         sus4: false,
+        major: false,
+        minor: false,
+        FifthChord: false
       };
     });
   };
   
   const handleSus4 = () => {
-    setChordMods((prevMods) => {
-      const newSus4 = !prevMods.sus4;
+    setChordMods(() => {
+      const newSus4 = !(conditionOne);
       return {
         sus2: false,
         sus4: newSus4,
+        major: false,
+        minor: false,
+        FifthChord: false
+      };
+    });
+  };
+
+  const handleMajor = () => {
+    setChordMods(() => {
+      const major = !(conditionOne);;
+      return {
+        sus2: false,
+        sus4: false,
+        major: major,
+        minor: false,
+        FifthChord: false
+      };
+    });
+  };
+
+  const handleMinor = () => {
+    setChordMods(() => {
+      const minor = !(conditionOne);;
+      return {
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: minor,
+        FifthChord: false
       };
     });
   };
@@ -134,6 +190,7 @@ const SelectionContainer = () => {
     } catch (error) {
       console.error("Error: ", error);
     }
+    setChordMods(ChordModsInitialState);
   };
 
   const removeFromChordsArray = async (rowID: number) => {
@@ -196,6 +253,12 @@ const SelectionContainer = () => {
         handleSus2={handleSus2}
         sus4={ChordMods.sus4}
         handleSus4={handleSus4}
+        major={ChordMods.major}
+        handleMajor={handleMajor}
+        minor={ChordMods.minor}
+        handleMinor={handleMinor}
+        FifthChord={ChordMods.FifthChord}
+        handleFifthChord={handleFifthChord}
       />
       <AddChordButtton 
         isDisabled={isAddChordDisabled}

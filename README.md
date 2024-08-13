@@ -38,7 +38,7 @@ The Chord Progression Tool is a web application designed to help musicians creat
 - **TypeScript Configuration**: Configured with strict type-checking and ES6 target.
 - **Express Server**: Handles API requests for managing chord progressions and modes.
 - **Chord and Mode Management**: Classes to manage musical chords, modes, and their properties. There is a class and method for managing chord voicings (the tablature for various ways to play each chord), and I plan on improving the voicing method and expanding upon it over time. 
-- **UberChord API Integration**: Fetches chord data from the UberChord API. I plan to eventually depreciate the use of UberChord API and create my own class/methods for providing the same functionality within the same server, but that will take quite some time to develop so that would not be completed any time soon.
+- **UberChord API Integration**: Fetches chord data from the UberChord API. I plan to eventually depreciate the use of UberChord API and create my own class/methods for providing the same functionality within the same server, but that will take quite some time to develop so that would not be completed any time soon. While the UberChord API has the ability to name a lot of chords, it isn't as comprehensive as I'd like. For example, if you have a diminished chord, say G diminished for example, and modify it with the `sus4` option, instead of returning `Gsus4(b5)` or even `Fmaj7(no3, no5)/B`, it will simply return `G unknown`. If you ever receive an unknown chord name, this is why, but the chord voicings and notes making up the chord should still be correct.
 
 #### Backend Files
 

@@ -1,6 +1,9 @@
 interface ChordModifications {
   sus2: boolean;
   sus4: boolean;
+  major: boolean;
+  minor: boolean;
+  FifthChord: boolean;
 }
 
 export class Chord {
@@ -39,108 +42,119 @@ export class Chord {
     this.notes.push(this.CHROMATIC[this.rootIndex]);
   }
 
-  public getMinorSecond(): void {
+  private getMinorSecond(): void {
     const minorSecond = (this.rootIndex + 1) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[minorSecond]);
   }
 
-  public getMajorSecond(): void {
+  private getMajorSecond(): void {
     const majorSecond = (this.rootIndex + 2) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[majorSecond]);
   }
 
-  public getMinorThird(): void {
+  private getMinorThird(): void {
     const minorThird = (this.rootIndex + 3) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[minorThird]);
   }
 
-  public getMajorThird(): void {
+  private getMajorThird(): void {
     const majorThird = (this.rootIndex + 4) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[majorThird]);
   }
 
-  public getPerfectFourth(): void {
+  private getPerfectFourth(): void {
     const perfectFourth = (this.rootIndex + 5) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[perfectFourth]);
   }
 
-  public getFlatFifth(): void {
+  private getFlatFifth(): void {
     const flatFifth = (this.rootIndex + 6) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[flatFifth]);
   }
 
-  public getPerfectFifth(): void {
+  private getPerfectFifth(): void {
     const perfectFifth = (this.rootIndex + 7) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[perfectFifth]);
   }
 
-  public getMinorSixth(): void {
+  private getMinorSixth(): void {
     const minorSixth = (this.rootIndex + 8) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[minorSixth]);
   }
 
-  public getMajorSixth(): void {
+  private getMajorSixth(): void {
     const majorSixth = (this.rootIndex + 9) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[majorSixth]);
   }
 
-  public getMinorSeventh(): void {
+  private getMinorSeventh(): void {
     const minorSeventh = (this.rootIndex + 10) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[minorSeventh]);
   }
 
-  public getMajorSeventh(): void {
+  private getMajorSeventh(): void {
     const majorSeventh = (this.rootIndex + 11) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[majorSeventh]);
   }
 
-  public getOctave(): void {
+  private getOctave(): void {
     const octave = (this.rootIndex + 12) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[octave]);
   }
 
-  public getMinorNinth(): void {
+  private getMinorNinth(): void {
     const minorNinth = (this.rootIndex + 13) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[minorNinth]);
   }
 
-  public getMajorNinth(): void {
+  private getMajorNinth(): void {
     const majorNinth = (this.rootIndex + 14) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[majorNinth]);
   }
 
-  public getEleventh(): void {
+  private getEleventh(): void {
     const eleventh = (this.rootIndex + 17) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[eleventh]);
   }
 
-  public getMinorThirteenth(): void {
+  private getMinorThirteenth(): void {
     const minorThirteenth = (this.rootIndex + 20) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[minorThirteenth]);
   }
 
-  public getMajorThirteenth(): void {
+  private getMajorThirteenth(): void {
     const majorThirteenth = (this.rootIndex + 21) % this.CHROMATIC.length;
     this.notes.push(this.CHROMATIC[majorThirteenth]);
   }
 
-  public getThird(): void {
+  private getThird(): void {
     const third = (this.CHORDNUM + 2) % this.SCALE.length;
     this.notes.push(this.SCALE[third]);
   }
 
-  public getFifth(): void {
+  private getFifth(): void {
     const fifth = (this.CHORDNUM + 4) % this.SCALE.length;
     this.notes.push(this.SCALE[fifth]);
   }
 
   public buildChord(): void {
-    if (!this.MODS.sus2 && !this.MODS.sus4) {
+    if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord)) {
       this.getThird();
-    } else if (this.MODS.sus2) {
+    } 
+    else if (this.MODS.sus2) {
       this.getMajorSecond();
-    } else if (this.MODS.sus4) {
+    } 
+    else if (this.MODS.sus4) {
       this.getPerfectFourth();
+    }
+    else if (this.MODS.major) {
+      this.getMajorThird();
+    }
+    else if (this.MODS.minor) {
+      this.getMinorThird();
+    }
+    else if (this.MODS.FifthChord) {
+      // Don't add a third
     }
     this.getFifth();
     if (this.seventh) {

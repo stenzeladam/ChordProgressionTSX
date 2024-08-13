@@ -33,6 +33,9 @@ export class CustomChordData {
             if (i === nameArr.length - 1 && nameArr[i] !== "") {
                 tempName = tempName + "/" + nameArr[i];
             }
+            else if (nameArr[i] === "Tritone") {
+                tempName = tempName + ` ${nameArr[i]}`;
+            }
             else {
                 tempName = tempName + nameArr[i];
             }
@@ -51,6 +54,9 @@ export class CustomChordData {
         for (let i = 0; i < nameArr.length; i++) {
             if (i === nameArr.length - 1 && nameArr[i] !== "") {
                 tempName = tempName + "/" + nameArr[i];
+            }
+            else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
+                tempName = tempName + ` ${nameArr[i]}`;
             }
             else {
                 tempName = tempName + nameArr[i];

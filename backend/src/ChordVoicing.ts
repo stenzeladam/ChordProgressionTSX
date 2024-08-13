@@ -1,15 +1,6 @@
 import { CustomChordData } from "./CustomChordData";
 import { UberChordAPI_data } from "./UberChordAPI_data";
 
-interface ChordData {
-    STRINGS: string[];
-    FINGERING: string;
-    CHORD_NAME: string;
-    ENHARMONIC_CHORD_NAME: string;
-    VOICING_ID: string;
-    TONES: string;
-}
-
 export class ChordVoicing {
     private readonly NOTES: string[];
     private readonly COMPENSATE_TUNING: boolean;
@@ -68,58 +59,51 @@ export class ChordVoicing {
         }
     }
 
-    public convertNotesToBasicVoicing(): string {
-
-        const numOfNotesInChord = this.NOTES.length;
-        let tabsFrets: string[] = ["X","X","X","X","X","X"];
-        
-        for (let nthString = 0; nthString < numOfNotesInChord; nthString++) {
-            let currentString = this.stringNotes[nthString];
-            let size = currentString.length;
-            let fret = 0;
-            while (currentString[fret] != this.NOTES[nthString] && fret < currentString.length) {
-                fret++;
+        // Overloaded signatures
+        public convertNotesToBasicVoicing(): string;
+        public convertNotesToBasicVoicing(input: string[][]): string;
+    
+        public convertNotesToBasicVoicing(input?: string[][]): string {
+            // This is a basic voicing to be sent to the UberChord API for naming purposes. This voicing does not give any consideration to playability.
+            const numOfNotesInChord = this.NOTES.length;
+            let tabsFrets: string[] = ["X", "X", "X", "X", "X", "X"];
+            const maxFret = 20; // UberChord API doesn't accept voicings with fret numbers greater than 20
+            let offset: number[] = [0, 1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7, 8, -8, 9, -9, 10, -10, 11, -11];
+    
+            for (let nthString = 0; nthString < numOfNotesInChord; nthString++) {
+                let currentString = input ? input[nthString] : this.stringNotes[nthString];
+                let fret: number = 0;
+                let fretPrevious: number;
+    
+                if (nthString === 0) { // For the 0th string, find the first note in this.NOTES where 0 <= frets < 12
+                    while (currentString[fret] !== this.NOTES[nthString] && fret < currentString.length) {
+                        fret++;
+                    }
+                } else { // For all other strings, find the next note in this.NOTES where 0 <= frets <= maxFret, finding the closest fret to the previous fret
+                    fretPrevious = parseInt(tabsFrets[nthString - 1], 10); // the fret of the previous string
+                    for (let offsetIndex = 0; offsetIndex < offset.length; offsetIndex++) {
+                        fret = fretPrevious + offset[offsetIndex];
+                        if (fret >= 0 && fret <= maxFret) {
+                            if (currentString[fret % 12] === this.NOTES[nthString]) {
+                                tabsFrets[nthString] = fret.toString();
+                                break;
+                            }
+                        }
+                    }
+                }
+                tabsFrets[nthString] = fret.toString();
             }
-            tabsFrets[nthString] = fret.toString();
+    
+            let voicing: string = "";
+            for (let i = 0; i < 6; i++) {
+                if (i < 5) {
+                    voicing = voicing + tabsFrets[i] + "-";
+                } else {
+                    voicing = voicing + tabsFrets[i];
+                }
+            }
+            return voicing;
         }
-
-        let voicing:string = "";
-        for(let i = 0; i < 6; i++) {
-            if (i < 5) {
-                voicing = voicing + tabsFrets[i] + "-";
-            }
-            else {
-                voicing = voicing + tabsFrets[i];
-            }
-        }
-        return voicing;
-    }
-
-    public convertNotesToVoicingStandard(): string {
-
-        const numOfNotesInChord = this.NOTES.length;
-        let tabsFrets: string[] = ["X","X","X","X","X","X"];
-        
-        for (let nthString = 0; nthString < numOfNotesInChord; nthString++) {
-            let currentString = this.STANDARD[nthString];
-            let fret = 0;
-            while (currentString[fret] != this.NOTES[nthString] && fret < currentString.length) {
-                fret++;
-            }
-            tabsFrets[nthString] = fret.toString();
-        }
-
-        let voicing:string = "";
-        for(let i = 0; i < 6; i++) {
-            if (i < 5) {
-                voicing = voicing + tabsFrets[i] + "-";
-            }
-            else {
-                voicing = voicing + tabsFrets[i];
-            }
-        }
-        return voicing;
-    }
 
     private convertFlatsToSharps(param: string[]): string[] {
         let chordNotes = param;
@@ -184,10 +168,19 @@ export class ChordVoicing {
         this.checkStringForNotes((n+1), voicingRootFret, voicingNoteAdded, 
             voicing, lookFor5th, dontGoAboveRootFret, dontGoBelowRootFret, fretTimesUsed, whichStringNotes);
 
+        
+        let allNotesAdded = Array.from(voicingNoteAdded.values()).every(value => value === true);
+        if (paramTones.length == 2 && allNotesAdded) { //Checking if the chord is supposed to be a power chord
+            return voicing;
+        }
         //check the rest of the strings
         for (let i = (n + 2); i < 6; i++) {
             this.checkStringForNotes(i, voicingRootFret, voicingNoteAdded, 
                 voicing, false, dontGoAboveRootFret, dontGoBelowRootFret, fretTimesUsed, whichStringNotes); //last parameter is false because no longer looking for the fifth 
+            allNotesAdded = Array.from(voicingNoteAdded.values()).every(value => value === true);
+            if (paramTones.length == 2 && allNotesAdded) { //Checking if the chord is supposed to be a power chord
+                return voicing;
+            }
         }
         // Check for first note in notes array, then prioritize finding the notes mostly sequentially
         // prioritize finding the fifth, flat 5th, then the fourth, then the third if possible. Also prioritize any notes that 
@@ -455,7 +448,7 @@ export class ChordVoicing {
         if (whichStringNotes[nthString + 1][0] === fifth) {
             return true;
         }
-        else if (whichStringNotes[nthString + 2][0] === fifth) {
+        else if (whichStringNotes[nthString + 2][0] === fifth && voicingNoteAdded.size !== 2) { // Condition of voicingNoteAdded.size !== 2 is so only 1 string below is checked in the case of power chords
             return true;
         }
         return false;
@@ -476,7 +469,7 @@ export class ChordVoicing {
         
         let voicing = "";
         if (this.COMPENSATE_TUNING) {
-            voicing = this.convertNotesToVoicingStandard(); // UberChord will return compensated chord name/information
+            voicing = this.convertNotesToBasicVoicing(this.STANDARD); // UberChord will return compensated chord name/information
         }
         else {
             voicing = voice_param; // UberChord will return non-compensated chord name/information
@@ -521,6 +514,15 @@ export class ChordVoicing {
 }
 
 /* Depreciated, keep until there is for sure no further use 
+
+    interface ChordData {
+        STRINGS: string[];
+        FINGERING: string;
+        CHORD_NAME: string;
+        ENHARMONIC_CHORD_NAME: string;
+        VOICING_ID: string;
+        TONES: string;
+    }
 
     public async fetchChordDataByStandardVoicing(voice_param: string): Promise<ChordData[]> {
         const voicing = voice_param;
