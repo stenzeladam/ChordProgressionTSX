@@ -8,10 +8,11 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import './VoicingDropdown.css';
 
 interface VoicingDropdownProps {
+  rowID: number;
   chord_tabs: string[];
 }
 
-const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ chord_tabs }) => {
+const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ rowID, chord_tabs }) => {
   const [voicing, setVoicing] = useState(chord_tabs[0] || '');
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ chord_tabs }) => {
         </InputLabel>
         <Select
           labelId="voicing-dropdown-label"
-          id="voicing-dropdown"
+          id={`voicing-dropdown-${rowID}`}
           value={voicing}
           onChange={handleVoicingChange}
           label="Chord Voicing"
@@ -46,15 +47,13 @@ const VoicingDropdown: React.FC<VoicingDropdownProps> = ({ chord_tabs }) => {
           {chord_tabs.map((tab, index) => (
             <MenuItem
               key={index}
+              id={`voicing-dropdown-${rowID}-menu-item-${index}`}
               value={tab}
               className={voicing === tab ? 'Mui-selected' : ''}
             >
               {tab}
             </MenuItem>
           ))}
-          <MenuItem value="">
-            None
-          </MenuItem>
         </Select>
       </FormControl>
     </Box>

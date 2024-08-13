@@ -69,6 +69,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
             <StyledTableRow key={row.rowID}>
               <StyledTableCell width={1}>
               <DeleteIcon 
+                  id={`delete-icon-${row.rowID}`}
                   onClick={() => handleDeleteRow(row.rowID)} 
                   className="delete-icon"
                 />
@@ -85,6 +86,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
               <StyledTableCell align="right">
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                   <VoicingDropdown
+                    rowID={row.rowID}
                     chord_tabs={row.chord_tabs}
                   />
                 </Box>

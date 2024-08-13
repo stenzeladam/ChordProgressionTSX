@@ -7,6 +7,7 @@ import KeyAndTuningButton from './KeyAndTuningButton';
 import CompensateForTuningOption from './CompensateForTuningOption';
 import Reset from './ResetButton'
 import ChordNumeralButtons from './ChordNumeralButtons';
+import ChordModifierCheckboxes from './ChordModifiers';
 import AddChordButtton from './AddChordButton'
 import { ModeOption } from './ModeSelector';
 import { ChordNumber } from './ChordNumeralButtons';
@@ -19,6 +20,16 @@ interface ChordInterface {
   chord_name: string,
   chord_tabs: string[],
   chord_notes: string,
+}
+
+interface ChordModifications {
+  sus2: boolean;
+  sus4: boolean;
+}
+
+const ChordModsInitialState: ChordModifications = {
+  sus2: false,
+  sus4: false
 }
 
 const SelectionContainer = () => {
@@ -37,6 +48,7 @@ const SelectionContainer = () => {
   const [selectModeDisabled, setSelectModeDisabled] = useState<boolean>(false);
   const [selectTuningDisabled, setSelectedTuningDisabled] = useState<boolean>(false);
   const [compensateOptionDisabled, setCompensateOptionDisabled] = useState<boolean>(false);
+  const [ChordMods, setChordMods] = useState<ChordModifications>(ChordModsInitialState);
   
   const handleRootSelect = (root: RootOption | null) => {
     setSelectedRoot(root);
@@ -57,6 +69,7 @@ const SelectionContainer = () => {
     setSelectModeDisabled(false);
     setSelectedTuningDisabled(false);
     setCompensateOptionDisabled(false);
+    setChordMods(ChordModsInitialState);
   };
 
   const handleModeSelect = (mode: ModeOption | null) => {
@@ -81,6 +94,30 @@ const SelectionContainer = () => {
     setChordNum(num);
   };
 
+  // *** A bunch of handlers to keep track of chord modifications. 
+
+  const handleSus2 = () => {
+    setChordMods((prevMods) => {
+      const newSus2 = !prevMods.sus2;
+      return {
+        sus2: newSus2,
+        sus4: false,
+      };
+    });
+  };
+  
+  const handleSus4 = () => {
+    setChordMods((prevMods) => {
+      const newSus4 = !prevMods.sus4;
+      return {
+        sus2: false,
+        sus4: newSus4,
+      };
+    });
+  };
+
+  // *** End of handlers to keep track of chord modifications
+
   const addChord = async (num: ChordNumber | null) => {
     try {
       if (modeInstanceState && num && selectedTuning != null) {
@@ -89,7 +126,8 @@ const SelectionContainer = () => {
           mode: modeInstanceState,
           compensate: compensateOption,
           tuning: stringTunings,
-          chordsArray: chordsArray
+          chordsArray: chordsArray,
+          ChordMods: ChordMods
         });
         setChordsArray(responseChord.data);
       }
@@ -153,6 +191,12 @@ const SelectionContainer = () => {
       />
       <ChordNumeralButtons 
         onSelect={handleNumeralSelect}/>
+      <ChordModifierCheckboxes 
+        sus2={ChordMods.sus2}
+        handleSus2={handleSus2}
+        sus4={ChordMods.sus4}
+        handleSus4={handleSus4}
+      />
       <AddChordButtton 
         isDisabled={isAddChordDisabled}
         hasChordNum={hasChordNum}

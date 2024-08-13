@@ -10,6 +10,7 @@ const ResetButton: React.FC<ResetButtonProps> = ( {onClick} ) => {
   return (
     <Stack spacing={2} direction="row">
       <Button variant="contained"
+        id="reset-button"
         onClick={onClick}
         color="warning"
         >Reset selection

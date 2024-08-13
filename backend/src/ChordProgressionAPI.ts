@@ -51,7 +51,7 @@ app.post('/api/mode', (req: Request, res: Response) => {
 app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected to be called line 67 in SelectionContainer.tsx
     
     const data = req.body;
-    let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic);
+    let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic, data.ChordMods);
     tempChord.buildChord();
     let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
     tempVoicing.tuneEachString();
