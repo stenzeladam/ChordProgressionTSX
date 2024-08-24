@@ -33,9 +33,12 @@ export class CustomChordData {
             if (i === nameArr.length - 1 && nameArr[i] !== "") {
                 tempName = tempName + "/" + nameArr[i];
             }
-            else if (nameArr[i] === "Tritone") {
+            else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
                 tempName = tempName + ` ${nameArr[i]}`;
             }
+            else if (i === 1 && nameArr[i] !== "" && nameArr[i+1] !== "" && /\d$/.test(nameArr[i])) { // only adds a comma if the last char in nameArr[1] is a number and the next element is not empty
+                tempName = tempName + `${nameArr[i]}, `;
+            }  
             else {
                 tempName = tempName + nameArr[i];
             }
@@ -58,6 +61,9 @@ export class CustomChordData {
             else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
                 tempName = tempName + ` ${nameArr[i]}`;
             }
+            else if (i === 1 && nameArr[i] !== "" && nameArr[i+1] !== "" && /\d$/.test(nameArr[i])) { // only adds a comma if the last char in nameArr[1] is a number and the next element is not empty
+                tempName = tempName + `${nameArr[i]}, `;
+            }  
             else {
                 tempName = tempName + nameArr[i];
             }
@@ -90,13 +96,6 @@ export class CustomChordData {
     }
 
     private formatTONES(): string {
-        // const EXPANSIONS: { [key: string]: string } = {
-        //     "A#": "A#(Bb)",
-        //     "C#": "C#(Db)",
-        //     "D#": "D#(Eb)",
-        //     "F#": "F#(Gb)",
-        //     "G#": "G#(Ab)"
-        // };
 
         let result = "";
 

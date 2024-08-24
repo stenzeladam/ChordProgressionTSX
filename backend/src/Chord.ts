@@ -1,9 +1,14 @@
 interface ChordModifications {
+  FifthChord: boolean;
   sus2: boolean;
   sus4: boolean;
   major: boolean;
   minor: boolean;
-  FifthChord: boolean;
+  dom7: boolean;
+  maj7: boolean;
+  min7: boolean;
+  min_Maj7: boolean;
+  add7: boolean;
 }
 
 export class Chord {
@@ -15,7 +20,6 @@ export class Chord {
   private rootIndex: number = -999;
   private isFlat = false;
   private isSharp = false;
-  private seventh = false;
 
   constructor(chordNumber: number, localScale: string[], localChrom: string[], Mods: ChordModifications) {
     this.SCALE = localScale;
@@ -138,7 +142,7 @@ export class Chord {
   }
 
   public buildChord(): void {
-    if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord)) {
+    if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord || this.MODS.dom7 || this.MODS.maj7 || this.MODS.min7 || this.MODS.min_Maj7)) {
       this.getThird();
     } 
     else if (this.MODS.sus2) {
@@ -156,10 +160,27 @@ export class Chord {
     else if (this.MODS.FifthChord) {
       // Don't add a third
     }
-    this.getFifth();
-    if (this.seventh) {
-      const sev = (this.CHORDNUM + 6) % this.SCALE.length;
-      this.notes.push(this.SCALE[sev]);
+    else if (this.MODS.dom7 || this.MODS.maj7) {
+      this.getMajorThird();
+    }
+    else if (this.MODS.min7 || this.MODS.min_Maj7) {
+      this.getMinorThird();
+    }
+    
+    this.getFifth(); // add the fifth
+    
+    if (this.MODS.add7) {
+      const seventh = (this.CHORDNUM + 6) % this.SCALE.length;
+      this.notes.push(this.SCALE[seventh]);
+    }
+    else if (this.MODS.dom7 || this.MODS.min7) {
+      this.getMinorSeventh();
+    }
+    else if (this.MODS.dom7 || this.MODS.min7) {
+      this.getMinorSeventh();
+    }
+    else if (this.MODS.maj7 || this.MODS.min_Maj7) {
+      this.getMajorSeventh();
     }
   }
 

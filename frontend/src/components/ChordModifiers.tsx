@@ -2,7 +2,6 @@ import * as React from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import ChordModifications from './SelectionContainer'
 
 interface ChordModifierCheckboxProps {
     sus2: boolean;
@@ -15,6 +14,16 @@ interface ChordModifierCheckboxProps {
     handleMinor: () => void;
     FifthChord: boolean;
     handleFifthChord: () => void;
+    dom7: boolean;
+    handleDom7: () => void;
+    maj7: boolean;
+    handleMaj7: () => void;
+    min7: boolean;
+    handleMin7: () => void;
+    min_Maj7: boolean;
+    handleMin_Maj7: () => void;
+    add7: boolean;
+    handleAdd7: () => void;
 }
 
 const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
@@ -27,7 +36,17 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
     minor,
     handleMinor,
     FifthChord,
-    handleFifthChord
+    handleFifthChord,
+    dom7,
+    handleDom7,
+    maj7,
+    handleMaj7,
+    min7,
+    handleMin7,
+    min_Maj7,
+    handleMin_Maj7,
+    add7,
+    handleAdd7
 }) => {
 
   return (
@@ -38,7 +57,7 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
             id="power-chord"
             checked={FifthChord}
             onChange={handleFifthChord}
-            disabled={sus2 || sus4 || major || minor}
+            disabled={sus2 || sus4 || major || minor || dom7 || maj7 || min7 || min_Maj7}
           />
         }
         label="5th Chord (Power Chord)"
@@ -49,10 +68,10 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
             id="sus2"
             checked={sus2}
             onChange={handleSus2}
-            disabled={sus4 || major || minor || FifthChord}
+            disabled={FifthChord || sus4 || major || minor || dom7 || maj7 || min7 || min_Maj7}
           />
         }
-        label="sus2"
+        label="Sus2"
       />
       <FormControlLabel
         control={
@@ -60,10 +79,10 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
             id="sus4"
             checked={sus4}
             onChange={handleSus4}
-            disabled={sus2 || major || minor || FifthChord}
+            disabled={FifthChord || sus2 || major || minor || dom7 || maj7 || min7 || min_Maj7}
           />
         }
-        label="sus4"
+        label="Sus4"
       />
       <FormControlLabel
         control={
@@ -71,10 +90,10 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
             id="major"
             checked={major}
             onChange={handleMajor}
-            disabled={sus2 || sus4 || minor || FifthChord}
+            disabled={FifthChord || sus2 || sus4 || minor || dom7 || maj7 || min7 || min_Maj7}
           />
         }
-        label="major"
+        label="Major"
       />
       <FormControlLabel
         control={
@@ -82,12 +101,68 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
             id="minor"
             checked={minor}
             onChange={handleMinor}
-            disabled={sus2 || sus4 || major || FifthChord}
+            disabled={FifthChord || sus2 || sus4 || major || dom7 || maj7 || min7 || min_Maj7}
           />
         }
-        label="minor"
+        label="Minor"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="dominant7"
+            checked={dom7}
+            onChange={handleDom7}
+            disabled={FifthChord || sus2 || sus4 || minor || maj7 || min7 || min_Maj7 || add7}
+          />
+        }
+        label="Dominant 7th"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="maj7"
+            checked={maj7}
+            onChange={handleMaj7}
+            disabled={FifthChord || sus2 || sus4 || minor || dom7 || min7 || min_Maj7 || add7}
+          />
+        }
+        label="Major 7th"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="min7"
+            checked={min7}
+            onChange={handleMin7}
+            disabled={FifthChord || sus2 || sus4 || major || dom7 || maj7 || min_Maj7 || add7}
+          />
+        }
+        label="Minor 7th"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="min_maj7"
+            checked={min_Maj7}
+            onChange={handleMin_Maj7}
+            disabled={FifthChord || sus2 || sus4 || major || dom7 || maj7 || min7 || add7}
+          />
+        }
+        label="Minor Major 7th"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="add7"
+            checked={add7}
+            onChange={handleAdd7}
+            disabled={dom7 || maj7 || min7 || min_Maj7}
+          />
+        }
+        label="Add 7th (mode-specific)"
       />
     </FormGroup>
+    
   );
 };
 

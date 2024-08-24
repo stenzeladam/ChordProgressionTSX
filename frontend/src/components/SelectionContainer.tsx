@@ -28,14 +28,24 @@ interface ChordModifications {
   major: boolean;
   minor: boolean;
   FifthChord: boolean;
+  dom7: boolean;
+  maj7: boolean;
+  min7: boolean;
+  min_Maj7: boolean;
+  add7: boolean;
 }
 
 const ChordModsInitialState: ChordModifications = {
+  FifthChord: false,
   sus2: false,
   sus4: false,
   major: false,
   minor: false,
-  FifthChord: false
+  dom7: false,
+  maj7: false,
+  min7: false,
+  min_Maj7: false,
+  add7: false
 }
 
 const SelectionContainer = () => {
@@ -101,76 +111,181 @@ const SelectionContainer = () => {
   };
 
   // *** A bunch of handlers to keep track of chord modifications. 
-  let conditionOne: boolean = ChordMods.sus2 || ChordMods.sus4 || ChordMods.major || ChordMods.minor || ChordMods.FifthChord;
-  React.useEffect (() => {
-    conditionOne = ChordMods.sus2 || ChordMods.sus4 || ChordMods.major || ChordMods.minor || ChordMods.FifthChord;
-    console.log(ChordMods)
-  }, [ChordMods])
+  // React.useEffect(() => {
+  //   console.log("ChordMods: ", ChordMods);
+  // }, [ChordMods]);
 
   const handleFifthChord = () => {
-    setChordMods(() => {
-      const fifth = !(conditionOne);
-      return {
-        sus2: false,
-        sus4: false,
-        major: false,
-        minor: false,
-        FifthChord: fifth
-      };
-    });
-  }
+    setChordMods(prevState => ({
+      ...prevState,
+      sus2: false,
+      sus4: false,
+      major: false,
+      minor: false,
+      FifthChord: !prevState.FifthChord,
+      dom7: false,
+      maj7: false,
+      min7: false,
+      min_Maj7: false
+    }));
+  };
 
   const handleSus2 = () => {
-    setChordMods(() => {
-      const newSus2 = !(conditionOne);
-      return {
-        sus2: newSus2,
-        sus4: false,
-        major: false,
-        minor: false,
-        FifthChord: false
-      };
-    });
+    setChordMods(prevState => ({
+      ...prevState,
+      sus2: !prevState.sus2,
+      sus4: false,
+      major: false,
+      minor: false,
+      FifthChord: false,
+      dom7: false,
+      maj7: false,
+      min7: false,
+      min_Maj7: false
+    }));
   };
-  
+
   const handleSus4 = () => {
-    setChordMods(() => {
-      const newSus4 = !(conditionOne);
-      return {
-        sus2: false,
-        sus4: newSus4,
-        major: false,
-        minor: false,
-        FifthChord: false
-      };
-    });
+    setChordMods(prevState => ({
+      ...prevState,
+      sus2: false,
+      sus4: !prevState.sus4,
+      major: false,
+      minor: false,
+      FifthChord: false,
+      dom7: false,
+      maj7: false,
+      min7: false,
+      min_Maj7: false
+    }));
   };
 
   const handleMajor = () => {
-    setChordMods(() => {
-      const major = !(conditionOne);;
+    setChordMods(prevState => {
+      const major = !prevState.major;
       return {
+        ...prevState,
         sus2: false,
         sus4: false,
         major: major,
         minor: false,
-        FifthChord: false
+        FifthChord: false,
+        dom7: major ? prevState.dom7 : false,
+        maj7: major ? prevState.maj7 : false,
+        min7: false,
+        min_Maj7: false
       };
     });
   };
 
   const handleMinor = () => {
-    setChordMods(() => {
-      const minor = !(conditionOne);;
+    setChordMods(prevState => {
+      const minor = !prevState.minor;
       return {
+        ...prevState,
         sus2: false,
         sus4: false,
         major: false,
         minor: minor,
-        FifthChord: false
+        FifthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: minor ? prevState.min7 : false,
+        min_Maj7: minor ? prevState.min_Maj7 : false
       };
     });
   };
+
+  const handleDom7 = () => {
+    setChordMods(prevState => {
+      const dom7 = !prevState.dom7;
+      return {
+        ...prevState,
+        sus2: false,
+        sus4: false,
+        major: dom7 ? true : prevState.major,
+        minor: false,
+        FifthChord: false,
+        dom7: dom7,
+        maj7: false,
+        min7: false,
+        min_Maj7: false
+      };
+    });
+  };
+
+  const handleMaj7 = () => {
+    setChordMods(prevState => {
+      const maj7 = !prevState.maj7;
+      return {
+        ...prevState,
+        sus2: false,
+        sus4: false,
+        major: maj7 ? true : prevState.major,
+        minor: false,
+        FifthChord: false,
+        dom7: false,
+        maj7: maj7,
+        min7: false,
+        min_Maj7: false
+      };
+    });
+  };
+
+  const handleMin7 = () => {
+    setChordMods(prevState => {
+      const min7 = !prevState.min7;
+      return {
+        ...prevState,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: min7 ? true : prevState.minor,
+        FifthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: min7,
+        min_Maj7: false
+      };
+    });
+  };
+
+  const handleMin_Maj7 = () => {
+    setChordMods(prevState => {
+      const min_Maj7 = !prevState.min_Maj7;
+      return {
+        ...prevState,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: min_Maj7 ? true : prevState.minor,
+        FifthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: min_Maj7
+      };
+    });
+  };
+
+  const handleAdd7 = () => {
+    setChordMods(prevState => {
+      const add7 = !prevState.add7;
+      return {
+        ...prevState,
+        sus2: prevState.sus2,
+        sus4: prevState.sus4,
+        major: prevState.major,
+        minor: prevState.minor,
+        FifthChord: prevState.FifthChord,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: add7
+      }
+    });
+  }
 
   // *** End of handlers to keep track of chord modifications
 
@@ -259,6 +374,16 @@ const SelectionContainer = () => {
         handleMinor={handleMinor}
         FifthChord={ChordMods.FifthChord}
         handleFifthChord={handleFifthChord}
+        dom7={ChordMods.dom7}
+        handleDom7={handleDom7}
+        maj7={ChordMods.maj7}
+        handleMaj7={handleMaj7}
+        min7={ChordMods.min7}
+        handleMin7={handleMin7}
+        min_Maj7={ChordMods.min_Maj7}
+        handleMin_Maj7 = {handleMin_Maj7}
+        add7={ChordMods.add7}
+        handleAdd7={handleAdd7}
       />
       <AddChordButtton 
         isDisabled={isAddChordDisabled}
