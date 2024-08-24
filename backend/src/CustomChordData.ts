@@ -36,9 +36,35 @@ export class CustomChordData {
             else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
                 tempName = tempName + ` ${nameArr[i]}`;
             }
-            else if (i === 1 && nameArr[i] !== "" && nameArr[i+1] !== "" && /\d$/.test(nameArr[i])) { // only adds a comma if the last char in nameArr[1] is a number and the next element is not empty
-                tempName = tempName + `${nameArr[i]}, `;
-            }  
+            else if (i < nameArr.length - 1
+                && /\d$/.test(nameArr[i])  // Last character of nameArr[i] is a number
+                && /^\d/.test(nameArr[i+1]) // First character of nameArr[i+1] is a number
+                && nameArr[i+1] !== "") {  // Next element is not empty
+                    // Extract numeric prefix and remaining part from nameArr[i+1]
+                    const match = nameArr[i+1].match(/^(\d+)(.*)$/);
+                    const numericPrefix = match ? match[1] : ""; // Numeric part
+                    const remainingPart = match ? match[2] : ""; // Remaining part
+                    
+                    tempName = tempName + `${nameArr[i]}(add${numericPrefix}${remainingPart})`;
+                    i++; // Skip the next element as it has been processed
+            }
+            else if (nameArr[i] === "dim") {
+                if (i < nameArr.length - 1) {
+                    if (nameArr[i+1] === "") {
+                        // Next element is blank, leave "dim" as is
+                        tempName = tempName + "dim";
+                    } else if (/^\D/.test(nameArr[i+1])) {
+                        // Next element starts with a non-numeric character, replace "dim" with "°"
+                        tempName = tempName + "°";
+                    } else {
+                        // If none of the above conditions are met, keep "dim" as is
+                        tempName = tempName + "dim";
+                    }
+                } else {
+                    // If there is no next element, keep "dim" as is
+                    tempName = tempName + "dim";
+                }
+            }
             else {
                 tempName = tempName + nameArr[i];
             }
@@ -61,9 +87,35 @@ export class CustomChordData {
             else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
                 tempName = tempName + ` ${nameArr[i]}`;
             }
-            else if (i === 1 && nameArr[i] !== "" && nameArr[i+1] !== "" && /\d$/.test(nameArr[i])) { // only adds a comma if the last char in nameArr[1] is a number and the next element is not empty
-                tempName = tempName + `${nameArr[i]}, `;
-            }  
+            else if (i < nameArr.length - 1
+                && /\d$/.test(nameArr[i])  // Last character of nameArr[i] is a number
+                && /^\d/.test(nameArr[i+1]) // First character of nameArr[i+1] is a number
+                && nameArr[i+1] !== "") {  // Next element is not empty
+                    // Extract numeric prefix and remaining part from nameArr[i+1]
+                    const match = nameArr[i+1].match(/^(\d+)(.*)$/);
+                    const numericPrefix = match ? match[1] : ""; // Numeric part
+                    const remainingPart = match ? match[2] : ""; // Remaining part
+                    
+                    tempName = tempName + `${nameArr[i]}(add${numericPrefix}${remainingPart})`;
+                    i++; // Skip the next element as it has been processed
+            }
+            else if (nameArr[i] === "dim") {
+                if (i < nameArr.length - 1) {
+                    if (nameArr[i+1] === "") {
+                        // Next element is blank, leave "dim" as is
+                        tempName = tempName + "dim";
+                    } else if (/^\D/.test(nameArr[i+1])) {
+                        // Next element starts with a non-numeric character, replace "dim" with "°"
+                        tempName = tempName + "°";
+                    } else {
+                        // If none of the above conditions are met, keep "dim" as is
+                        tempName = tempName + "dim";
+                    }
+                } else {
+                    // If there is no next element, keep "dim" as is
+                    tempName = tempName + "dim";
+                }
+            }
             else {
                 tempName = tempName + nameArr[i];
             }

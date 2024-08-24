@@ -1,9 +1,10 @@
 interface ChordModifications {
-  FifthChord: boolean;
   sus2: boolean;
   sus4: boolean;
   major: boolean;
   minor: boolean;
+  FifthChord: boolean;
+  SixthChord: boolean;
   dom7: boolean;
   maj7: boolean;
   min7: boolean;
@@ -168,6 +169,10 @@ export class Chord {
     }
     
     this.getFifth(); // add the fifth
+    
+    if (this.MODS.SixthChord) {
+      this.getMajorSixth();
+    }
     
     if (this.MODS.add7) {
       const seventh = (this.CHORDNUM + 6) % this.SCALE.length;

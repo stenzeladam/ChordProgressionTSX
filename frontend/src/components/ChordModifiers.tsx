@@ -14,6 +14,8 @@ interface ChordModifierCheckboxProps {
     handleMinor: () => void;
     FifthChord: boolean;
     handleFifthChord: () => void;
+    SixthChord: boolean;
+    handleSixthChord: () => void;
     dom7: boolean;
     handleDom7: () => void;
     maj7: boolean;
@@ -37,6 +39,8 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
     handleMinor,
     FifthChord,
     handleFifthChord,
+    SixthChord,
+    handleSixthChord,
     dom7,
     handleDom7,
     maj7,
@@ -57,7 +61,7 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
             id="power-chord"
             checked={FifthChord}
             onChange={handleFifthChord}
-            disabled={sus2 || sus4 || major || minor || dom7 || maj7 || min7 || min_Maj7}
+            disabled={sus2 || sus4 || major || minor || SixthChord || dom7 || maj7 || min7 || min_Maj7}
           />
         }
         label="5th Chord (Power Chord)"
@@ -105,6 +109,17 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
           />
         }
         label="Minor"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="sixth-Chord"
+            checked={SixthChord}
+            onChange={handleSixthChord}
+            disabled={FifthChord}
+          />
+        }
+        label="6th Chord"
       />
       <FormControlLabel
         control={

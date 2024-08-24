@@ -28,6 +28,7 @@ interface ChordModifications {
   major: boolean;
   minor: boolean;
   FifthChord: boolean;
+  SixthChord: boolean;
   dom7: boolean;
   maj7: boolean;
   min7: boolean;
@@ -36,11 +37,12 @@ interface ChordModifications {
 }
 
 const ChordModsInitialState: ChordModifications = {
-  FifthChord: false,
   sus2: false,
   sus4: false,
   major: false,
   minor: false,
+  FifthChord: false,
+  SixthChord: false,
   dom7: false,
   maj7: false,
   min7: false,
@@ -115,21 +117,6 @@ const SelectionContainer = () => {
   //   console.log("ChordMods: ", ChordMods);
   // }, [ChordMods]);
 
-  const handleFifthChord = () => {
-    setChordMods(prevState => ({
-      ...prevState,
-      sus2: false,
-      sus4: false,
-      major: false,
-      minor: false,
-      FifthChord: !prevState.FifthChord,
-      dom7: false,
-      maj7: false,
-      min7: false,
-      min_Maj7: false
-    }));
-  };
-
   const handleSus2 = () => {
     setChordMods(prevState => ({
       ...prevState,
@@ -194,6 +181,31 @@ const SelectionContainer = () => {
         min_Maj7: minor ? prevState.min_Maj7 : false
       };
     });
+  };
+
+  const handleFifthChord = () => {
+    setChordMods(prevState => ({
+      ...prevState,
+      sus2: false,
+      sus4: false,
+      major: false,
+      minor: false,
+      FifthChord: !prevState.FifthChord,
+      SixthChord: false,
+      dom7: false,
+      maj7: false,
+      min7: false,
+      min_Maj7: false
+    }));
+  };
+
+  const handleSixthChord = () => {
+    setChordMods(prevState => ({
+      ...prevState,
+      FifthChord: false,
+      SixthChord: !prevState.SixthChord,
+      add7: false
+    }));
   };
 
   const handleDom7 = () => {
@@ -270,19 +282,13 @@ const SelectionContainer = () => {
 
   const handleAdd7 = () => {
     setChordMods(prevState => {
-      const add7 = !prevState.add7;
       return {
         ...prevState,
-        sus2: prevState.sus2,
-        sus4: prevState.sus4,
-        major: prevState.major,
-        minor: prevState.minor,
-        FifthChord: prevState.FifthChord,
         dom7: false,
         maj7: false,
         min7: false,
         min_Maj7: false,
-        add7: add7
+        add7: !prevState.add7
       }
     });
   }
@@ -374,6 +380,8 @@ const SelectionContainer = () => {
         handleMinor={handleMinor}
         FifthChord={ChordMods.FifthChord}
         handleFifthChord={handleFifthChord}
+        SixthChord={ChordMods.SixthChord}
+        handleSixthChord={handleSixthChord}
         dom7={ChordMods.dom7}
         handleDom7={handleDom7}
         maj7={ChordMods.maj7}
