@@ -23,11 +23,13 @@ interface ChordInterface {
 }
 
 interface ChordModifications {
+  FifthChord: boolean;
+  sharp: boolean;
+  flat: boolean;
   sus2: boolean;
   sus4: boolean;
   major: boolean;
   minor: boolean;
-  FifthChord: boolean;
   SixthChord: boolean;
   dom7: boolean;
   maj7: boolean;
@@ -37,11 +39,13 @@ interface ChordModifications {
 }
 
 const ChordModsInitialState: ChordModifications = {
+  FifthChord: false,
+  sharp: false,
+  flat: false,
   sus2: false,
   sus4: false,
   major: false,
   minor: false,
-  FifthChord: false,
   SixthChord: false,
   dom7: false,
   maj7: false,
@@ -113,9 +117,38 @@ const SelectionContainer = () => {
   };
 
   // *** A bunch of handlers to keep track of chord modifications. 
-  // React.useEffect(() => {
-  //   console.log("ChordMods: ", ChordMods);
-  // }, [ChordMods]);
+
+  const handleFifthChord = () => {
+    setChordMods(prevState => ({
+      ...prevState,
+      sus2: false,
+      sus4: false,
+      major: false,
+      minor: false,
+      FifthChord: !prevState.FifthChord,
+      SixthChord: false,
+      dom7: false,
+      maj7: false,
+      min7: false,
+      min_Maj7: false
+    }));
+  };
+
+  const handleSharp = () => {
+    setChordMods(prevState => ({
+      ...prevState,
+      sharp: !prevState.sharp,
+      flat: false
+    }));
+  };
+
+  const handleFlat = () => {
+    setChordMods(prevState => ({
+      ...prevState,
+      sharp: false,
+      flat: !prevState.flat
+    }));
+  };
 
   const handleSus2 = () => {
     setChordMods(prevState => ({
@@ -181,22 +214,6 @@ const SelectionContainer = () => {
         min_Maj7: minor ? prevState.min_Maj7 : false
       };
     });
-  };
-
-  const handleFifthChord = () => {
-    setChordMods(prevState => ({
-      ...prevState,
-      sus2: false,
-      sus4: false,
-      major: false,
-      minor: false,
-      FifthChord: !prevState.FifthChord,
-      SixthChord: false,
-      dom7: false,
-      maj7: false,
-      min7: false,
-      min_Maj7: false
-    }));
   };
 
   const handleSixthChord = () => {
@@ -296,6 +313,7 @@ const SelectionContainer = () => {
   // *** End of handlers to keep track of chord modifications
 
   const addChord = async (num: ChordNumber | null) => {
+    console.log("SUBMIT")
     try {
       if (modeInstanceState && num && selectedTuning != null) {
         const responseChord = await axios.post('http://localhost:3000/api/add/chord', {
@@ -370,6 +388,12 @@ const SelectionContainer = () => {
       <ChordNumeralButtons 
         onSelect={handleNumeralSelect}/>
       <ChordModifierCheckboxes 
+        FifthChord={ChordMods.FifthChord}
+        handleFifthChord={handleFifthChord}
+        sharp={ChordMods.sharp}
+        handleSharp={handleSharp}
+        flat={ChordMods.flat}
+        handleFlat={handleFlat}
         sus2={ChordMods.sus2}
         handleSus2={handleSus2}
         sus4={ChordMods.sus4}
@@ -378,8 +402,6 @@ const SelectionContainer = () => {
         handleMajor={handleMajor}
         minor={ChordMods.minor}
         handleMinor={handleMinor}
-        FifthChord={ChordMods.FifthChord}
-        handleFifthChord={handleFifthChord}
         SixthChord={ChordMods.SixthChord}
         handleSixthChord={handleSixthChord}
         dom7={ChordMods.dom7}

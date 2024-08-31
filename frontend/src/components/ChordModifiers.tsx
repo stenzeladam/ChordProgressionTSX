@@ -4,6 +4,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 
 interface ChordModifierCheckboxProps {
+    FifthChord: boolean;
+    handleFifthChord: () => void;
+    sharp: boolean;
+    handleSharp: () => void;
+    flat: boolean;
+    handleFlat: () => void;
     sus2: boolean;
     handleSus2: () => void;
     sus4: boolean;
@@ -12,8 +18,6 @@ interface ChordModifierCheckboxProps {
     handleMajor: () => void;
     minor: boolean;
     handleMinor: () => void;
-    FifthChord: boolean;
-    handleFifthChord: () => void;
     SixthChord: boolean;
     handleSixthChord: () => void;
     dom7: boolean;
@@ -29,6 +33,12 @@ interface ChordModifierCheckboxProps {
 }
 
 const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
+    FifthChord,
+    handleFifthChord,
+    sharp,
+    handleSharp,
+    flat, // "♭" is Unicode value U+266D. May use `\u266D` to represent it
+    handleFlat,
     sus2,
     handleSus2,
     sus4,
@@ -37,8 +47,6 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
     handleMajor,
     minor,
     handleMinor,
-    FifthChord,
-    handleFifthChord,
     SixthChord,
     handleSixthChord,
     dom7,
@@ -65,6 +73,28 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
           />
         }
         label="5th Chord (Power Chord)"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="sharp"
+            checked={sharp}
+            onChange={handleSharp}
+            disabled={flat}
+          />
+        }
+        label="# (Sharp tonic)"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="flat"
+            checked={flat}
+            onChange={handleFlat}
+            disabled={sharp}
+          />
+        }
+        label="♭ (Flat tonic)"
       />
       <FormControlLabel
         control={

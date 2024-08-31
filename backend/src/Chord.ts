@@ -1,9 +1,11 @@
 interface ChordModifications {
+  FifthChord: boolean;
+  sharp: boolean;
+  flat: boolean;
   sus2: boolean;
   sus4: boolean;
   major: boolean;
   minor: boolean;
-  FifthChord: boolean;
   SixthChord: boolean;
   dom7: boolean;
   maj7: boolean;
@@ -19,8 +21,6 @@ export class Chord {
   private readonly MODS: ChordModifications;
   private notes: string[] = [];
   private rootIndex: number = -999;
-  private isFlat = false;
-  private isSharp = false;
 
   constructor(chordNumber: number, localScale: string[], localChrom: string[], Mods: ChordModifications) {
     this.SCALE = localScale;
@@ -31,13 +31,13 @@ export class Chord {
     for (let i = 0; i < 12; i++) {
       if (this.SCALE[this.CHORDNUM] == this.CHROMATIC[i]) { 
         this.rootIndex = i;
-        if (this.isFlat) {
+        if (this.MODS.flat) {
           this.rootIndex = (this.rootIndex - 1) % this.CHROMATIC.length;
           if (this.rootIndex == -1) {
             this.rootIndex = 11;
           }
         }
-        else if (this.isSharp) {
+        else if (this.MODS.sharp) {
           this.rootIndex = (this.rootIndex + 1) % this.CHROMATIC.length;
         }
         break;
@@ -143,6 +143,7 @@ export class Chord {
   }
 
   public buildChord(): void {
+    console.log("HERE")
     if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord || this.MODS.dom7 || this.MODS.maj7 || this.MODS.min7 || this.MODS.min_Maj7)) {
       this.getThird();
     } 

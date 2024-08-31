@@ -21,6 +21,8 @@
 
 The Chord Progression Tool is a web application designed to help musicians create and manage chord progressions. The tool allows users to select root notes, modes, and tunings, and add various chord modifications to build custom chord progressions. The idea is that the application will figure out the chord names, the notes that make up the chord, and multiple ways you can possibly play the chord on guitar. This should eliminate the need to sit down, and spend a lot of time thinking about what a given numeric chord progression (example: `I` `III` `IV-sus2` `V` `V-major` `V-sus4`) in a specific mode/tuning would translate to on guitar.
 
+**8/30/24: The UberChord API seems to longer be functional. I will be immediately working on a way to depreciate the usage of UberChord API and make the project functional again.
+
 ## Features
 
 - **Select Root Notes**: Choose from a variety of root notes.
