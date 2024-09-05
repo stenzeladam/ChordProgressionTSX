@@ -81,7 +81,7 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
               </StyledTableCell>
               <StyledTableCell 
                 align="right">
-                <span className="CourierTable">{row.chord_name}</span>
+                <span className="CourierTable">{row.chord_name[0]}</span>
               </StyledTableCell>
               <StyledTableCell align="right">
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>

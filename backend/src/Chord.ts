@@ -143,7 +143,6 @@ export class Chord {
   }
 
   public buildChord(): void {
-    console.log("HERE")
     if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord || this.MODS.dom7 || this.MODS.maj7 || this.MODS.min7 || this.MODS.min_Maj7)) {
       this.getThird();
     } 

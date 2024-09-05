@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Modes } from './Modes';
 import { Chord } from './Chord';
 import { ChordVoicing } from './ChordVoicing';
+import { CustomChordData } from './CustomChordData';
 
 interface ChordInterface {
     rowID: number,
@@ -55,7 +56,7 @@ app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected 
     tempChord.buildChord();
     let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
     tempVoicing.tuneEachString();
-    let chordData = await createCallandInterpretData(tempVoicing);
+    let chordData: CustomChordData = await createVoicingsAndData(tempVoicing);
     let newChordDataInterface = chordData?.getData();
     let chordsArr = data.chordsArray;
     let uniqueID;
@@ -73,7 +74,7 @@ app.post('/api/add/chord', async (req: Request, res: Response) => { // Expected 
             {
                 rowID: uniqueID,
                 numeral: chordNumeral,
-                chord_name: newChordDataInterface.NAME,
+                chord_name: newChordDataInterface.NAMES,
                 chord_tabs: newChordDataInterface.TABS,
                 chord_notes: newChordDataInterface.TONES
             }
@@ -107,15 +108,23 @@ app.delete('/api/delete/chord', (req: Request, res: Response) => {
   });
   
 
-async function createCallandInterpretData(param: ChordVoicing) {
+async function createVoicingsAndData(param: ChordVoicing) {
       try {
-          const calledChordData = await param.fetchUberChordDataByVoicing(param.convertNotesToBasicVoicing());
-          return calledChordData;
+          //const calledChordData = await param.fetchUberChordDataByVoicing(param.convertNotesToBasicVoicing());
+          //return calledChordData;
+
+          const voicingsAndData = await param.determineVoicingsAndData(param.convertNotesToBasicVoicing())
+          return voicingsAndData;
   
       } catch (error) {
+        let junkData = new CustomChordData(
+            [['X-X-X-X-X-X']], // TABS: 2D array of random strings
+            ["Undefined"],                     // NAMES: random string
+            ['X', 'X']          // TONES: array of random musical notes
+          );
           console.error('Error fetching or creating instance:', error);
+          return junkData;
       }
-  
 }
 
 function convertToRoman(num: number): string {
