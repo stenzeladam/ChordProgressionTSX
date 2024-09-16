@@ -84,7 +84,7 @@ The Chord Progression Tool is a web application designed to help musicians creat
 
 ### Adding a chord
 `post('.../api/add/chord')`
-```JSON
+```
 {
   "numeral": number,
   "mode": <{ root: string; chromatic: string[]; scale: string[]; } | null>,
@@ -129,8 +129,8 @@ An example object to post for this endpoint is:
   numeral: 1,
   mode: {
     root: "C#",
-    chromatic: ["C#", "D", "D#", "E", "F", "F#", ​"G", "G#", "A"​​, "A#", "B", ​​"C"]
-    scale: ["C#", "D", "E", "F#", "G#", "A", "B"]
+    chromatic: [ "C#", "D", "D#", "E", "F", "F#", ​"G", "G#", "A"​​, "A#", "B", ​​"C" ]
+    scale: [ "C#", "D", "E", "F#", "G#", "A", "B" ]
   }
   compensate: true,
   tuning: ["C", "F", "A#", "D#", "G", "C"],
