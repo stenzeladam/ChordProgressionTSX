@@ -313,7 +313,6 @@ const SelectionContainer = () => {
   // *** End of handlers to keep track of chord modifications
 
   const addChord = async (num: ChordNumber | null) => {
-    console.log("SUBMIT")
     try {
       if (modeInstanceState && num && selectedTuning != null) {
         const responseChord = await axios.post('http://localhost:3000/api/add/chord', {

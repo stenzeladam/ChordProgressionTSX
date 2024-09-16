@@ -9,6 +9,7 @@
     - [Backend Files](#backend-files)
   - [Frontend](#frontend)
     - [Frontend Files](#frontend-files)
+- [API Endpoints](#api-endpoints)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -20,8 +21,6 @@
 ## Overview
 
 The Chord Progression Tool is a web application designed to help musicians create and manage chord progressions. The tool allows users to select root notes, modes, and tunings, and add various chord modifications to build custom chord progressions. The idea is that the application will figure out the chord names, the notes that make up the chord, and multiple ways you can possibly play the chord on guitar. This should eliminate the need to sit down, and spend a lot of time thinking about what a given numeric chord progression (example: `I` `III` `IV-sus2` `V` `V-major` `V-sus4`) in a specific mode/tuning would translate to on guitar.
-
-**8/30/24: The UberChord API seems to longer be functional. I will be immediately working on a way to depreciate the usage of UberChord API and make the project functional again.
 
 ## Features
 
@@ -40,7 +39,7 @@ The Chord Progression Tool is a web application designed to help musicians creat
 - **TypeScript Configuration**: Configured with strict type-checking and ES6 target.
 - **Express Server**: Handles API requests for managing chord progressions and modes.
 - **Chord and Mode Management**: Classes to manage musical chords, modes, and their properties. There is a class and method for managing chord voicings (the tablature for various ways to play each chord), and I plan on improving the voicing method and expanding upon it over time. 
-- **UberChord API Integration**: Fetches chord data from the UberChord API. I plan to eventually depreciate the use of UberChord API and create my own class/methods for providing the same functionality within the same server, but that will take quite some time to develop so that would not be completed any time soon. While the UberChord API has the ability to name a lot of chords, it isn't as comprehensive as I'd like. For example, if you have a diminished chord, say G diminished for example, and modify it with the `sus4` option, instead of returning `Gsus4(b5)` or even `Fmaj7(no3, no5)/B`, it will simply return `G unknown`. If you ever receive an unknown chord name, this is why, but the chord voicings and notes making up the chord should still be correct.
+- **Tonal Music Theory Library**: chord data is managed using the Tonal Music Theory Library. This library offers comprehensive chord and music theory functionality. Although it might sometimes return results like `unknown` for complex chord modifications that don't have conventional names, the chord voicings and notes provided will still be accurate. You can explore the Tonal Music Theory Library [here on GitHub](https://github.com/tonaljs/tonal).
 
 #### Backend Files
 
@@ -49,8 +48,6 @@ The Chord Progression Tool is a web application designed to help musicians creat
 3. **`ChordVoicing.ts`**: Manages chord voicings and interacts with the UberChord API to fetch chord data.
 4. **`CustomChordData.ts`**: Defines the `CustomChordData` class for managing chord data.
 5. **`Modes.ts`**: Defines the `Modes` class for managing musical scales and modes.
-6. **`UberChordAPI_data.ts`**: Defines the `UberChordAPI_data` class for interfacing with the UberChord API to fetch chord data.
-
 
 ### Frontend
 
@@ -82,6 +79,108 @@ The Chord Progression Tool is a web application designed to help musicians creat
    - **`TuningSelector.tsx`**: Defines the `TuningSelector` component for selecting a tuning.
    - **`VoicingDropdown.css`**: Contains styles for the voicing dropdown.
    - **`VoicingDropdown.tsx`**: Defines the `VoicingDropdown` component for selecting chord voicings.
+
+## API Endpoints
+
+### Adding a chord
+`post('.../api/add/chord')`
+```JSON
+{
+  "numeral": number,
+  "mode": <{ root: string; chromatic: string[]; scale: string[]; } | null>,
+  "compensate": boolean,
+  "tuning": string[],
+  "chordsArray": ChordInterface[],
+  "ChordMods": ChordModifications
+}
+```
+
+The relevant interfaces to use this API endpoint:
+
+```typescript
+interface ChordInterface {
+  rowID: number,
+  numeral: string,
+  chord_name: string,
+  chord_tabs: string[],
+  chord_notes: string,
+}
+
+interface ChordModifications {
+  FifthChord: boolean;
+  sharp: boolean;
+  flat: boolean;
+  sus2: boolean;
+  sus4: boolean;
+  major: boolean;
+  minor: boolean;
+  SixthChord: boolean;
+  dom7: boolean;
+  maj7: boolean;
+  min7: boolean;
+  min_Maj7: boolean;
+  add7: boolean;
+}
+```
+An example object to post for this endpoint is:
+
+```typescript
+{
+  numeral: 1,
+  mode: {
+    root: "C#",
+    chromatic: ["C#", "D", "D#", "E", "F", "F#", ​"G", "G#", "A"​​, "A#", "B", ​​"C"]
+    scale: ["C#", "D", "E", "F#", "G#", "A", "B"]
+  }
+  compensate: true,
+  tuning: ["C", "F", "A#", "D#", "G", "C"],
+  chordsArray: [ 
+    { 
+      0, 
+      "II", 
+      [ "DM", "F#m5/D" ], 
+      [ "2-4-4-3-2-2", "X-9-11-11-11-9", "X-X-4-6-7-6" ], 
+      "D, F#, A" 
+    } 
+  ]
+  ChordMods: {
+    FifthChord: false;
+    sharp: false;
+    flat: false;
+    sus2: false;
+    sus4: false;
+    major: false;
+    minor: false;
+    SixthChord: false;
+    dom7: false;
+    maj7: false;
+    min7: false;
+    min_Maj7: false;
+    add7: false;
+}
+```
+
+And the endpoint response data for this example should be:
+
+```typescript
+[
+  {
+    rowID: 0,
+    numeral: "II",
+    chord_names: [ "DM", "F#m#5/D" ],
+    chord_tabs: [ "2-4-4-3-2-2", "X-9-11-11-11-9", "X-X-4-6-7-6" ]
+    chord_notes: "D, F#, A"
+  },
+  {
+    rowID: 1,
+    numeral: "I",
+    chord_names: [ "C#m" ],
+    chord_tabs: [ "1-3-3-1-1-1", "X-8-10-10-9-8", "X-X-3-5-6-4"]
+    chord_notes: "C#, E, G#"
+  }
+]
+
+```
 
 ## Getting Started
 
