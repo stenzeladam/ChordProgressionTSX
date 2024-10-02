@@ -8,8 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import './ChordProgressionTable.css'
-import './VoicingDropdown'
-import VoicingDropdown from './VoicingDropdown';
+import './TableDropdown'
+import TableDropdown from './TableDropdown';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface ChordInterface {
   rowID: number,
   numeral: string,
-  chord_name: string,
+  chord_name: string[],
   chord_tabs: string[],
   chord_notes: string,
 }
@@ -79,15 +79,21 @@ const ChordProgressionTable: React.FC<ChordProgressionTableProps> = ({chordsArra
                 scope="row">
                 <span className="CourierTable">{row.numeral}</span>
               </StyledTableCell>
-              <StyledTableCell 
-                align="right">
-                <span className="CourierTable">{row.chord_name[0]}</span>
+              <StyledTableCell align="right">
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                  <TableDropdown
+                    rowID={row.rowID}
+                    columnArr={row.chord_name}
+                    dropdownLabel={"Chord Name(s)"}
+                  />
+                </Box>
               </StyledTableCell>
               <StyledTableCell align="right">
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                  <VoicingDropdown
+                  <TableDropdown
                     rowID={row.rowID}
-                    chord_tabs={row.chord_tabs}
+                    columnArr={row.chord_tabs}
+                    dropdownLabel={"Chord Voicing"}
                   />
                 </Box>
               </StyledTableCell>

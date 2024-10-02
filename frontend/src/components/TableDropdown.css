@@ -1,47 +1,46 @@
-/* VoicingDropdown.css */
+/* TableDropdown.css */
 
-.voicing-dropdown-container {
+.table-dropdown-container {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-  }
+}
   
-  .voicing-dropdown .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+.table-dropdown .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
     border-color: black !important; /* Default border color */
-  }
+}
   
-  .voicing-dropdown .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+.table-dropdown .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
     border-color: black !important; /* Border color when hovered */
-  }
+}
   
-  .voicing-dropdown .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+.table-dropdown .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: black !important; /* Border color when focused */
-  }
+}
   
-  .voicing-dropdown .MuiInputLabel-root {
+.table-dropdown .MuiInputLabel-root {
     color: black !important; /* Default label color */
-  }
+}
   
-  .voicing-dropdown .MuiInputLabel-root.Mui-focused {
+.table-dropdown .MuiInputLabel-root.Mui-focused {
     color: black !important; /* Label color when focused */
-  }
+}
   
-  .voicing-dropdown .MuiSelect-select,
-  .voicing-dropdown .MuiMenuItem-root {
+.table-dropdown .MuiSelect-select,
+.table-dropdown .MuiMenuItem-root {
     font-family: 'Courier New', Courier, monospace;
     font-weight: 600;
-  }
+}
   
-  .voicing-dropdown .MuiMenuItem-root.Mui-selected {
+.table-dropdown .MuiMenuItem-root.Mui-selected {
     background-color: green !important; /* Selected item background color */
     color: white !important; /* Selected item text color */
-  }
+}
   
-  .voicing-dropdown .MuiMenuItem-root {
+.table-dropdown .MuiMenuItem-root {
     text-align: right;
-  }
+}
   
-  .voicing-dropdown .MuiList-root {
+.table-dropdown .MuiList-root {
     text-align: right;
-  }
-  
+}

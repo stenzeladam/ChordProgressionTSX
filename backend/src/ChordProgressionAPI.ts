@@ -7,7 +7,7 @@ import { CustomChordData } from './CustomChordData';
 interface ChordInterface {
     rowID: number,
     numeral: string,
-    chord_name: string,
+    chord_name: string[],
     chord_tabs: string[],
     chord_notes: string,
   }

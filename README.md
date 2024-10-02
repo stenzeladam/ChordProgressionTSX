@@ -77,14 +77,14 @@ The Chord Progression Tool is a web application designed to help musicians creat
    - **`SelectRootNote.tsx`**: Defines the `AutocompleteRoot` component for selecting a root note.
    - **`SubmitChordProgressionButton.tsx`**: Defines the `SubmitChordProgessionButton` component for submitting the chord progression.
    - **`TuningSelector.tsx`**: Defines the `TuningSelector` component for selecting a tuning.
-   - **`VoicingDropdown.css`**: Contains styles for the voicing dropdown.
-   - **`VoicingDropdown.tsx`**: Defines the `VoicingDropdown` component for selecting chord voicings.
+   - **`TableDropdown.css`**: Contains styles for the table dropdowns.
+   - **`TableDropdown.tsx`**: Defines the `TableDropdown` component used for selecting chord voicings and chord names.
 
 ## API Endpoints
 
 ### Adding a chord
 `post('.../api/add/chord')`
-```
+```typescript
 {
   "numeral": number,
   "mode": <{ root: string; chromatic: string[]; scale: string[]; } | null>,
@@ -101,7 +101,7 @@ The relevant interfaces to use this API endpoint:
 interface ChordInterface {
   rowID: number,
   numeral: string,
-  chord_name: string,
+  chord_name: string[],
   chord_tabs: string[],
   chord_notes: string,
 }
