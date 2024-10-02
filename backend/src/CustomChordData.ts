@@ -23,107 +23,6 @@ export class CustomChordData {
         return this.NAMES;
     }
 
-    // public getFormattedName(): string {
-    //     const nameArr: string[] = this.NAMES.split(',');
-    //     let tempName: string = ""
-    //     for (let i = 0; i < nameArr.length; i++) {
-    //         if (i === nameArr.length - 1 && nameArr[i] !== "") {
-    //             tempName = tempName + "/" + nameArr[i];
-    //         }
-    //         else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
-    //             tempName = tempName + ` ${nameArr[i]}`;
-    //         }
-    //         else if (i < nameArr.length - 1
-    //             && /\d$/.test(nameArr[i])  // Last character of nameArr[i] is a number
-    //             && /^\d/.test(nameArr[i+1]) // First character of nameArr[i+1] is a number
-    //             && nameArr[i+1] !== "") {  // Next element is not empty
-    //                 // Extract numeric prefix and remaining part from nameArr[i+1]
-    //                 const match = nameArr[i+1].match(/^(\d+)(.*)$/);
-    //                 const numericPrefix = match ? match[1] : ""; // Numeric part
-    //                 const remainingPart = match ? match[2] : ""; // Remaining part
-                    
-    //                 tempName = tempName + `${nameArr[i]}(add${numericPrefix}${remainingPart})`;
-    //                 i++; // Skip the next element as it has been processed
-    //         }
-    //         else if (nameArr[i] === "dim") {
-    //             if (i < nameArr.length - 1) {
-    //                 if (nameArr[i+1] === "") {
-    //                     // Next element is blank, leave "dim" as is
-    //                     tempName = tempName + "dim";
-    //                 } else if (/^\D/.test(nameArr[i+1])) {
-    //                     // Next element starts with a non-numeric character, replace "dim" with "°"
-    //                     tempName = tempName + "°";
-    //                 } else {
-    //                     // If none of the above conditions are met, keep "dim" as is
-    //                     tempName = tempName + "dim";
-    //                 }
-    //             } else {
-    //                 // If there is no next element, keep "dim" as is
-    //                 tempName = tempName + "dim";
-    //             }
-    //         }
-    //         else {
-    //             tempName = tempName + nameArr[i];
-    //         }
-    //     }
-
-    //     let enharmName = this.getFormattedEnharmonicName();
-    //     if (enharmName !== tempName) {
-    //         tempName = `${tempName} (also ${enharmName})`;
-    //     }
-    //     return tempName;
-    // }
-
-    // public getFormattedEnharmonicName(): string {
-    //     const nameArr: string[] = this.ENHARMONIC_NAME.split(',');
-    //     let tempName: string = ""
-    //     for (let i = 0; i < nameArr.length; i++) {
-    //         if (i === nameArr.length - 1 && nameArr[i] !== "") {
-    //             tempName = tempName + "/" + nameArr[i];
-    //         }
-    //         else if (nameArr[i] === "Tritone" || nameArr[i] === "unknown") {
-    //             tempName = tempName + ` ${nameArr[i]}`;
-    //         }
-    //         else if (i < nameArr.length - 1
-    //             && /\d$/.test(nameArr[i])  // Last character of nameArr[i] is a number
-    //             && /^\d/.test(nameArr[i+1]) // First character of nameArr[i+1] is a number
-    //             && nameArr[i+1] !== "") {  // Next element is not empty
-    //                 // Extract numeric prefix and remaining part from nameArr[i+1]
-    //                 const match = nameArr[i+1].match(/^(\d+)(.*)$/);
-    //                 const numericPrefix = match ? match[1] : ""; // Numeric part
-    //                 const remainingPart = match ? match[2] : ""; // Remaining part
-                    
-    //                 tempName = tempName + `${nameArr[i]}(add${numericPrefix}${remainingPart})`;
-    //                 i++; // Skip the next element as it has been processed
-    //         }
-    //         else if (nameArr[i] === "dim") {
-    //             if (i < nameArr.length - 1) {
-    //                 if (nameArr[i+1] === "") {
-    //                     // Next element is blank, leave "dim" as is
-    //                     tempName = tempName + "dim";
-    //                 } else if (/^\D/.test(nameArr[i+1])) {
-    //                     // Next element starts with a non-numeric character, replace "dim" with "°"
-    //                     tempName = tempName + "°";
-    //                 } else {
-    //                     // If none of the above conditions are met, keep "dim" as is
-    //                     tempName = tempName + "dim";
-    //                 }
-    //             } else {
-    //                 // If there is no next element, keep "dim" as is
-    //                 tempName = tempName + "dim";
-    //             }
-    //         }
-    //         else {
-    //             tempName = tempName + nameArr[i];
-    //         }
-    //     }
-    //     return tempName;
-    // }
-
-    // public getEnharmonicName(): string {
-    //     return this.ENHARMONIC_NAME;
-    // }
-
     public getTones(): string[] {
         return this.TONES;
     }
@@ -149,7 +48,6 @@ export class CustomChordData {
         let result = "";
 
         for (let i = 0; i < this.TONES.length; i++) {
-            //const tone = EXPANSIONS[this.TONES[i]] || this.TONES[i];
             const tone = this.TONES[i];
             result += tone;
             if (i < this.TONES.length - 1) {
@@ -160,12 +58,67 @@ export class CustomChordData {
         return result;
     }
 
+    /**
+     * This function processes an array of chord names (`NAMES`) and performs several transformations:
+     * 1. Removes "M" (Major) from the chord names, if present.
+     * 2. Replaces "m7b5" with "ø" (half-diminished symbol).
+     * 3. Replaces "dim" with "°" (diminished symbol).
+     * 4. Replaces "o" with "dim" and adds an alternative version with "°".
+     * 5. Replaces 'b' with '♭' (flat symbol).
+     *
+     * @returns The transformed array of chord names.
+     */
+    private formatNAMES(): string[] {
+        for (let i = 0; i < this.NAMES.length; i++) {
+            let name = this.NAMES[i];
+
+            // Remove "M" from the chord name if it's at index 1, or after a "#".
+            if (name[1] === 'M' || (name[1] === '#' && name[2] === 'M')) {
+                if (name[1] === 'M') {
+                    this.NAMES[i] = name.slice(0, 1) + name.slice(2);
+                } else if (name[1] === '#' && name[2] === 'M') {
+                    this.NAMES[i] = name.slice(0, 2) + name.slice(3);
+                }
+            }
+
+            // Replace "m7b5" with the half-diminished symbol "ø".
+            if (name.includes("m7b5")) {
+                const newName = name.replace("m7b5", "ø");
+                this.NAMES.splice(i + 1, 0, newName); // Insert the new name after the current one.
+                i++; // Skip the newly added name.
+            }
+
+            // Replace "dim" with the diminished symbol "°".
+            if (name.includes("dim")) {
+                const newName = name.replace("dim", "°");
+                this.NAMES.splice(i + 1, 0, newName);
+                i++; // Skip the newly added name.
+            }
+
+            // If "o" is used for diminished, replace it with "dim" and also add "°".
+            if (name.includes("o")) {
+                const dimName = name.replace("o", "dim");
+                this.NAMES[i] = dimName; // Replace the original name with "dim".
+
+                const correctDimName = name.replace("o", "°");
+                this.NAMES.splice(i + 1, 0, correctDimName); // Insert the name with "°".
+                i++; // Skip the newly added name.
+            }
+
+            // Replace any 'b' with the flat symbol '♭'.
+            this.NAMES[i] = this.NAMES[i].replace(/b/g, "♭");
+        }
+
+        return this.NAMES;
+    }
+
     public getData(): NewChordData {
         let tabsArray = this.convertTABStoStringArray();
         let formattedTones: string = this.formatTONES();
+        let formattedNames: string[] = this.formatNAMES();
         return {
             TABS: tabsArray,
-            NAMES: this.NAMES,
+            NAMES: formattedNames,
             TONES: formattedTones
         }
     }

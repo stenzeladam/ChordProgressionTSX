@@ -110,9 +110,6 @@ app.delete('/api/delete/chord', (req: Request, res: Response) => {
 
 async function createVoicingsAndData(param: ChordVoicing) {
       try {
-          //const calledChordData = await param.fetchUberChordDataByVoicing(param.convertNotesToBasicVoicing());
-          //return calledChordData;
-
           const voicingsAndData = await param.determineVoicingsAndData(param.convertNotesToBasicVoicing())
           return voicingsAndData;
   
