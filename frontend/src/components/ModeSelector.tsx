@@ -21,6 +21,7 @@ const Modes: ModeOption[] = [
   { label: 'Aeolian', mode: "Aeolian" },
   { label: 'Locrian', mode: "Locrian" },
   { label: 'Harmonic Minor', mode: "Harmonic Minor" },
+  { label: 'Phrygian Dominant', mode: "Phrygian Dominant" },
   { label: 'Double Harmonic Major', mode: "Double Harmonic Major" }
 ];
 

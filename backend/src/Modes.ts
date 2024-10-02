@@ -76,6 +76,9 @@ export class Modes {
             case "Harmonic Minor":
                 this.harmonicMinor();
                 break;
+            case "Phrygian Dominant":
+                this.phrygianDominant();
+                break;
             case "Double Harmonic Major":
                 this.doubleHarmonicMajor();
                 break;
@@ -102,6 +105,28 @@ export class Modes {
             }
             else {                              // half step
                 this.scale[i] = this.CHROMATIC[j];
+                j++;
+            }
+        }
+    }
+
+    private phrygianDominant(): void {
+        this.scale = ["", "", "", "", "", "", ""];  
+        let j = 0;
+        for (let i = 0; i < this.scale.length; i++) {
+            if (i === 0 || i === 2 || i === 4) {
+                this.scale[i] = this.CHROMATIC[j];
+                j++;
+            }
+            else if (i === 1) {
+                this.scale[i] = this.CHROMATIC[j];
+                j++;
+                j++;
+                j++;
+            }
+            else {
+                this.scale[i] = this.CHROMATIC[j];
+                j++;
                 j++;
             }
         }
