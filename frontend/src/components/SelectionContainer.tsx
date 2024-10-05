@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RootNoteSelect, { RootOption } from './SelectRootNote';
 import TuningSelector, { TuningOption } from './TuningSelector';
 import ModeSelector from './ModeSelector';
@@ -37,6 +37,7 @@ interface ChordModifications {
   min_Maj7: boolean;
   add7: boolean;
   add9: boolean;
+  slashChord: { isChecked: boolean, bassNote: string | null };
 }
 
 const ChordModsInitialState: ChordModifications = {
@@ -53,7 +54,8 @@ const ChordModsInitialState: ChordModifications = {
   min7: false,
   min_Maj7: false,
   add7: false,
-  add9: false
+  add9: false,
+  slashChord: { isChecked: false, bassNote: "" }
 }
 
 const SelectionContainer = () => {
@@ -319,9 +321,46 @@ const SelectionContainer = () => {
         ...prevState,
         add9: !prevState.add9
       }
-    })
+    });
   }
 
+  const handleSlashChord = (note: any) => {
+    setChordMods(prevState => {
+      let newIsChecked = !prevState.slashChord.isChecked;
+      let newBassNote: string | null;
+      if (!newIsChecked) {
+        newBassNote = null;
+      }
+      else {
+        newBassNote = prevState.slashChord.bassNote;
+      }
+
+      return {
+        ...prevState,
+        slashChord: {
+          isChecked: newIsChecked,
+          bassNote: newBassNote
+        }
+      }
+    });
+  }
+
+  const handleInversionNote = (note: string | null) => {
+    setChordMods(prevState => {
+
+      return {
+        ...prevState,
+        slashChord: {
+          isChecked: prevState.slashChord.isChecked,
+          bassNote: note
+        }
+      }
+    });
+  }
+
+  useEffect(()=> {
+    console.log(ChordMods.slashChord)
+  },[ChordMods.slashChord])
   // *** End of handlers to keep track of chord modifications
 
   const addChord = async (num: ChordNumber | null) => {
@@ -427,6 +466,9 @@ const SelectionContainer = () => {
         handleAdd7={handleAdd7}
         add9={ChordMods.add9}
         handleAdd9={handleAdd9}
+        slashChordIsChecked={ChordMods.slashChord.isChecked}
+        handleSlashChord={handleSlashChord}
+        handleInversionNote={handleInversionNote}
       />
       <AddChordButtton 
         isDisabled={isAddChordDisabled}

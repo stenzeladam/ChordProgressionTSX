@@ -1,7 +1,9 @@
 import * as React from "react";
+import { useState, useEffect } from 'react';
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
+import SlashChordBassNoteDropdown, { InversionNoteSelection } from "./SlashChordBassNoteDropdown";
 
 interface ChordModifierCheckboxProps {
     FifthChord: boolean;
@@ -32,6 +34,9 @@ interface ChordModifierCheckboxProps {
     handleAdd7: () => void;
     add9: boolean;
     handleAdd9: () => void;
+    slashChordIsChecked: boolean;
+    handleSlashChord: (note: any) => void;
+    handleInversionNote: (note: string | null) => void;
 }
 
 const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
@@ -62,9 +67,22 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
     add7,
     handleAdd7,
     add9,
-    handleAdd9
+    handleAdd9,
+    slashChordIsChecked,
+    handleSlashChord,
+    handleInversionNote
 }) => {
 
+  const [invertedNoteState, setInvertedNoteState] = useState<InversionNoteSelection | null>(null);
+  useEffect(() => {
+    //console.log(invertedNoteState)
+    if (invertedNoteState !== null) {
+      handleInversionNote(invertedNoteState.value);
+    }
+    else {
+      handleInversionNote(null);
+    }
+  }, [invertedNoteState])
   return (
     <FormGroup row>
       <FormControlLabel
@@ -221,8 +239,23 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
         }
         label="Add 9th"
       />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="slashedChord"
+            checked={slashChordIsChecked}
+            onChange={handleSlashChord}
+            disabled={false}
+          />
+        }
+        label=" / (Inverted Chord)"
+      />
+      <SlashChordBassNoteDropdown
+        onSelect={setInvertedNoteState}
+        slashChordBassNoteState={invertedNoteState}
+        isDisabled={!slashChordIsChecked}
+      />
     </FormGroup>
-    
   );
 };
 
