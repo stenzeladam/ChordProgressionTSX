@@ -17,7 +17,7 @@ import axios from 'axios';
 interface ChordInterface {
   rowID: number,
   numeral: string,
-  chord_name: string,
+  chord_name: string[],
   chord_tabs: string[],
   chord_notes: string,
 }
@@ -36,6 +36,7 @@ interface ChordModifications {
   min7: boolean;
   min_Maj7: boolean;
   add7: boolean;
+  add9: boolean;
 }
 
 const ChordModsInitialState: ChordModifications = {
@@ -51,7 +52,8 @@ const ChordModsInitialState: ChordModifications = {
   maj7: false,
   min7: false,
   min_Maj7: false,
-  add7: false
+  add7: false,
+  add9: false
 }
 
 const SelectionContainer = () => {
@@ -130,7 +132,8 @@ const SelectionContainer = () => {
       dom7: false,
       maj7: false,
       min7: false,
-      min_Maj7: false
+      min_Maj7: false,
+      add9: false
     }));
   };
 
@@ -310,6 +313,15 @@ const SelectionContainer = () => {
     });
   }
 
+  const handleAdd9 = () => {
+    setChordMods(prevState => {
+      return {
+        ...prevState,
+        add9: !prevState.add9
+      }
+    })
+  }
+
   // *** End of handlers to keep track of chord modifications
 
   const addChord = async (num: ChordNumber | null) => {
@@ -413,6 +425,8 @@ const SelectionContainer = () => {
         handleMin_Maj7 = {handleMin_Maj7}
         add7={ChordMods.add7}
         handleAdd7={handleAdd7}
+        add9={ChordMods.add9}
+        handleAdd9={handleAdd9}
       />
       <AddChordButtton 
         isDisabled={isAddChordDisabled}

@@ -30,6 +30,8 @@ interface ChordModifierCheckboxProps {
     handleMin_Maj7: () => void;
     add7: boolean;
     handleAdd7: () => void;
+    add9: boolean;
+    handleAdd9: () => void;
 }
 
 const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
@@ -58,7 +60,9 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
     min_Maj7,
     handleMin_Maj7,
     add7,
-    handleAdd7
+    handleAdd7,
+    add9,
+    handleAdd9
 }) => {
 
   return (
@@ -205,6 +209,17 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
           />
         }
         label="Add 7th (mode-specific)"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            id="add9"
+            checked={add9}
+            onChange={handleAdd9}
+            disabled={FifthChord}
+          />
+        }
+        label="Add 9th"
       />
     </FormGroup>
     

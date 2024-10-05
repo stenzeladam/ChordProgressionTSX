@@ -12,6 +12,7 @@ interface ChordModifications {
   min7: boolean;
   min_Maj7: boolean;
   add7: boolean;
+  add9: boolean;
 }
 
 export class Chord {
@@ -186,6 +187,10 @@ export class Chord {
     }
     else if (this.MODS.maj7 || this.MODS.min_Maj7) {
       this.getMajorSeventh();
+    }
+
+    if (this.MODS.add9) {
+      this.getMajorNinth();
     }
   }
 
