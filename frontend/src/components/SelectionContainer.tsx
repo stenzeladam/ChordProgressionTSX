@@ -80,6 +80,18 @@ const SelectionContainer = () => {
     setSelectedRoot(root);
   };
 
+  useEffect(()=> {
+    if (ChordMods.slashChord.isChecked && ChordMods.slashChord.bassNote === null) {
+      setAddChordDisabled(true);
+    }
+    else if (ChordMods.slashChord.isChecked && ChordMods.slashChord.bassNote !== null) {
+      setAddChordDisabled(false);
+    }
+    else {
+      setAddChordDisabled(false);
+    }
+  }, [ChordMods])
+
   const resetInputs = () => {
     setSelectedRoot(null);
     setSelectedTuning(null);
@@ -347,7 +359,6 @@ const SelectionContainer = () => {
 
   const handleInversionNote = (note: string | null) => {
     setChordMods(prevState => {
-
       return {
         ...prevState,
         slashChord: {
@@ -358,9 +369,6 @@ const SelectionContainer = () => {
     });
   }
 
-  useEffect(()=> {
-    console.log(ChordMods.slashChord)
-  },[ChordMods.slashChord])
   // *** End of handlers to keep track of chord modifications
 
   const addChord = async (num: ChordNumber | null) => {

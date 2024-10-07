@@ -13,6 +13,7 @@ interface ChordModifications {
   min_Maj7: boolean;
   add7: boolean;
   add9: boolean;
+  slashChord: { isChecked: boolean, bassNote: string | null }
 }
 
 export class Chord {
@@ -144,6 +145,9 @@ export class Chord {
   }
 
   public buildChord(): void {
+
+    console.log(this.MODS.slashChord);
+
     if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord || this.MODS.dom7 || this.MODS.maj7 || this.MODS.min7 || this.MODS.min_Maj7)) {
       this.getThird();
     } 

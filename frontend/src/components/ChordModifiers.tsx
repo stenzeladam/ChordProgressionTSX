@@ -75,7 +75,6 @@ const ChordModifierCheckboxes: React.FC<ChordModifierCheckboxProps> = ({
 
   const [invertedNoteState, setInvertedNoteState] = useState<InversionNoteSelection | null>(null);
   useEffect(() => {
-    //console.log(invertedNoteState)
     if (invertedNoteState !== null) {
       handleInversionNote(invertedNoteState.value);
     }
