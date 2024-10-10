@@ -144,9 +144,101 @@ export class Chord {
     this.notes.push(this.SCALE[fifth]);
   }
 
+  private romanToIndex(roman: string): string {
+
+    let i: number = 0;
+    let j: number = 0;
+
+    switch (roman) {
+        case 'I':
+            return this.SCALE[0];
+        case 'II':
+            return this.SCALE[1];
+        case 'III':
+            return this.SCALE[2];
+        case 'IV':
+            return this.SCALE[3];
+        case 'V':
+            return this.SCALE[4];
+        case 'VI':
+            return this.SCALE[5];
+        case 'VII':
+            return this.SCALE[6];
+        case 'Ib':
+            // find I on this.chromatic, then take that index i, get j = ((i-1)+12) % 12 and return this.CHROMATIC(j)
+            i = this.CHROMATIC.indexOf(this.SCALE[0]);
+            j = ((i - 1) + 12) % 12;
+            return this.CHROMATIC[j];
+        case 'IIb':
+            // find II on this.chromatic, then take that index i, get j = ((i-1)+12) % 12 and return this.CHROMATIC(j)
+            i = this.CHROMATIC.indexOf(this.SCALE[1]);
+            j = ((i - 1) + 12) % 12;
+            return this.CHROMATIC[j];
+        case 'IIIb':
+            i = this.CHROMATIC.indexOf(this.SCALE[2]);
+            j = ((i - 1) + 12) % 12;
+            return this.CHROMATIC[j];
+        case 'IVb':
+            i = this.CHROMATIC.indexOf(this.SCALE[3]);
+            j = ((i - 1) + 12) % 12;
+            return this.CHROMATIC[j];
+        case 'Vb':
+          i = this.CHROMATIC.indexOf(this.SCALE[4]);
+          j = ((i - 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'VIb':
+          i = this.CHROMATIC.indexOf(this.SCALE[5]);
+          j = ((i - 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'VIIb':
+          i = this.CHROMATIC.indexOf(this.SCALE[6]);
+          j = ((i - 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'I#':
+          // find I on this.chromatic, then take that index i, get j = ((i-1)+12) % 12 and return this.CHROMATIC(j)
+          i = this.CHROMATIC.indexOf(this.SCALE[0]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'II#':
+          // find II on this.chromatic, then take that index i, get j = ((i-1)+12) % 12 and return this.CHROMATIC(j)
+          i = this.CHROMATIC.indexOf(this.SCALE[1]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'III#':
+          i = this.CHROMATIC.indexOf(this.SCALE[2]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'IV#':
+          i = this.CHROMATIC.indexOf(this.SCALE[3]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'V#':
+          i = this.CHROMATIC.indexOf(this.SCALE[4]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'VI#':
+          i = this.CHROMATIC.indexOf(this.SCALE[5]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        case 'VII#':
+          i = this.CHROMATIC.indexOf(this.SCALE[6]);
+          j = ((i + 1) + 12) % 12;
+          return this.CHROMATIC[j];
+        default:
+            return "null"; // Return null for invalid input
+    }
+}
+
+  private getChordInversion(input: string): void {
+    let newNote = this.romanToIndex(input);
+    this.notes.unshift(newNote);
+  }
+
   public buildChord(): void {
 
-    console.log(this.MODS.slashChord);
+    if (this.MODS.slashChord.isChecked && this.MODS.slashChord.bassNote !== null) {
+      this.getChordInversion(this.MODS.slashChord.bassNote)
+    }
 
     if (!(this.MODS.sus2 || this.MODS.sus4 || this.MODS.major || this.MODS.minor || this.MODS.FifthChord || this.MODS.dom7 || this.MODS.maj7 || this.MODS.min7 || this.MODS.min_Maj7)) {
       this.getThird();
