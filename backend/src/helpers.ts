@@ -1,6 +1,8 @@
 import { CustomChordData } from "./CustomChordData";
 import { ChordVoicing } from "./ChordVoicing";
 import { Chord } from "./Chord";
+import { ChordInterface } from './ChordProgressionAPI';
+
 export async function createVoicingsAndData(param: ChordVoicing) {
     try {
         const voicingsAndData = await param.determineVoicingsAndData(param.convertNotesToBasicVoicing())
@@ -71,3 +73,25 @@ export async function addChord(data: any) {
     uniqueID++;
     return chordsArr;
 }
+
+export function deleteChord(chordsArray: string, rowID: string): ChordInterface[] | { error: string } {
+    if (!chordsArray || typeof rowID !== 'string') {
+      return { error: 'Invalid request parameters' };
+    }
+  
+    try {
+      const parsedChordsArray = JSON.parse(chordsArray) as ChordInterface[];
+      const idToDelete = parseInt(rowID, 10);
+  
+      if (isNaN(idToDelete)) {
+        return { error: 'Invalid rowID' };
+      }
+  
+      // Filter out the chord with the specified rowID
+      const newChordsArray = parsedChordsArray.filter((chord) => chord.rowID !== idToDelete);
+      return newChordsArray;
+    } catch (error) {
+      console.error('Error parsing chords array:', error);
+      return { error: 'Internal server error' };
+    }
+  }

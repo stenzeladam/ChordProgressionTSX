@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import { Modes } from './Modes';
-import { addChord } from './helpers';
+import { addChord, deleteChord } from './helpers';
 
-interface ChordInterface {
+export interface ChordInterface {
     rowID: number,
     numeral: string,
     chord_name: string[],
@@ -31,11 +31,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// const port = process.env.PORT || 3000;
-// app.listen(port, () => {
-//     console.log(`Listening on port ${port}...`);
-// });
-
 //Root URL
 app.get('/', (req: Request, res: Response) => {
     res.send('Chord Progression Tool');
@@ -56,60 +51,19 @@ app.post('/api/add/chord', async (req: Request, res: Response) => {
         res.send(error)
     }
     // TODO: Write actual error handling that doesn't send error information to the front end, and keeps it restricted to the server logs
-    // let tempChord = new Chord(data.numeral, data.mode.scale, data.mode.chromatic, data.ChordMods);
-    // tempChord.buildChord();
-    // let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
-    // tempVoicing.tuneEachString();
-    // let chordData: CustomChordData = await createVoicingsAndData(tempVoicing);
-    // let newChordDataInterface = chordData?.getData();
-    // let chordsArr = data.chordsArray;
-    // let uniqueID;
-    // if (chordsArr.length === 0) {
-    //     uniqueID = 0;
-    // }
-    // else {
-    //     let last = chordsArr.length-1;
-    //     uniqueID = chordsArr[last].rowID + 1;
-    // }
-    // let chordNumeral: string = convertToRoman(data.numeral);
-    // if (newChordDataInterface) {
-    //     chordsArr = [
-    //         ...chordsArr,
-    //         {
-    //             rowID: uniqueID,
-    //             numeral: chordNumeral,
-    //             chord_name: newChordDataInterface.NAMES,
-    //             chord_tabs: newChordDataInterface.TABS,
-    //             chord_notes: newChordDataInterface.TONES
-    //         }
-    //     ]
-    // }
-    // uniqueID++;
-    // res.send(chordsArr);
 });
 
 app.delete('/api/delete/chord', (req: Request, res: Response) => {
     const { chordsArray: serializedChordsArray, rowID } = req.query;
   
-    if (!serializedChordsArray || typeof rowID !== 'string') {
-      return res.status(400).json({ error: 'Invalid request parameters' });
+    const result = deleteChord(serializedChordsArray as string, rowID as string);
+  
+    if ('error' in result) {
+      return res.status(400).json(result);  // Handle errors returned from the helper function
     }
   
-    try {
-      const parsedChordsArray = JSON.parse(serializedChordsArray as string) as ChordInterface[];
-      const idToDelete = parseInt(rowID, 10);
-  
-      if (isNaN(idToDelete)) {
-        return res.status(400).json({ error: 'Invalid rowID' });
-      }
-  
-      const newChordsArray = parsedChordsArray.filter((chord) => chord.rowID !== idToDelete);
-      res.status(200).json(newChordsArray);
-    } catch (error) {
-      console.error('Error parsing chords array:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-});
+    res.status(200).json(result);  // Send the updated chords array
+  });
 
 app.use((req: Request, res: Response) => {
     res.status(404).send('404 Error: Page Not Found');

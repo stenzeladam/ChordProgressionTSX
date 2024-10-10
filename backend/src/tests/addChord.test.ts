@@ -1,8 +1,4 @@
-// tests/addChord.test.ts
 import { addChord } from '../helpers';  // Adjust the path if necessary
-import { Chord } from '../Chord';
-import { ChordVoicing } from '../ChordVoicing';
-import { CustomChordData } from '../CustomChordData';
 
 describe('addChord', () => {
   it('should add a new chord to the array and return the updated array', async () => {
