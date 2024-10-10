@@ -374,7 +374,7 @@ const SelectionContainer = () => {
   const addChord = async (num: ChordNumber | null) => {
     try {
       if (modeInstanceState && num && selectedTuning != null) {
-        const SHIT = {
+        const sendData = {
           numeral: num.value,
           mode: modeInstanceState,
           compensate: compensateOption,
@@ -382,8 +382,7 @@ const SelectionContainer = () => {
           chordsArray: chordsArray,
           ChordMods: ChordMods
         }
-        console.log("SHIT: ", SHIT)
-        const responseChord = await axios.post('http://localhost:3000/api/add/chord', SHIT);
+        const responseChord = await axios.post('http://localhost:3000/api/add/chord', sendData);
         setChordsArray(responseChord.data);
       }
     } catch (error) {

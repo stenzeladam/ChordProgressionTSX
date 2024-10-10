@@ -45,7 +45,6 @@ export async function addChord(data: any) {
     let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
     tempVoicing.tuneEachString();
     let chordData: CustomChordData = await createVoicingsAndData(tempVoicing);
-    console.log(chordData instanceof CustomChordData)
     let newChordDataInterface = chordData?.getData();
     let chordsArr = data.chordsArray;
     let uniqueID;

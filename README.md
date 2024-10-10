@@ -45,7 +45,7 @@ The Chord Progression Tool is a web application designed to help musicians creat
 
 1. **`Chord.ts`**: Contains the `Chord` class that manages musical chords and their notes.
 2. **`ChordProgressionAPI.ts`**: Sets up an Express server with endpoints for managing chord progressions and modes.
-3. **`ChordVoicing.ts`**: Manages chord voicings and interacts with the UberChord API to fetch chord data.
+3. **`ChordVoicing.ts`**: Manages chord voicings and interacts with the tonal.js library to fetch chord data.
 4. **`CustomChordData.ts`**: Defines the `CustomChordData` class for managing chord data.
 5. **`Modes.ts`**: Defines the `Modes` class for managing musical scales and modes.
 
@@ -247,4 +247,4 @@ For the full license text, see the [LICENSE.txt](./LICENSE.txt) file or visit [G
 ## Acknowledgements
 
 - [Material-UI](https://mui.com/) for the UI components.
-- [UberChord API](https://api.uberchord.com/) for providing chord data.
+- [Tonal.js](https://github.com/tonaljs/tonal) for providing chord data.

@@ -50,7 +50,8 @@ app.post('/api/mode', (req: Request, res: Response) => {
 app.post('/api/add/chord', async (req: Request, res: Response) => { 
     const data = req.body;
     try {
-        res.send(addChord(data));
+        console.log(await addChord(data));
+        res.send(await addChord(data));
     } catch (error) {
         res.send(error)
     }
@@ -60,7 +61,6 @@ app.post('/api/add/chord', async (req: Request, res: Response) => {
     // let tempVoicing = new ChordVoicing(tempChord.getNotes(), data.compensate, data.tuning);
     // tempVoicing.tuneEachString();
     // let chordData: CustomChordData = await createVoicingsAndData(tempVoicing);
-    // console.log(chordData instanceof CustomChordData)
     // let newChordDataInterface = chordData?.getData();
     // let chordsArr = data.chordsArray;
     // let uniqueID;

@@ -64,10 +64,10 @@ export class ChordVoicing {
         public convertNotesToBasicVoicing(input: string[][]): string;
     
         public convertNotesToBasicVoicing(input?: string[][]): string {
-            // This is a basic voicing to be sent to the UberChord API for naming purposes. This voicing does not give any consideration to playability.
+            // This is a basic voicing. This voicing does not give any consideration to playability.
             const numOfNotesInChord = this.NOTES.length;
             let tabsFrets: string[] = ["X", "X", "X", "X", "X", "X"];
-            const maxFret = 20; // UberChord API doesn't accept voicings with fret numbers greater than 20
+            const maxFret = 20; // doesn't accept voicings with fret numbers greater than 20
             let offset: number[] = [0, 1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7, 8, -8, 9, -9, 10, -10, 11, -11];
     
             for (let nthString = 0; nthString < numOfNotesInChord; nthString++) {
