@@ -382,6 +382,7 @@ const SelectionContainer = () => {
           chordsArray: chordsArray,
           ChordMods: ChordMods
         }
+        console.log("SendData: ", sendData)
         const responseChord = await axios.post('http://localhost:3000/api/add/chord', sendData);
         setChordsArray(responseChord.data);
       }
