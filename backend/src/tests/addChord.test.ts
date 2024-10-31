@@ -328,3 +328,378 @@ describe('addChord', () => {
   });
 });
 
+describe('addChord', () => {
+  it('should add a I chord in C standard tuning (compensated) in C Aeolian with a sharp root', async () => {
+    // Setup sample input data
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "D#", "F", "G", "G#", "A#"
+        ]
+      },
+      compensate: true,
+      tuning: [
+        "C", "F", "A#", "D#", "G", "C"
+      ],
+      chordsArray: [],
+      ChordMods: {
+        FifthChord: false,
+        sharp: true,
+        flat: false,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: false,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    // Call the function with the input data
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: expect.stringMatching(/^[Ii]$/), 
+        chord_name: expect.any(Array),
+        chord_tabs: expect.any(Array),
+        chord_notes: "C#, D#, G",
+      },
+    ]);
+  });
+});
+
+describe('addChord', () => {
+  it('should add a I chord in C standard tuning (compensated) in C Aeolian with a flat root', async () => {
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "D#", "F", "G", "G#", "A#"
+        ]
+      },
+      compensate: true,
+      tuning: [
+        "C", "F", "A#", "D#", "G", "C"
+      ],
+      chordsArray: [],
+      ChordMods: {
+        FifthChord: false,
+        sharp: false,
+        flat: true,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: false,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: expect.stringMatching(/^[Ii]$/),
+        chord_name: expect.any(Array),
+        chord_tabs: expect.any(Array),  
+        chord_notes: "B, D#, G",
+      },
+    ]);
+  });
+});
+
+describe('addChord', () => {
+  it('should add a I 5th chord in C standard tuning (compensated) in C Aeolian with a flat root', async () => {
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "D#", "F", "G", "G#", "A#"
+        ]
+      },
+      compensate: true,
+      tuning: [
+        "C", "F", "A#", "D#", "G", "C"
+      ],
+      chordsArray: [],
+      ChordMods: {
+        FifthChord: true,
+        sharp: false,
+        flat: true,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: false,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: expect.stringMatching(/^[Ii]$/),
+        chord_name: expect.any(Array),
+        chord_tabs: expect.arrayContaining(["X-6-9-X-X-X"]),  
+        chord_notes: "B, G",
+      },
+    ]);
+  });
+});
+
+describe('addChord', () => {
+  it('should add a I 5th chord in C standard tuning (compensated) in C Aeolian with a sharp root', async () => {
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "D#", "F", "G", "G#", "A#"
+        ]
+      },
+      compensate: true,
+      tuning: [
+        "C", "F", "A#", "D#", "G", "C"
+      ],
+      chordsArray: [],
+      ChordMods: {
+        FifthChord: true,
+        sharp: true,
+        flat: false,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: false,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: expect.stringMatching(/^[Ii]$/),
+        chord_name: expect.any(Array),
+        chord_tabs: expect.arrayContaining(["X-8-9-X-X-X"]),  
+        chord_notes: "C#, G",
+      },
+    ]);
+  });
+});
+
+/* uncomment test case when the voicing method is updated
+describe('addChord', () => {
+  it('should add a I sus2 chord in C standard tuning (compensated) in C Aeolian', async () => {
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "D#", "F", "G", "G#", "A#"
+        ]
+      },
+      compensate: true,
+      tuning: [
+        "C", "F", "A#", "D#", "G", "C"
+      ],
+      chordsArray: [],
+      ChordMods: {
+        FifthChord: false,
+        sharp: false,
+        flat: false,
+        sus2: true,
+        sus4: false,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: false,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: expect.stringMatching(/^[Ii]$/),
+        chord_name: expect.arrayContaining(["Csus2"]),
+        chord_tabs: expect.arrayContaining(["X-7-9-9-7-7", "X-X-2-4-5-2"]),  
+        chord_notes: "C, D, G",
+      },
+    ]);
+  });
+});
+*/
+
+describe('addChord', () => {
+  it('should add a I sus4 chord in C standard tuning (compensated) in C Aeolian', async () => {
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "D#", "F", "G", "G#", "A#"
+        ]
+      },
+      compensate: true,
+      tuning: [
+        "C", "F", "A#", "D#", "G", "C"
+      ],
+      chordsArray: [],
+      ChordMods: {
+        FifthChord: false,
+        sharp: false,
+        flat: false,
+        sus2: false,
+        sus4: true,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: false,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: expect.stringMatching(/^[Ii]$/),
+        chord_name: expect.arrayContaining(["Csus4"]),
+        chord_tabs: expect.arrayContaining(["0-2-2-2-0-0", "X-7-9-9-10-7", "X-X-2-4-5-5"]),  
+        chord_notes: "C, F, G",
+      },
+    ]);
+  });
+});
+
+describe('addChord', () => {
+  it('should test that "Unknown" chord names are handled correctly', async () => {
+    const inputData = {
+      numeral: 1,
+      mode: {
+        root: 'C',
+        chromatic: [
+          "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        ],
+        scale: [
+          "C", "D", "E", "F", "G", "A", "B"
+        ]
+      },
+      compensate: false,
+      tuning: [
+        "E", "A", "D", "G", "B", "E"
+      ],
+      chordsArray: [
+        {
+          rowID: 0,
+          numeral: "I",
+          chord_name: expect.arrayContaining(["C", "Em#5/C"]),
+          chord_tabs: expect.arrayContaining(["8-10-10-9-8-8", "X-3-2-0-1-3", "X-X-10-12-13-12"]),
+          chord_notes: "C, E, G"
+        }
+      ],
+      ChordMods: {
+        FifthChord: true,
+        sharp: false,
+        flat: false,
+        sus2: false,
+        sus4: false,
+        major: false,
+        minor: false,
+        SixthChord: false,
+        dom7: false,
+        maj7: false,
+        min7: false,
+        min_Maj7: false,
+        add7: true,
+        add9: false,
+        slashChord: { isChecked: false, bassNote: '' },
+      },
+    };
+
+    const result = await addChord(inputData);
+
+    expect(result).toEqual([
+      {
+        rowID: 0,
+        numeral: "I",
+        chord_name: ["C", "Em#5/C"],
+        chord_tabs: ["8-10-10-9-8-8", "X-3-2-0-1-3", "X-X-10-12-13-12"],
+        chord_notes: "C, E, G"
+      },
+      {
+        rowID: 1,
+        numeral: expect.stringContaining("I"),
+        chord_name: ["Unknown"],
+        chord_tabs: expect.arrayContaining(["X-3-X-0-0-3", "X-X-10-12-12-X"]),
+        chord_notes: "C, G, B"
+      }
+    ]);
+  });
+});
