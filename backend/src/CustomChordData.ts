@@ -73,10 +73,10 @@ export class CustomChordData {
         for (let i = 0; i < this.NAMES.length; i++) {
             let name = this.NAMES[i];
 
-            // Skip processing if the name is any form of "Unknown".
-            if (/^Unknown/i.test(name)) {
-                continue;
-            }
+            // // Skip processing if the name is any form of "Unknown".
+            // if (/^Unknown/i.test(name)) {
+            //     continue;
+            // }
 
             // Remove "M" from the chord name if it's at index 1, or after a "#".
             if (name[1] === 'M' || (name[1] === '#' && name[2] === 'M')) {
