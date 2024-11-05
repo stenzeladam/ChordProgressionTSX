@@ -1,0 +1,23 @@
+.container {
+    position: relative;
+    background-image: url('../assets/red-guitar-get-started.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+    color: white;
+  }
+
+  .header h1 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }

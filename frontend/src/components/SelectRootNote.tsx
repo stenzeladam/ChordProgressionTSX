@@ -1,5 +1,7 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import './SelectRootNote.css'
+import DownwardOnlyPopper from '../utils/DownwardOnlyPopper';
 
 export interface RootOption {
   value: string;
@@ -12,18 +14,19 @@ interface AutocompleteRootProps {
   isDisabled: boolean;
 }
 
+const flat: string = '\u266D';
 const rootNotes: RootOption[] = [
   { value: "C", label: "C"},
-  { value: "C#", label: "Db/C#"},
+  { value: "C#", label: `C#/D${flat}`},
   { value: "D", label: "D"},
-  { value: "D#", label: "Eb/D#"},
+  { value: "D#", label: `D#/E${flat}`},
   { value: "E", label: "E"},
   { value: "F", label: "F"},
-  { value: "F#", label: "Gb/F#"},
+  { value: "F#", label: `F#/G${flat}`},
   { value: "G", label: "G"},
-  { value: "G#", label: "Ab/G#"},
+  { value: "G#", label: `G#/A${flat}`},
   { value: "A", label: "A"},
-  { value: "A#", label: "Bb/A#"},
+  { value: "A#", label: `A#/B${flat}`},
   { value: "B", label: "B"},
 ]
 
@@ -34,14 +37,15 @@ const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState, onSelect
 
   return (
     <Autocomplete
+      className="custom-autocomplete"
       id='RootSelector'
+      PopperComponent={DownwardOnlyPopper} // Use custom Popper component
       disabled={isDisabled}
       value={rootState}
       onChange={handleChange}
       options={rootNotes}
       getOptionLabel={(option) => option.label}
-      sx={{ width: 200 }}
-      renderInput={(params) => <TextField {...params} label="Select a root note" />}
+      renderInput={(params) => <TextField {...params} label="Root Note" />}
     />
   );
 };

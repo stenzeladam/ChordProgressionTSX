@@ -1,6 +1,6 @@
 .container {
     position: relative;
-    background-image: url('../assets/red-guitar-get-started.jpg'); /* Replace with your image path */
+    background-image: url('../assets/red-guitar-get-started.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -10,7 +10,7 @@
   }
   
   .overlay {
-    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 20px;
     text-align: center;
     color: white;

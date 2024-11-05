@@ -19,7 +19,7 @@ const GetStarted: React.FC = () => {
           >
             GitHub Repository
           </button>
-          <Link to="/selection-container">
+          <Link to="/key-selection">
             <button className='get-started-button'>Get Started</button>
           </Link>
         </div>
