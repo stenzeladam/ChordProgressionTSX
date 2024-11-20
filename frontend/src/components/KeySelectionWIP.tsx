@@ -15,11 +15,11 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
-  outline: 'none', // Prevents the default focus outline
+  outline: 'none',
 };
 
 export default function WorkInProgress() {
-  const [open, setOpen] = React.useState(true); // Modal is open by default
+  const [open, setOpen] = React.useState(true); 
 
   const handleClose = () => setOpen(false);
 
@@ -31,7 +31,6 @@ export default function WorkInProgress() {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        {/* Close Button */}
         <IconButton
           onClick={handleClose}
           sx={{
