@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './KeySelection.css'
 import RootNoteSelect, { RootOption } from '../components/SelectRootNote';
+import WorkInProgress from '../components/KeySelectionWIP';
 
 const KeySelection: React.FC = () => {
 
@@ -15,6 +16,7 @@ const KeySelection: React.FC = () => {
     return (
         <div className='container'>
             <div className='overlay'>
+                <WorkInProgress />
                 <div className='header'>
                     <h1>Select a root note, a mode, and a tuning: </h1>
                     <RootNoteSelect
