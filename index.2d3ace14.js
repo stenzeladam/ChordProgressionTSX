@@ -74854,6 +74854,6 @@ var _default = exports.default = (0, _createSvgIcon.default)(/*#__PURE__*/ (0, _
     d: "M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
 }), "Close");
 
-},{"239535702eb5ed24":"7XM86","6c62a682237a7579":"lVV9C","61f3f716cbb9f2ed":"6AEwr"}]},["94b1M","1xC6H","4aBH6"], "4aBH6", "parcelRequireb396")
+},{"239535702eb5ed24":"7XM86","6c62a682237a7579":"lVV9C","61f3f716cbb9f2ed":"6AEwr"}]},["94b1M","1xC6H","4aBH6"], "4aBH6", "parcelRequire9e6d")
 
 //# sourceMappingURL=index.2d3ace14.js.map
