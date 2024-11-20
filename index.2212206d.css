@@ -1,0 +1,126 @@
+.header p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+.github-button, .get-started-button {
+  color: #fff;
+  cursor: pointer;
+  background-color: red;
+  border: none;
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+
+.github-button:hover, .get-started-button:hover {
+  background-color: #8b0000;
+}
+
+.custom-autocomplete {
+  width: 130px;
+}
+
+.custom-autocomplete .MuiInputBase-input, .custom-autocomplete .MuiAutocomplete-popupIndicator, .custom-autocomplete .MuiInputLabel-root, .custom-autocomplete .MuiInputLabel-root.Mui-focused {
+  color: #fff;
+}
+
+.custom-autocomplete .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline, .custom-autocomplete .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, .custom-autocomplete .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #fff;
+}
+
+.custom-autocomplete .MuiAutocomplete-clearIndicator {
+  color: #fff;
+}
+
+.custom-autocomplete .MuiAutocomplete-clearIndicator:hover {
+  color: #aaa;
+}
+
+.MerriweatherRadio {
+  font-family: Merriweather, serif, monospace;
+  font-size: large;
+  font-weight: bold;
+}
+
+.CourierRadio {
+  font-family: Courier New, serif, monospace;
+  font-size: large;
+  font-weight: 700;
+}
+
+.CourierTable {
+  font-family: Courier New, Courier, monospace;
+  font-size: large;
+  font-weight: 600;
+}
+
+.voicing-dropdown-container {
+  justify-content: flex-end;
+  width: 100%;
+  display: flex;
+}
+
+.delete-icon {
+  cursor: pointer;
+}
+
+.delete-icon:hover {
+  color: #dc0000;
+}
+
+.table-dropdown-container {
+  justify-content: flex-end;
+  width: 100%;
+  display: flex;
+}
+
+.table-dropdown .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline, .table-dropdown .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, .table-dropdown .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #000 !important;
+}
+
+.table-dropdown .MuiInputLabel-root, .table-dropdown .MuiInputLabel-root.Mui-focused {
+  color: #000 !important;
+}
+
+.table-dropdown .MuiSelect-select, .table-dropdown .MuiMenuItem-root {
+  font-family: Courier New, Courier, monospace;
+  font-weight: 600;
+}
+
+.table-dropdown .MuiMenuItem-root.Mui-selected {
+  color: #fff !important;
+  background-color: green !important;
+}
+
+.table-dropdown .MuiMenuItem-root, .table-dropdown .MuiList-root {
+  text-align: right;
+}
+
+.container {
+  background-image: url("red-guitar-get-started.115d8ff9.jpg");
+  background-position: center;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  display: flex;
+  position: relative;
+}
+
+.overlay {
+  text-align: center;
+  color: #fff;
+  background-color: #00000080;
+  padding: 20px;
+}
+
+.header h1 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+}
+/*# sourceMappingURL=index.2212206d.css.map */
