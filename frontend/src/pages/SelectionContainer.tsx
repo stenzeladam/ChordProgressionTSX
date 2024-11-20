@@ -421,10 +421,12 @@ const SelectionContainer = () => {
       <h1>Create a chord progression</h1>
       <h2>Select a root note, a mode, and a tuning:</h2>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <RootNoteSelect 
+      <div style={{ backgroundColor: 'black', padding: '10px', borderRadius: '5px' }}>
+        <RootNoteSelect
           rootState={selectedRoot}
           onSelect={handleRootSelect}
           isDisabled={selectRootDisabled} />
+      </div>
         <ModeSelector 
           modeState={selectedMode}
           onSelect={handleModeSelect}
