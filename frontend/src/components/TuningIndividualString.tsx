@@ -38,36 +38,7 @@ const TuningIndividualStringAutocomplete: React.FC<TuningNoteProps> = ({
             value={noteState}
             options={noteOptions.map((option) => ({ value: option, label: option }))}
             renderInput={(params) => <TextField {...params} label={label} size="small" />}
-            onChange={handleChange}
-            sx={{
-                '& .MuiInputBase-input.Mui-disabled': {
-                    color: '#b0b0b0',
-                },
-                '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#b0b0b0',
-                },
-                '& .MuiAutocomplete-popupIndicator.Mui-disabled': {
-                    color: '#b0b0b0',
-                },
-                '& .MuiAutocomplete-clearIndicator.Mui-disabled': {
-                    color: '#b0b0b0',
-                },
-                '& .MuiAutocomplete-clearIndicator.Mui-disabled:hover': {
-                    color: '#a0a0a0',
-                },
-                '& .MuiOutlinedInput-root.Mui-focused.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#b0b0b0',
-                },
-                '& .MuiAutocomplete-root.Mui-disabled': {
-                    backgroundColor: '#b0b0b0',
-                },
-                '& .MuiFormLabel.Mui-disabled': {
-                    color: '#b0b0b0',
-                },
-                '& .MuiInputLabel-root.Mui-disabled': {
-                    color: '#b0b0b0',
-                },
-            }}                                                                              
+            onChange={handleChange}                                                                              
         />
     );
 };

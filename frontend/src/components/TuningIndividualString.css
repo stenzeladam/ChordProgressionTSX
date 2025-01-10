@@ -47,3 +47,53 @@
   .individual-string-tuning-autocomplete .MuiAutocomplete-clearIndicator:hover {
     color: #aaaaaa;
   }
+
+  /* Disabled input text color */
+  .individual-string-tuning-autocomplete .MuiInputBase-input.Mui-disabled {
+    color: #b0b0b0;
+  }
+
+  /* Disabled input border color */
+  .individual-string-tuning-autocomplete .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: #b0b0b0;
+  }
+
+  /* Disabled popup indicator color */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-popupIndicator.Mui-disabled {
+    color: #b0b0b0;
+  }
+
+  /* Disabled clear indicator color */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-clearIndicator.Mui-disabled {
+    color: #b0b0b0;
+  }
+
+  /* Disabled clear indicator hover color */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-clearIndicator.Mui-disabled:hover {
+    color: #a0a0a0;
+  }
+
+  /* Disabled focused input border color */
+  .individual-string-tuning-autocomplete .MuiOutlinedInput-root.Mui-focused.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: #b0b0b0;
+  }
+
+  /* Disabled autocomplete background color */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-root.Mui-disabled {
+    background-color: #b0b0b0;
+  }
+
+  /* Disabled form label color */
+  .individual-string-tuning-autocomplete .MuiFormLabel.Mui-disabled {
+    color: #b0b0b0;
+  }
+
+  /* Disabled input label color */
+  .individual-string-tuning-autocomplete .MuiInputLabel-root.Mui-disabled {
+    color: #b0b0b0;
+  }
+
+  /* Disabled outlined input text opacity and color */
+  .individual-string-tuning-autocomplete .MuiOutlinedInput-input.Mui-disabled  {
+    -webkit-text-fill-color: unset;
+  }
