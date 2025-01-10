@@ -37,9 +37,9 @@ const AutocompleteRoot: React.FC<AutocompleteRootProps> = ({ rootState, onSelect
 
   return (
     <Autocomplete
-      className="custom-autocomplete"
+      className="root-select-autocomplete"
       id='RootSelector'
-      PopperComponent={DownwardOnlyPopper} // Use custom Popper component
+      PopperComponent={DownwardOnlyPopper}
       disabled={isDisabled}
       value={rootState}
       onChange={handleChange}

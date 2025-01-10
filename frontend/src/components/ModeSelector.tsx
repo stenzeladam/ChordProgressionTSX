@@ -1,5 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import './ModeSelector.css'
+import DownwardOnlyPopper from '../utils/DownwardOnlyPopper';
 
 export interface ModeOption {
   label: string;
@@ -32,14 +34,15 @@ const ModeSelector: React.FC<ModeSelectorProps> = ({ modeState, onSelect, isDisa
 
   return (
     <Autocomplete
+      className="mode-select-autocomplete"
+      id="ModeSelector"
+      PopperComponent={DownwardOnlyPopper}
+      disabled={isDisabled}
       value={modeState}
       onChange={handleChange}
-      disabled={isDisabled}
       disablePortal
-      id="ModeSelector"
       options={Modes}
       getOptionLabel={(option) => option.label}
-      sx={{ width: 200 }}
       renderInput={(params) => <TextField {...params} label="Select a mode" />}
     />
   );

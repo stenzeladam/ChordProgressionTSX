@@ -1,0 +1,49 @@
+/* Set width of the Autocomplete component */
+.mode-select-autocomplete {
+  width: 200px;
+}
+
+/* Text color inside the input field */
+.mode-select-autocomplete .MuiInputBase-input {
+  color: #ffffff;
+}
+
+/* Popup indicator (dropdown arrow) color */
+.mode-select-autocomplete .MuiAutocomplete-popupIndicator {
+  color: #ffffff;
+}
+
+/* Input label color */
+.mode-select-autocomplete .MuiInputLabel-root {
+  color: #ffffff;
+}
+
+/* Input label color when focused */
+.mode-select-autocomplete .MuiInputLabel-root.Mui-focused {
+  color: #ffffff;
+}
+
+/* Border color for outlined input */
+.mode-select-autocomplete .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+/* Hover border color */
+.mode-select-autocomplete .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+/* Focused border color */
+.mode-select-autocomplete .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+/* Clear indicator (X icon) color */
+.mode-select-autocomplete .MuiAutocomplete-clearIndicator {
+  color: #ffffff;
+}
+
+/* Clear indicator color on hover */
+.mode-select-autocomplete .MuiAutocomplete-clearIndicator:hover {
+  color: #aaaaaa;
+}

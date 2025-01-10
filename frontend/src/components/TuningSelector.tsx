@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
+import './TuningSelector.css'
+import DownwardOnlyPopper from '../utils/DownwardOnlyPopper';
+import TuningIndividualStringAutocomplete from './TuningIndividualString'
 
 export interface TuningOption {
   label: string;
@@ -25,18 +28,6 @@ const tuningOptions = [
 ];
 
 const definedTunings: { [key: string]: string[] } = {
-  // "E Standard": ["E", "A", "D", "G", "B", "E"],
-  // "D# Standard": ["Eb/D#", "Ab/G#", "Db/C#", "Gb/F#", "Bb/A#", "Eb/D#"],
-  // "D Standard": ["D", "G", "C", "F", "A", "D"],
-  // "C# Standard": ["Db/C#", "Gb/F#", "B", "E", "Ab/G#", "Db/C#"],
-  // "C Standard": ["C", "F", "Bb/A#", "Eb/D#", "G", "C"],
-  // "B Standard": ["B", "E", "A", "D", "Gb/F#", "B"],
-  // "Drop D": ["D", "A", "D", "G", "B", "E"],
-  // "Drop C#": ["Db/C#", "Ab/G#", "Db/C#", "Gb/F#", "Bb/A#", "Eb/D#"],
-  // "Drop C": ["C", "G", "C", "F", "A", "D"],
-  // "Drop B": ["B", "Gb/F#", "B", "E", "Ab/G#", "Db/C#"],
-  // "Drop A#": ["Bb/A#", "F", "Bb/A#", "Eb/D#", "G", "C"],
-  // "Drop A": ["A", "E", "A", "D", "Gb/F#", "B"],
   "E Standard": ["E", "A", "D", "G", "B", "E"],
   "D# Standard": ["D#", "G#", "C#", "F#", "A#", "D#"],
   "D Standard": ["D", "G", "C", "F", "A", "D"],
@@ -61,112 +52,66 @@ interface TuningSelectorProps {
 
 const TuningSelector: React.FC<TuningSelectorProps> = ({ 
   tuningState, 
-  stringTuningState,
+  stringTuningState, 
   setTuning, 
-  setStringTuning,
+  setStringTuning, 
   isDisabled 
-  }) => {
+}) => {
     const [disableStringTuningFlag, setDisabledStringFlag] = useState(true);
 
     const handleTuningChange = (_: any, value: { label: string; tuning: string } | null) => {
-      const tuning = value?.tuning || ""; // Ensure tuning is always a string
-      setTuning(value);
+        const tuning = value?.tuning || "";
+        setTuning(value);
 
-      if (tuning && definedTunings[tuning]) {
-        setTuning(value);
-        setStringTuning(definedTunings[tuning]);
-      } else {
-        setTuning(value);
-        setStringTuning(Array(6).fill(""));
-      }
-      setDisabledStringFlag(tuning !== "Other");
+        if (tuning && definedTunings[tuning]) {
+            setTuning(value);
+            setStringTuning(definedTunings[tuning]);
+        } else {
+            setTuning(value);
+            setStringTuning(Array(6).fill(""));
+        }
+        setDisabledStringFlag(tuning !== "Other");
     };
 
     const handleSingleStringTuningChange = (value: string | null | undefined, index: number) => {
-      const updatedStringTunings = [...stringTuningState.slice(0, index), value ?? "", ...stringTuningState.slice(index + 1)];
-      setStringTuning(updatedStringTunings);
+        const updatedStringTunings = [
+            ...stringTuningState.slice(0, index),
+            value ?? "",
+            ...stringTuningState.slice(index + 1),
+        ];
+        setStringTuning(updatedStringTunings);
     };
 
     return (
       <div>
         <Autocomplete
+          className="tuning-select-autocomplete"
+          id="tuningSelector"
+          PopperComponent={DownwardOnlyPopper}
+          disabled={isDisabled}
           disablePortal
           value={tuningState}
-          id="tuningSelector"
-          disabled={isDisabled}
-          options={tuningOptions}
-          sx={{ width: 300, marginBottom: 2 }}
-          renderInput={(params) => <TextField {...params} label="Select a tuning" />}
           onChange={handleTuningChange}
+          options={tuningOptions}
+          renderInput={(params) => <TextField {...params} label="Select a tuning" />}
         />
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          <Autocomplete
-            key={"6thString"}
-            disablePortal
-            value={stringTuningState[0] || null}
-            //options={["E", "Eb/D#", "D", "Db/C#", "C", "B", "Bb/A#", "A", "Ab/G#", "G", "Gb/F#", "F"]}
-            options={["E", "D#", "D", "C#", "C", "B", "A#", "A", "G#", "G", "F#", "F"]}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label={`6th String (Lowest)`} size="small" />}
-            onChange={(_, value) => handleSingleStringTuningChange(value, 0)}
-            disabled={disableStringTuningFlag}
-          />
-          <Autocomplete
-            key={"5thString"}
-            disablePortal
-            value={stringTuningState[1] || null}
-            //options={["A", "Ab/G#", "G", "Gb/F#", "F", "E", "Eb/D#", "D", "Db/C#", "C", "B", "Bb/A#"]}
-            options={["A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C", "B", "A#"]}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label={`5th String`} size="small" />}
-            onChange={(_, value) => handleSingleStringTuningChange(value, 1)}
-            disabled={disableStringTuningFlag}
-          />
-          <Autocomplete
-            key={"4thString"}
-            disablePortal
-            value={stringTuningState[2] || null}
-            //options={["D", "Db/C#", "C", "B", "Bb/A#", "A", "Ab/G#", "G", "Gb/F#", "F", "E", "Eb/D#"]}
-            options={["D", "C#", "C", "B", "A#", "A", "G#", "G", "F#", "F", "E", "D#"]}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label={`4th String`} size="small" />}
-            onChange={(_, value) => handleSingleStringTuningChange(value, 2)}
-            disabled={disableStringTuningFlag}
-          />
-          <Autocomplete
-            key={"3rdString"}
-            disablePortal
-            value={stringTuningState[3] || null}
-            //options={["G", "Gb/F#", "F", "E", "Eb/D#", "D", "Db/C#", "C", "B", "Bb/A#", "A", "Ab/G#"]}
-            options={["G", "F#", "F", "E", "D#", "D", "C#", "C", "B", "A#", "A", "G#"]}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label={`3rd String`} size="small" />}
-            onChange={(_, value) => handleSingleStringTuningChange(value, 3)}
-            disabled={disableStringTuningFlag}
-          />
-          <Autocomplete
-            key={"2ndString"}
-            disablePortal
-            value={stringTuningState[4] || null}
-            //options={["B", "Bb/A#", "A", "Ab/G#", "G", "Gb/F#", "F", "E", "Eb/D#", "D", "Db/C#", "C"]}
-            options={["B", "A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C"]}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label={`2nd String`} size="small" />}
-            onChange={(_, value) => handleSingleStringTuningChange(value, 4)}
-            disabled={disableStringTuningFlag}
-          />
-          <Autocomplete
-            key={"1stString"}
-            disablePortal
-            value={stringTuningState[5] || null}
-            //options={["E", "Eb/D#", "D", "Db/C#", "C", "B", "Bb/A#", "A", "Ab/G#", "G", "Gb/F#", "F"]}
-            options={["E", "D#", "D", "C#", "C", "B", "A#", "A", "G#", "G", "F#", "F"]}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label={`1st String (Highest)`} size="small" />}
-            onChange={(_, value) => handleSingleStringTuningChange(value, 5)}
-            disabled={disableStringTuningFlag}
-          />
-        </Box>
+        <div className="tuning-select-string-container">
+          {['6th String (Lowest)', '5th String', '4th String', '3rd String', '2nd String', '1st String (Highest)'].map(
+            (label, index) => (
+              <div key={index} className="tuning-select-string-item">
+                <TuningIndividualStringAutocomplete
+                  noteState={
+                    stringTuningState[index] ? { value: stringTuningState[index], label: stringTuningState[index] } : null
+                  } // Convert to TuningNoteOption
+                  onSelect={(newValue) => handleSingleStringTuningChange(newValue?.value, index)}
+                  noteOptions={['E', 'D#', 'D', 'C#', 'C', 'B', 'A#', 'A', 'G#', 'G', 'F#', 'F']}
+                  label={label}
+                  isDisabled={disableStringTuningFlag}
+                />
+              </div>
+            )
+          )}
+        </div>
       </div>
     );
 };

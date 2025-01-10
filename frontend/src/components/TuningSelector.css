@@ -1,0 +1,64 @@
+/* Set width of the Autocomplete component */
+.tuning-select-autocomplete {
+    width: 245px;
+  }
+  
+  /* Set the layout for the string tuning autocompletes */
+  .tuning-select-string-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Adjust spacing between columns */
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  /* Each individual string autocomplete */
+  .tuning-select-string-item {
+    width: 48%; /* This ensures each autocomplete takes up roughly half the row */
+  }
+  
+  /* Text color inside the input field */
+  .tuning-select-autocomplete .MuiInputBase-input {
+    color: #ffffff;
+  }
+  
+  /* Popup indicator (dropdown arrow) color */
+  .tuning-select-autocomplete .MuiAutocomplete-popupIndicator {
+    color: #ffffff;
+  }
+  
+  /* Input label color */
+  .tuning-select-autocomplete .MuiInputLabel-root {
+    color: #ffffff;
+  }
+  
+  /* Input label color when focused */
+  .tuning-select-autocomplete .MuiInputLabel-root.Mui-focused {
+    color: #ffffff;
+  }
+  
+  /* Border color for outlined input */
+  .tuning-select-autocomplete .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+  }
+  
+  /* Hover border color */
+  .tuning-select-autocomplete .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+  }
+  
+  /* Focused border color */
+  .tuning-select-autocomplete .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+  }
+  
+  /* Clear indicator (X icon) color */
+  .tuning-select-autocomplete .MuiAutocomplete-clearIndicator {
+    color: #ffffff;
+  }
+  
+  /* Clear indicator color on hover */
+  .tuning-select-autocomplete .MuiAutocomplete-clearIndicator:hover {
+    color: #aaaaaa;
+  }
+  

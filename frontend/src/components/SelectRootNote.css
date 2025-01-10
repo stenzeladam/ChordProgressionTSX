@@ -1,50 +1,49 @@
 /* Set width of the Autocomplete component */
-.custom-autocomplete {
-    width: 130px;
-  }
-  
-  /* Text color inside the input field */
-  .custom-autocomplete .MuiInputBase-input {
-    color: #ffffff;
-  }
-  
-  /* Popup indicator (dropdown arrow) color */
-  .custom-autocomplete .MuiAutocomplete-popupIndicator {
-    color: #ffffff;
-  }
-  
-  /* Input label color */
-  .custom-autocomplete .MuiInputLabel-root {
-    color: #ffffff;
-  }
-  
-  /* Input label color when focused */
-  .custom-autocomplete .MuiInputLabel-root.Mui-focused {
-    color: #ffffff;
-  }
-  
-  /* Border color for outlined input */
-  .custom-autocomplete .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: #ffffff;
-  }
-  
-  /* Hover border color */
-  .custom-autocomplete .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: #ffffff;
-  }
-  
-  /* Focused border color */
-  .custom-autocomplete .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #ffffff;
-  }
-  
-  /* Clear indicator (X icon) color */
-  .custom-autocomplete .MuiAutocomplete-clearIndicator {
-    color: #ffffff;
-  }
-  
-  /* Clear indicator color on hover */
-  .custom-autocomplete .MuiAutocomplete-clearIndicator:hover {
-    color: #aaaaaa;
-  }
-  
+.root-select-autocomplete {
+  width: 130px;
+}
+
+/* Text color inside the input field */
+.root-select-autocomplete .MuiInputBase-input {
+  color: #ffffff;
+}
+
+/* Popup indicator (dropdown arrow) color */
+.root-select-autocomplete .MuiAutocomplete-popupIndicator {
+  color: #ffffff;
+}
+
+/* Input label color */
+.root-select-autocomplete .MuiInputLabel-root {
+  color: #ffffff;
+}
+
+/* Input label color when focused */
+.root-select-autocomplete .MuiInputLabel-root.Mui-focused {
+  color: #ffffff;
+}
+
+/* Border color for outlined input */
+.root-select-autocomplete .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+/* Hover border color */
+.root-select-autocomplete .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+/* Focused border color */
+.root-select-autocomplete .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+/* Clear indicator (X icon) color */
+.root-select-autocomplete .MuiAutocomplete-clearIndicator {
+  color: #ffffff;
+}
+
+/* Clear indicator color on hover */
+.root-select-autocomplete .MuiAutocomplete-clearIndicator:hover {
+  color: #aaaaaa;
+}

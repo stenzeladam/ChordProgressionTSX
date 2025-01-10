@@ -1,0 +1,49 @@
+/* Set width of the Autocomplete component */
+.individual-string-tuning-autocomplete {
+    width: 185px;
+  }
+  
+  /* Text color inside the input field */
+  .individual-string-tuning-autocomplete .MuiInputBase-input {
+    color: #ffffff;
+  }
+  
+  /* Popup indicator (dropdown arrow) color */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-popupIndicator {
+    color: #ffffff;
+  }
+  
+  /* Input label color */
+  .individual-string-tuning-autocomplete .MuiInputLabel-root {
+    color: #ffffff;
+  }
+  
+  /* Input label color when focused */
+  .individual-string-tuning-autocomplete .MuiInputLabel-root.Mui-focused {
+    color: #ffffff;
+  }
+  
+  /* Border color for outlined input */
+  .individual-string-tuning-autocomplete .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+  }
+  
+  /* Hover border color */
+  .individual-string-tuning-autocomplete .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+  }
+  
+  /* Focused border color */
+  .individual-string-tuning-autocomplete .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+  }
+  
+  /* Clear indicator (X icon) color */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-clearIndicator {
+    color: #ffffff;
+  }
+  
+  /* Clear indicator color on hover */
+  .individual-string-tuning-autocomplete .MuiAutocomplete-clearIndicator:hover {
+    color: #aaaaaa;
+  }
